@@ -192,7 +192,22 @@
       <button type="submit">Servis Kaydını Kaydet</button>
 
     </form>
+<hr style="margin:30px 0;">
 
+<h2>Müşteri Ara</h2>
+
+<input
+  type="text"
+  id="musteriAra"
+  placeholder="Müşteri adını yazın"
+  style="width:100%; padding:12px; margin-bottom:10px;"
+>
+
+<button type="button" onclick="musteriAra()">
+  Müşteri Ara
+</button>
+
+<div id="aramaSonuclari" style="margin-top:20px;"></div>
     <div id="durum"></div>
 
   </div>
@@ -279,7 +294,65 @@ document.getElementById("servisForm").addEventListener("submit", async function(
   }
 
 });
+async function musteriAra() {
+  const arama = document.getElementById("musteriAra").value.trim();
+  const sonuc = document.getElementById("aramaSonuclari");
 
+  if (!arama) {
+    sonuc.innerHTML = "Müşteri adı yazın.";
+    return;
+  }
+
+  sonuc.innerHTML = "Aranıyor...";
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/service_records?customer_name=ilike.*" +
+      encodeURIComponent(arama) +
+      "*&order=service_date.desc",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const kayitlar = await response.json();
+
+    if (kayitlar.length === 0) {
+      sonuc.innerHTML = "Kayıt bulunamadı.";
+      return;
+    }
+
+    sonuc.innerHTML = kayitlar.map(k => `
+      <div style="
+        padding:15px;
+        margin:10px 0;
+        border:1px solid #ddd;
+        border-radius:12px;
+      ">
+        <strong>${k.customer_name}</strong><br><br>
+
+        📞 ${k.phone || "-"}<br>
+        🚤 Tekne: ${k.boat || "-"}<br>
+        ⚙️ Motor: ${k.motor || "-"}<br>
+        🔧 İşlem: ${k.service_details || "-"}<br>
+        💰 Ücret: ${k.amount || 0} ₺<br>
+        💳 Ödeme: ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
+        📅 Servis Tarihi: ${k.service_date || "-"}
+      </div>
+    `).join("");
+
+  } catch (error) {
+    sonuc.innerHTML = "❌ Kayıtlar getirilemedi.";
+    console.error(error);
+  }
+}
 </script>
 
 </body>
