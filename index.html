@@ -68,18 +68,11 @@
       min-height: 80px;
     }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #0f172a;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    <button type="button" onclick="siparisKaydet()">
+  💾 Siparişi Kaydet
+</button>
+
+<div id="siparisMesaj" class="mesaj"></div>
 
     .mesaj {
       margin-top: 15px;
@@ -513,7 +506,55 @@
 
       `).join("");
   }
+async function siparisKaydet() {
 
+  const mesaj = document.getElementById("siparisMesaj");
+
+  const siparis = {
+    order_date: document.getElementById("siparisTarih").value,
+    customer_name: document.getElementById("siparisMusteri").value.trim(),
+    phone: document.getElementById("siparisTelefon").value.trim(),
+    model: document.getElementById("siparisModel").value.trim(),
+    notes: document.getElementById("siparisNotlar").value.trim()
+  };
+
+  if (!siparis.order_date || !siparis.customer_name) {
+    mesaj.textContent = "❌ Tarih ve ad soyad zorunludur.";
+    return;
+  }
+
+  mesaj.textContent = "Kaydediliyor...";
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/orders",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(siparis)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    mesaj.textContent = "✅ Sipariş başarıyla kaydedildi.";
+
+    document.getElementById("siparisTarih").value = "";
+    document.getElementById("siparisMusteri").value = "";
+    document.getElementById("siparisTelefon").value = "";
+    document.getElementById("siparisModel").value = "";
+    document.getElementById("siparisNotlar").value = "";
+
+  } catch (error) {
+    mesaj.textContent = "❌ Hata: " + error.message;
+  }
+}
 </script>
 
 </body>
