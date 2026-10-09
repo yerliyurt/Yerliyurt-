@@ -107,7 +107,33 @@
 </head>
 
 <body>
+<div id="siparisSekmesi" style="display:none; padding:20px;">
 
+  <h2>📋 Yerliyurt Marin Sipariş Formu</h2>
+
+  <label>Tarih</label>
+  <input type="date" id="siparisTarih">
+
+  <label>Ad Soyad</label>
+  <input type="text" id="siparisMusteri">
+
+  <label>Telefon</label>
+  <input type="tel" id="siparisTelefon">
+
+  <label>Model</label>
+  <input type="text" id="siparisModel">
+
+  <label>Notlar</label>
+  <textarea id="siparisNotlar"
+    placeholder="Siparişle ilgili notlarınızı yazın..."
+    style="min-height:120px;"></textarea>
+
+  <button type="button"
+    onclick="alert('Kaydetme özelliği henüz eklenmedi.')">
+    💾 Siparişi Kaydet
+  </button>
+
+</div>
 <div class="container">
 
 <div style="text-align:center; margin-bottom:25px;">
