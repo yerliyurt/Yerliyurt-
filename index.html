@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yerliyurt</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 13px;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #111;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    #mesaj {
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Yerliyurt</h1>
+  <p>Hoş Geldiniz</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Yerliyurt</h2>
+    <p>Web sitemize hoş geldiniz.</p>
+  </div>
+
+  <div class="card">
+    <h2>İletişim</h2>
+
+    <input id="isim" type="text" placeholder="Adınız">
+
+    <input id="email" type="email" placeholder="E-posta adresiniz">
+
+    <textarea id="mesajMetni" rows="5"
+      placeholder="Mesajınız"></textarea>
+
+    <button onclick="gonder()">Gönder</button>
+
+    <div id="mesaj"></div>
+  </div>
+
+</div>
+
+<script>
+function gonder() {
+  const isim = document.getElementById("isim").value;
+  const email = document.getElementById("email").value;
+  const mesajMetni = document.getElementById("mesajMetni").value;
+
+  if (!isim || !email || !mesajMetni) {
+    document.getElementById("mesaj").innerHTML =
+      "Lütfen tüm alanları doldurun.";
+    return;
+  }
+
+  document.getElementById("mesaj").innerHTML =
+    "Mesajınız alındı. Teşekkür ederiz.";
+
+  document.getElementById("isim").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("mesajMetni").value = "";
+}
+</script>
+
+</body>
+</html>
