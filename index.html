@@ -6,331 +6,996 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
+
 <title>Yerliyurt Marin - Servis Takip</title>
+
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
 <style>
 *{box-sizing:border-box}
+
 body{
- margin:0;background:#f2f5f9;color:#17263d;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+ margin:0;
+ background:#f2f5f9;
+ color:#17263d;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
+
 header{
- background:white;text-align:center;padding:20px 15px;
- border-bottom:1px solid #e2e8f0
+ background:white;
+ text-align:center;
+ padding:20px 15px;
+ border-bottom:1px solid #e2e8f0;
 }
-header img{display:block;width:100%;max-width:330px;height:auto;margin:0 auto 12px}
-header h1{font-size:20px;color:#09254a;margin:8px 0 5px}
-header p{color:#64748b;font-size:13px;margin:0}
+
+header img{
+ display:block;
+ width:100%;
+ max-width:330px;
+ height:auto;
+ margin:0 auto 12px;
+}
+
+header h1{
+ font-size:20px;
+ color:#09254a;
+ margin:8px 0 5px;
+}
+
+header p{
+ color:#64748b;
+ font-size:13px;
+ margin:0;
+}
+
 nav{
- display:flex;gap:7px;overflow-x:auto;padding:12px;
- background:white;position:sticky;top:0;z-index:5;
- border-bottom:1px solid #ddd
+ display:flex;
+ gap:7px;
+ overflow-x:auto;
+ padding:12px;
+ background:white;
+ position:sticky;
+ top:0;
+ z-index:5;
+ border-bottom:1px solid #ddd;
 }
+
 button{
- border:0;border-radius:10px;padding:12px 14px;
- font-weight:600;font-size:14px;cursor:pointer
+ border:0;
+ border-radius:10px;
+ padding:12px 14px;
+ font-weight:600;
+ font-size:14px;
+ cursor:pointer;
 }
-nav button{white-space:nowrap;background:#e9eef5;color:#17263d}
-nav button.active,.primary{background:#2563eb;color:white}
-main{max-width:850px;margin:auto;padding:15px}
+
+button:disabled{
+ opacity:.55;
+ cursor:wait;
+}
+
+nav button{
+ white-space:nowrap;
+ background:#e9eef5;
+ color:#17263d;
+}
+
+nav button.active,.primary{
+ background:#2563eb;
+ color:white;
+}
+
+main{
+ max-width:850px;
+ margin:auto;
+ padding:15px;
+}
+
 section{display:none}
 section.active{display:block}
+
 .card{
- background:white;border-radius:15px;padding:17px;
- margin-bottom:15px;box-shadow:0 2px 12px #17263d0c
+ background:white;
+ border-radius:15px;
+ padding:17px;
+ margin-bottom:15px;
+ box-shadow:0 2px 12px #17263d0c;
 }
+
 h2{font-size:20px;margin:0 0 15px}
 h3{font-size:16px;margin:0 0 8px}
-label{display:block;font-size:13px;font-weight:600;margin:13px 0 6px}
+
+label{
+ display:block;
+ font-size:13px;
+ font-weight:600;
+ margin:13px 0 6px;
+}
+
 input,textarea,select{
- width:100%;border:1px solid #cbd5e1;border-radius:9px;
- padding:12px;font:inherit;font-size:16px;
- background:white;color:#17263d
+ width:100%;
+ border:1px solid #cbd5e1;
+ border-radius:9px;
+ padding:12px;
+ font:inherit;
+ font-size:16px;
+ background:white;
+ color:#17263d;
 }
-textarea{min-height:85px;resize:vertical}
-.primary{width:100%;margin-top:16px}
-.secondary{background:#e2e8f0;color:#17263d}
-.danger{background:#fee2e2;color:#b91c1c}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+textarea{
+ min-height:85px;
+ resize:vertical;
+}
+
+.primary{
+ width:100%;
+ margin-top:16px;
+}
+
+.secondary{
+ background:#e2e8f0;
+ color:#17263d;
+}
+
+.danger{
+ background:#fee2e2;
+ color:#b91c1c;
+}
+
+.actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:12px;
+}
+
 .actions button{flex:1}
+
 .record{
- border:1px solid #e2e8f0;border-radius:12px;
- padding:14px;margin:10px 0
+ border:1px solid #e2e8f0;
+ border-radius:12px;
+ padding:14px;
+ margin:10px 0;
 }
-.record p{margin:6px 0;font-size:14px;overflow-wrap:anywhere}
-.muted{color:#64748b;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:#eff6ff;padding:15px;border-radius:12px;font-size:13px}
-.stat strong{font-size:26px;display:block;color:#1d4ed8}
-.empty{text-align:center;color:#64748b;padding:25px}
+
+.record p{
+ margin:6px 0;
+ font-size:14px;
+ overflow-wrap:anywhere;
+}
+
+.muted{
+ color:#64748b;
+ font-size:13px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
+}
+
+.stat{
+ background:#eff6ff;
+ padding:15px;
+ border-radius:12px;
+ font-size:13px;
+}
+
+.stat strong{
+ font-size:26px;
+ display:block;
+ color:#1d4ed8;
+}
+
+.empty{
+ text-align:center;
+ color:#64748b;
+ padding:25px;
+}
+
 .notice{
- background:#fff7ed;border-radius:10px;
- padding:12px;font-size:13px;margin-bottom:15px
+ background:#fff7ed;
+ border-radius:10px;
+ padding:12px;
+ font-size:13px;
+ margin-bottom:15px;
 }
+
 .badge{
- display:inline-block;background:#dbeafe;color:#1d4ed8;
- border-radius:20px;padding:5px 9px;font-size:12px
+ display:inline-block;
+ background:#dbeafe;
+ color:#1d4ed8;
+ border-radius:20px;
+ padding:5px 9px;
+ font-size:12px;
 }
-.due{background:#fee2e2;color:#991b1b}
-.ok{background:#dcfce7;color:#166534}
-.photos{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
-.photo{position:relative;width:100px}
+
+.due{
+ background:#fee2e2;
+ color:#991b1b;
+}
+
+.ok{
+ background:#dcfce7;
+ color:#166534;
+}
+
+.photos{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:12px;
+}
+
+.photo{
+ position:relative;
+ width:100px;
+}
+
 .photo img{
- width:100px;height:100px;object-fit:cover;
- border-radius:10px;border:1px solid #ddd
+ width:100px;
+ height:100px;
+ object-fit:cover;
+ border-radius:10px;
+ border:1px solid #ddd;
 }
+
 .photo button{
- position:absolute;right:-5px;top:-5px;
- border-radius:50%;padding:4px 8px;
- background:#dc2626;color:white
+ position:absolute;
+ right:-5px;
+ top:-5px;
+ border-radius:50%;
+ padding:4px 8px;
+ background:#dc2626;
+ color:white;
 }
-.photo a{display:block}
-.photo-note{font-size:12px;color:#64748b;margin-top:7px}
-.price{font-size:20px;font-weight:700;color:#1d4ed8}
+
+.photo-note{
+ font-size:12px;
+ color:#64748b;
+ margin-top:7px;
+}
+
+.price{
+ font-size:20px;
+ font-weight:700;
+ color:#1d4ed8;
+}
+
 .part-row{
- display:flex;justify-content:space-between;
- align-items:center;gap:10px;flex-wrap:wrap
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ flex-wrap:wrap;
 }
-.part-row h3{margin:0}
-.part-row .price{margin:0}
+
+.part-row h3,.part-row .price{margin:0}
+
+#loginScreen{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+}
+
+.login-card{
+ background:white;
+ width:100%;
+ max-width:400px;
+ border-radius:18px;
+ padding:25px;
+ box-shadow:0 4px 25px #17263d15;
+ text-align:center;
+}
+
+.login-card img{
+ max-width:260px;
+ width:100%;
+ margin-bottom:15px;
+}
+
+.login-card h2{
+ color:#09254a;
+}
+
+.login-card label{
+ text-align:left;
+}
+
+#app{display:none}
+
+.topbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ padding:10px 15px;
+ background:#eff6ff;
+ font-size:12px;
+}
+
+#connectionStatus{
+ font-weight:600;
+ color:#166534;
+}
+
+#userEmail{
+ overflow-wrap:anywhere;
+}
+
+.smallbtn{
+ font-size:12px;
+ padding:8px;
+}
+
+.loading{
+ text-align:center;
+ padding:20px;
+ color:#64748b;
+}
+
 </style>
 </head>
+
 <body>
 
+<div id="loginScreen">
+
+<div class="login-card">
+
+<img src="./yerliyurt-logo.png"
+ alt="Yerliyurt Marin"
+ onerror="this.style.display='none'">
+
+<h2>YERLİYURT MARİN</h2>
+
+<p class="muted">
+Servis ve Sipariş Yönetim Sistemi
+</p>
+
+<form id="loginForm">
+
+<label>E-posta Adresi</label>
+<input
+ type="email"
+ id="loginEmail"
+ autocomplete="username"
+ required
+>
+
+<label>Şifre</label>
+<input
+ type="password"
+ id="loginPassword"
+ autocomplete="current-password"
+ required
+>
+
+<button class="primary" type="submit" id="loginButton">
+Giriş Yap
+</button>
+
+</form>
+
+<p id="loginMessage" class="muted"></p>
+
+</div>
+</div>
+
+<div id="app">
+
 <header>
-<img src="./yerliyurt-logo.png" alt="Yerliyurt Marin Logosu">
+
+<img src="./yerliyurt-logo.png"
+ alt="Yerliyurt Marin Logosu"
+ onerror="this.style.display='none'">
+
 <h1>Servis & Sipariş Takip</h1>
+
 <p>Yerliyurt Marin Yönetim Sistemi</p>
+
 </header>
 
+<div class="topbar">
+
+<div>
+<div id="userEmail"></div>
+<div id="connectionStatus">Bağlanıyor...</div>
+</div>
+
+<div>
+<button class="secondary smallbtn" onclick="refreshData()">
+Yenile
+</button>
+
+<button class="danger smallbtn" onclick="logout()">
+Çıkış
+</button>
+</div>
+
+</div>
+
 <nav>
-<button class="active" data-tab="home">Ana Sayfa</button>
-<button data-tab="service">Yeni Servis</button>
-<button data-tab="history">Geçmiş Servisler</button>
-<button data-tab="order">Sipariş Formları</button>
-<button data-tab="parts">Motor Bakım Parçaları</button>
-<button data-tab="reminders">Hatırlatmalar</button>
-<button data-tab="backup">Yedekleme</button>
+
+<button class="active" data-tab="home">
+Ana Sayfa
+</button>
+
+<button data-tab="service">
+Yeni Servis
+</button>
+
+<button data-tab="history">
+Geçmiş Servisler
+</button>
+
+<button data-tab="order">
+Sipariş Formları
+</button>
+
+<button data-tab="parts">
+Motor Bakım Parçaları
+</button>
+
+<button data-tab="reminders">
+Hatırlatmalar
+</button>
+
+<button data-tab="backup">
+Yedekleme
+</button>
+
 </nav>
 
 <main>
 
 <section id="home" class="active">
+
 <div class="card">
+
 <h2>Genel Durum</h2>
+
 <div class="stats">
-<div class="stat"><strong id="serviceCount">0</strong>Servis Kaydı</div>
-<div class="stat"><strong id="orderCount">0</strong>Sipariş Formu</div>
-<div class="stat"><strong id="partCount">0</strong>Motor Bakım Parçası</div>
-<div class="stat"><strong id="reminderCount">0</strong>Bekleyen Hatırlatma</div>
-<div class="stat"><strong id="completedCount">0</strong>Tamamlanan Servis</div>
+
+<div class="stat">
+<strong id="serviceCount">0</strong>
+Servis Kaydı
 </div>
+
+<div class="stat">
+<strong id="orderCount">0</strong>
+Sipariş Formu
 </div>
+
+<div class="stat">
+<strong id="partCount">0</strong>
+Motor Bakım Parçası
+</div>
+
+<div class="stat">
+<strong id="reminderCount">0</strong>
+Bekleyen Hatırlatma
+</div>
+
+<div class="stat">
+<strong id="completedCount">0</strong>
+Tamamlanan Servis
+</div>
+
+</div>
+
+</div>
+
 <div class="card">
+
 <h3>Yaklaşan Hatırlatmalar</h3>
+
 <div id="homeReminders"></div>
+
 </div>
+
 </section>
 
 <section id="service">
+
 <div class="card">
+
 <h2 id="serviceTitle">Yeni Servis Kaydı</h2>
+
 <form id="serviceForm">
+
 <input type="hidden" id="serviceId">
+
 <label>Tarih</label>
 <input type="date" id="serviceDate" required>
+
 <label>Ad Soyad</label>
 <input id="serviceName" required>
+
 <label>Telefon</label>
 <input type="tel" id="servicePhone">
+
 <label>Model</label>
 <input id="serviceModel" required>
+
 <label>Arıza / Yapılacak İşlem</label>
 <textarea id="serviceProblem"></textarea>
+
 <label>Notlar</label>
 <textarea id="serviceNotes"></textarea>
+
 <label>Durum</label>
+
 <select id="serviceStatus">
 <option>Bekliyor</option>
 <option>İşlemde</option>
 <option>Tamamlandı</option>
 <option>Teslim Edildi</option>
 </select>
+
 <label>Hatırlatma Tarihi</label>
 <input type="date" id="serviceReminder">
+
 <label>Servis Fotoğrafları</label>
-<input type="file" id="servicePhotos" accept="image/*" multiple>
-<p class="photo-note">Kameradan çekebilir veya galeriden fotoğraf seçebilirsin.</p>
+
+<input
+ type="file"
+ id="servicePhotos"
+ accept="image/*"
+ multiple
+>
+
+<p class="photo-note">
+Kameradan veya galeriden fotoğraf ekleyebilirsin.
+Bir kayda en fazla 10 fotoğraf eklenebilir.
+</p>
+
 <div id="servicePhotoPreview" class="photos"></div>
-<button type="submit" class="primary">Servis Kaydını Kaydet</button>
-<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetService()">Formu Temizle</button>
+
+<button type="submit" class="primary">
+Servis Kaydını Kaydet
+</button>
+
+<button type="button"
+ class="secondary"
+ style="width:100%;margin-top:8px"
+ onclick="resetService()">
+Formu Temizle
+</button>
+
 </form>
+
 </div>
+
 </section>
 
 <section id="history">
+
 <div class="card">
+
 <h2>Geçmiş Servis Kayıtları</h2>
-<input id="serviceSearch" placeholder="Ad, telefon veya model ara..." oninput="renderServices()">
+
+<input
+ id="serviceSearch"
+ placeholder="Ad, telefon veya model ara..."
+ oninput="renderServices()"
+>
+
 <div id="serviceList"></div>
+
 </div>
+
 </section>
 
 <section id="order">
+
 <div class="card">
+
 <h2 id="orderTitle">Yeni Sipariş Formu</h2>
+
 <form id="orderForm">
+
 <input type="hidden" id="orderId">
+
 <label>Tarih</label>
 <input type="date" id="orderDate" required>
+
 <label>Ad Soyad</label>
 <input id="orderName" required>
+
 <label>Telefon</label>
 <input type="tel" id="orderPhone">
+
 <label>Model</label>
 <input id="orderModel" required>
+
 <label>Notlar</label>
 <textarea id="orderNotes"></textarea>
+
 <label>Durum</label>
+
 <select id="orderStatus">
 <option>Bekliyor</option>
 <option>Sipariş Verildi</option>
 <option>Geldi</option>
 <option>Teslim Edildi</option>
 </select>
+
 <label>Hatırlatma Tarihi</label>
 <input type="date" id="orderReminder">
+
 <label>Sipariş Fotoğrafları</label>
-<input type="file" id="orderPhotos" accept="image/*" multiple>
+
+<input
+ type="file"
+ id="orderPhotos"
+ accept="image/*"
+ multiple
+>
+
 <div id="orderPhotoPreview" class="photos"></div>
-<button type="submit" class="primary">Sipariş Formunu Kaydet</button>
-<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetOrder()">Formu Temizle</button>
+
+<button type="submit" class="primary">
+Sipariş Formunu Kaydet
+</button>
+
+<button type="button"
+ class="secondary"
+ style="width:100%;margin-top:8px"
+ onclick="resetOrder()">
+Formu Temizle
+</button>
+
 </form>
+
 </div>
+
 <div class="card">
+
 <h2>Kaydedilen Siparişler</h2>
-<input id="orderSearch" placeholder="Ad, telefon veya model ara..." oninput="renderOrders()">
+
+<input
+ id="orderSearch"
+ placeholder="Ad, telefon veya model ara..."
+ oninput="renderOrders()"
+>
+
 <div id="orderList"></div>
+
 </div>
+
 </section>
 
 <section id="parts">
+
 <div class="card">
+
 <h2 id="partTitle">Motor Bakım Parçaları</h2>
+
 <form id="partForm">
+
 <input type="hidden" id="partId">
+
 <label>Parça Adı</label>
-<input id="partName" required placeholder="Örn. Yağ filtresi">
+<input id="partName" required>
+
 <label>Fiyat (₺)</label>
-<input id="partPrice" type="number" min="0" step="0.01" required placeholder="Örn. 850">
-<button type="submit" class="primary">Parçayı Kaydet</button>
-<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetPart()">Formu Temizle</button>
+
+<input
+ id="partPrice"
+ type="number"
+ min="0"
+ step="0.01"
+ required
+>
+
+<button type="submit" class="primary">
+Parçayı Kaydet
+</button>
+
+<button type="button"
+ class="secondary"
+ style="width:100%;margin-top:8px"
+ onclick="resetPart()">
+Formu Temizle
+</button>
+
 </form>
+
 </div>
+
 <div class="card">
+
 <h2>Kayıtlı Motor Bakım Parçaları</h2>
-<input id="partSearch" placeholder="Parça adı ara..." oninput="renderParts()">
+
+<input
+ id="partSearch"
+ placeholder="Parça adı ara..."
+ oninput="renderParts()"
+>
+
 <div id="partList"></div>
+
 </div>
+
 </section>
 
 <section id="reminders">
+
 <div class="card">
+
 <h2>Hatırlatmalar</h2>
-<div class="notice">Hatırlatmalar uygulama açıldığında görüntülenir. Safari kapalıyken otomatik bildirim gönderilmez.</div>
-<div id="reminderList"></div>
+
+<div class="notice">
+Hatırlatmalar program açıldığında görüntülenir.
+Safari kapalıyken otomatik bildirim gönderilmez.
 </div>
+
+<div id="reminderList"></div>
+
+</div>
+
 </section>
 
 <section id="backup">
+
 <div class="card">
+
 <h2>Yedekleme</h2>
-<p class="muted">Servis, sipariş, fotoğraf ve motor bakım parçası kayıtlarını JSON dosyası olarak yedekleyebilirsin.</p>
-<button class="primary" onclick="exportBackup()">Tüm Verileri Yedekle</button>
-<label>Yedekten Geri Yükle</label>
-<input type="file" id="backupFile" accept=".json,application/json">
-<button class="secondary" style="width:100%;margin-top:12px" onclick="importBackup()">Yedeği Geri Yükle</button>
+
+<p class="muted">
+Ortak veritabanındaki kayıtları JSON dosyası olarak
+yedekleyebilirsin. Fotoğraflar bağlantı yollarıyla
+yedeklenir; ayrı fotoğraf dosyaları bu yedeğe dahil değildir.
+</p>
+
+<button class="primary" onclick="exportBackup()">
+Tüm Verileri Yedekle
+</button>
+
+<label>Eski Yedeği İçeri Aktar</label>
+
+<input
+ type="file"
+ id="backupFile"
+ accept=".json,application/json"
+>
+
+<button class="secondary"
+ style="width:100%;margin-top:12px"
+ onclick="importBackup()">
+Yedekten Kayıtları Aktar
+</button>
+
+<p class="muted">
+İçe aktarma mevcut kayıtları topluca silmez.
+Aynı kimliğe sahip kayıtları günceller.
+</p>
+
 </div>
+
 </section>
 
 </main>
+</div>
 
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-const today=()=>{
- const d=new Date();
- return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+/* SUPABASE BAĞLANTISI */
+
+const SUPABASE_URL =
+"https://dgmsqqcnqiazbpnpflna.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rAem6UGu8RnZHgj1uZ683Q_AOaK7eRQ";
+
+const PHOTO_BUCKET = "Marin-photos";
+
+const client = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+const TABLES = {
+ service:"marin_services",
+ order:"marin_orders",
+ part:"marin_parts"
 };
-const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
-const DB_NAME="servis_siparis_fotograf_v1";
-const STORE="records";
-let database;
-let db={services:[],orders:[],parts:[]};
-let photoCache={service:[],order:[]};
-let busy=false;
 
-function normalize(data){
- return {
-  services:Array.isArray(data?.services)?data.services:[],
-  orders:Array.isArray(data?.orders)?data.orders:[],
-  parts:Array.isArray(data?.parts)?data.parts:[]
- };
+let db = {
+ services:[],
+ orders:[],
+ parts:[]
+};
+
+let photoCache = {
+ service:[],
+ order:[]
+};
+
+let busy = false;
+let refreshBusy = false;
+let currentUser = null;
+let photoUrls = new Map();
+
+function today(){
+ const d=new Date();
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0")+"-"+
+ String(d.getDate()).padStart(2,"0");
 }
 
-function openDatabase(){
- return new Promise((resolve,reject)=>{
-  const request=indexedDB.open(DB_NAME,1);
-  request.onupgradeneeded=()=>{
-   const d=request.result;
-   if(!d.objectStoreNames.contains(STORE)){
-    d.createObjectStore(STORE);
-   }
-  };
-  request.onsuccess=()=>resolve(request.result);
-  request.onerror=()=>reject(request.error);
- });
-}
-
-function readDatabase(){
- return new Promise((resolve,reject)=>{
-  const tx=database.transaction(STORE,"readonly");
-  const request=tx.objectStore(STORE).get("data");
-  request.onsuccess=()=>resolve(request.result||{services:[],orders:[],parts:[]});
-  request.onerror=()=>reject(request.error);
- });
-}
-
-function writeDatabase(data){
- return new Promise((resolve,reject)=>{
-  const tx=database.transaction(STORE,"readwrite");
-  tx.objectStore(STORE).put(data,"data");
-  tx.oncomplete=()=>resolve();
-  tx.onerror=()=>reject(tx.error);
-  tx.onabort=()=>reject(tx.error);
- });
-}
-
-async function persist(next){
- await writeDatabase(next);
- db=next;
- renderAll();
+function uid(){
+ if(crypto.randomUUID)return crypto.randomUUID();
+ return Date.now().toString(36)+"-"+
+ Math.random().toString(36).slice(2);
 }
 
 function safe(value){
  return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
  })[c]);
 }
 
+function setConnection(message,error=false){
+ $("connectionStatus").textContent=message;
+ $("connectionStatus").style.color=
+ error?"#b91c1c":"#166534";
+}
+
+function errorText(error){
+ return error?.message||String(error);
+}
+
+/* GİRİŞ */
+
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ const button=$("loginButton");
+ button.disabled=true;
+ $("loginMessage").textContent="Giriş yapılıyor...";
+
+ try{
+  const email=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
+
+  const {data,error}=await client.auth.signInWithPassword({
+   email,password
+  });
+
+  if(error)throw error;
+
+  if(!data.user)throw new Error("Giriş yapılamadı.");
+
+  $("loginPassword").value="";
+  await enterApp(data.user);
+
+ }catch(error){
+  $("loginMessage").textContent=
+  "Giriş başarısız: "+errorText(error);
+ }finally{
+  button.disabled=false;
+ }
+});
+
+async function enterApp(user){
+ currentUser=user;
+ $("loginScreen").style.display="none";
+ $("app").style.display="block";
+ $("userEmail").textContent=user.email||"Çalışan";
+
+ resetService();
+ resetOrder();
+ resetPart();
+
+ await refreshData();
+}
+
+async function logout(){
+ await client.auth.signOut();
+ currentUser=null;
+ db={services:[],orders:[],parts:[]};
+ photoCache={service:[],order:[]};
+ photoUrls.clear();
+
+ $("app").style.display="none";
+ $("loginScreen").style.display="flex";
+ $("loginMessage").textContent="";
+}
+
+/* ORTAK VERİTABANI */
+
+async function readTable(table){
+ const all=[];
+ const pageSize=500;
+
+ for(let start=0;;start+=pageSize){
+  const {data,error}=await client
+   .from(table)
+   .select("*")
+   .order("created_at",{ascending:false})
+   .range(start,start+pageSize-1);
+
+  if(error)throw error;
+
+  all.push(...(data||[]));
+
+  if(!data||data.length<pageSize)break;
+ }
+
+ return all;
+}
+
+async function refreshData(){
+ if(!currentUser||refreshBusy)return;
+
+ refreshBusy=true;
+ setConnection("Veriler yenileniyor...");
+
+ try{
+  const [services,orders,parts]=await Promise.all([
+   readTable(TABLES.service),
+   readTable(TABLES.order),
+   readTable(TABLES.part)
+  ]);
+
+  db={services,orders,parts};
+
+  renderAll();
+  setConnection("☁️ Ortak veritabanı bağlı");
+
+ }catch(error){
+  setConnection("Bağlantı hatası",true);
+  alert("Veriler alınamadı: "+errorText(error));
+ }finally{
+  refreshBusy=false;
+ }
+}
+
+async function saveRecord(table,item){
+ const {error}=await client
+  .from(table)
+  .upsert(item,{onConflict:"id"});
+
+ if(error)throw error;
+}
+
+async function removeRecord(table,id){
+ const {error}=await client
+  .from(table)
+  .delete()
+  .eq("id",id);
+
+ if(error)throw error;
+}
+
+/* SEKMELER */
+
 function show(tab){
- document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll("section").forEach(s=>{
+  s.classList.remove("active");
+ });
+
  document.querySelectorAll("nav button").forEach(b=>{
   b.classList.toggle("active",b.dataset.tab===tab);
  });
+
  $(tab).classList.add("active");
  renderAll();
  window.scrollTo(0,0);
@@ -339,6 +1004,8 @@ function show(tab){
 document.querySelectorAll("nav button").forEach(b=>{
  b.addEventListener("click",()=>show(b.dataset.tab));
 });
+
+/* FORMLAR */
 
 function resetService(){
  $("serviceForm").reset();
@@ -364,25 +1031,52 @@ function resetPart(){
  $("partTitle").textContent="Motor Bakım Parçaları";
 }
 
+/* FOTOĞRAFLAR */
+
 function resizePhoto(file){
  return new Promise((resolve,reject)=>{
   const reader=new FileReader();
-  reader.onerror=()=>reject(new Error("Fotoğraf okunamadı"));
+
+  reader.onerror=()=>reject(
+   new Error("Fotoğraf okunamadı.")
+  );
+
   reader.onload=()=>{
    const img=new Image();
-   img.onerror=()=>reject(new Error("Fotoğraf açılamadı"));
+
+   img.onerror=()=>reject(
+    new Error("Fotoğraf açılamadı.")
+   );
+
    img.onload=()=>{
     const max=1200;
-    const scale=Math.min(1,max/Math.max(img.width,img.height));
+    const scale=Math.min(
+     1,max/Math.max(img.width,img.height)
+    );
+
     const canvas=document.createElement("canvas");
-    canvas.width=Math.max(1,Math.round(img.width*scale));
-    canvas.height=Math.max(1,Math.round(img.height*scale));
-    const ctx=canvas.getContext("2d");
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    resolve(canvas.toDataURL("image/jpeg",0.72));
+
+    canvas.width=Math.max(
+     1,Math.round(img.width*scale)
+    );
+
+    canvas.height=Math.max(
+     1,Math.round(img.height*scale)
+    );
+
+    canvas.getContext("2d").drawImage(
+     img,0,0,canvas.width,canvas.height
+    );
+
+    canvas.toBlob(blob=>{
+     if(blob)resolve(blob);
+     else reject(new Error("Fotoğraf işlenemedi."));
+    },"image/jpeg",0.72);
    };
+
    img.src=reader.result;
   };
+
   reader.readAsDataURL(file);
  });
 }
@@ -393,16 +1087,25 @@ async function addPhotos(type,files){
    if(!file.type.startsWith("image/")){
     throw new Error("Yalnızca fotoğraf seçebilirsin.");
    }
+
    if(photoCache[type].length>=10){
-    alert("Bir kayda en fazla 10 fotoğraf eklenebilir.");
+    alert("En fazla 10 fotoğraf eklenebilir.");
     break;
    }
-   const data=await resizePhoto(file);
-   photoCache[type].push(data);
+
+   const blob=await resizePhoto(file);
+
+   photoCache[type].push({
+    kind:"new",
+    blob,
+    preview:URL.createObjectURL(blob)
+   });
   }
+
   renderPhotoPreview(type);
- }catch(e){
-  alert("Fotoğraf eklenemedi: "+e.message);
+
+ }catch(error){
+  alert("Fotoğraf eklenemedi: "+errorText(error));
  }
 }
 
@@ -413,25 +1116,86 @@ async function addPhotos(type,files){
  });
 });
 
-function renderPhotoPreview(type){
+async function getPhotoUrl(path){
+ if(!path)return "";
+
+ if(path.startsWith("data:"))return path;
+
+ if(photoUrls.has(path))return photoUrls.get(path);
+
+ const {data,error}=await client.storage
+  .from(PHOTO_BUCKET)
+  .createSignedUrl(path,3600);
+
+ if(error)throw error;
+
+ photoUrls.set(path,data.signedUrl);
+ return data.signedUrl;
+}
+
+async function renderPhotoPreview(type){
  const container=$(type+"PhotoPreview");
  container.innerHTML="";
- photoCache[type].forEach((photo,index)=>{
+
+ for(const [index,item] of photoCache[type].entries()){
   const wrapper=document.createElement("div");
   wrapper.className="photo";
+
   const img=document.createElement("img");
-  img.src=photo;
+  img.alt="Fotoğraf";
+
+  if(item.kind==="new"){
+   img.src=item.preview;
+  }else{
+   getPhotoUrl(item.path)
+    .then(url=>img.src=url)
+    .catch(()=>img.alt="Fotoğraf açılamadı");
+  }
+
   const button=document.createElement("button");
   button.type="button";
   button.textContent="×";
+
   button.onclick=()=>{
+   if(item.kind==="new"){
+    URL.revokeObjectURL(item.preview);
+   }
    photoCache[type].splice(index,1);
    renderPhotoPreview(type);
   };
+
   wrapper.append(img,button);
   container.appendChild(wrapper);
- });
+ }
 }
+
+async function uploadPhotos(type,id){
+ const paths=[];
+
+ for(const item of photoCache[type]){
+  if(item.kind==="stored"){
+   paths.push(item.path);
+   continue;
+  }
+
+  const path=type+"/"+id+"/"+uid()+".jpg";
+
+  const {error}=await client.storage
+   .from(PHOTO_BUCKET)
+   .upload(path,item.blob,{
+    contentType:"image/jpeg",
+    upsert:false
+   });
+
+  if(error)throw error;
+
+  paths.push(path);
+ }
+
+ return paths;
+}
+
+/* SERVİS VE SİPARİŞ KAYITLARI */
 
 function collect(type){
  const item={
@@ -442,43 +1206,51 @@ function collect(type){
   model:$(type+"Model").value.trim(),
   notes:$(type+"Notes").value.trim(),
   status:$(type+"Status").value,
-  reminder:$(type+"Reminder").value,
-  photos:[...photoCache[type]]
+  reminder:$(type+"Reminder").value||null
  };
+
  if(type==="service"){
   item.problem=$("serviceProblem").value.trim();
  }
+
  return item;
 }
 
 async function submitRecord(type){
  if(busy)return;
+
  const item=collect(type);
+
  if(!item.name||!item.model){
   alert("Ad soyad ve model zorunludur.");
   return;
  }
- const key=type==="service"?"services":"orders";
- const next={
-  services:[...db.services],
-  orders:[...db.orders],
-  parts:[...db.parts]
- };
- next[key]=next[key].filter(x=>x.id!==item.id);
- next[key].unshift(item);
+
  busy=true;
+
  try{
-  await persist(next);
+  item.photos=await uploadPhotos(type,item.id);
+
+  await saveRecord(TABLES[type],item);
+
   if(type==="service"){
    resetService();
-   alert("Servis kaydı kaydedildi.");
-   show("history");
   }else{
    resetOrder();
-   alert("Sipariş formu kaydedildi.");
   }
- }catch(e){
-  alert("Kayıt kaydedilemedi: "+e.message);
+
+  await refreshData();
+
+  alert(
+   type==="service"?
+   "Servis kaydı ortak veritabanına kaydedildi.":
+   "Sipariş formu ortak veritabanına kaydedildi."
+  );
+
+  if(type==="service")show("history");
+
+ }catch(error){
+  alert("Kayıt kaydedilemedi: "+errorText(error));
  }finally{
   busy=false;
  }
@@ -494,73 +1266,167 @@ $("orderForm").addEventListener("submit",async e=>{
  await submitRecord("order");
 });
 
+/* MOTOR BAKIM PARÇALARI */
+
 $("partForm").addEventListener("submit",async e=>{
  e.preventDefault();
+
  if(busy)return;
+
  const name=$("partName").value.trim();
  const price=Number($("partPrice").value);
+
  if(!name||!Number.isFinite(price)||price<0){
   alert("Geçerli parça adı ve fiyatı gir.");
   return;
  }
- const id=$("partId").value||uid();
- const item={id,name,price};
- const next={
-  services:[...db.services],
-  orders:[...db.orders],
-  parts:db.parts.filter(x=>x.id!==id)
- };
- next.parts.unshift(item);
+
  busy=true;
+
  try{
-  await persist(next);
+  await saveRecord(TABLES.part,{
+   id:$("partId").value||uid(),
+   name,
+   price
+  });
+
   resetPart();
+  await refreshData();
+
   alert("Motor bakım parçası kaydedildi.");
- }catch(e){
-  alert("Parça kaydedilemedi: "+e.message);
+
+ }catch(error){
+  alert("Parça kaydedilemedi: "+errorText(error));
  }finally{
   busy=false;
  }
 });
 
+/* KAYIT GÖRÜNTÜLEME */
+
 function recordHTML(x,type){
- const photos=(x.photos||[]).map(p=>
-  `<div class="photo"><a href="${safe(p)}" target="_blank" rel="noopener"><img src="${safe(p)}" alt="Kayıt fotoğrafı"></a></div>`
- ).join("");
  return `<div class="record">
+
  <h3>${safe(x.name)}</h3>
+
  <p><b>Tarih:</b> ${safe(x.date)}</p>
  <p><b>Telefon:</b> ${safe(x.phone)}</p>
  <p><b>Model:</b> ${safe(x.model)}</p>
- ${type==="service"?`<p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
+
+ ${type==="service"?
+ `<p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
+
  <p><b>Not:</b> ${safe(x.notes)}</p>
- <p><b>Durum:</b> <span class="badge">${safe(x.status)}</span></p>
- ${x.reminder?`<p><b>Hatırlatma:</b> ${safe(x.reminder)}</p>`:""}
- <div class="photos">${photos}</div>
+
+ <p><b>Durum:</b>
+ <span class="badge">${safe(x.status)}</span>
+ </p>
+
+ ${x.reminder?
+ `<p><b>Hatırlatma:</b> ${safe(x.reminder)}</p>`:""}
+
+ <div class="photos" data-photo-record="${safe(type)}"
+ data-record-id="${safe(x.id)}"></div>
+
  <div class="actions">
- <button class="secondary" data-action="edit" data-type="${type}" data-id="${safe(x.id)}">Düzenle</button>
- <button class="danger" data-action="delete" data-type="${type}" data-id="${safe(x.id)}">Sil</button>
- </div></div>`;
+
+ <button class="secondary"
+ data-action="edit"
+ data-type="${type}"
+ data-id="${safe(x.id)}">
+ Düzenle
+ </button>
+
+ <button class="danger"
+ data-action="delete"
+ data-type="${type}"
+ data-id="${safe(x.id)}">
+ Sil
+ </button>
+
+ </div>
+ </div>`;
+}
+
+async function renderStoredPhotos(){
+ const containers=document.querySelectorAll(
+  "[data-photo-record]"
+ );
+
+ for(const container of containers){
+  const type=container.dataset.photoRecord;
+  const id=container.dataset.recordId;
+
+  const list=type==="service"?db.services:db.orders;
+  const item=list.find(x=>x.id===id);
+
+  if(!item)continue;
+
+  container.innerHTML="";
+
+  for(const path of item.photos||[]){
+   const wrapper=document.createElement("div");
+   wrapper.className="photo";
+
+   const link=document.createElement("a");
+   link.target="_blank";
+   link.rel="noopener noreferrer";
+
+   const img=document.createElement("img");
+   img.alt="Kayıt fotoğrafı";
+
+   wrapper.appendChild(link);
+   link.appendChild(img);
+   container.appendChild(wrapper);
+
+   try{
+    const url=await getPhotoUrl(path);
+
+    if(!container.isConnected)break;
+
+    img.src=url;
+    link.href=url;
+   }catch(error){
+    img.alt="Fotoğraf yüklenemedi";
+   }
+  }
+ }
 }
 
 function renderServices(){
- const q=$("serviceSearch").value.toLocaleLowerCase("tr");
+ const q=$("serviceSearch").value
+  .toLocaleLowerCase("tr");
+
  const items=db.services.filter(x=>
-  [x.name,x.phone,x.model,x.problem,x.notes].join(" ").toLocaleLowerCase("tr").includes(q)
+  [x.name,x.phone,x.model,x.problem,x.notes]
+  .join(" ")
+  .toLocaleLowerCase("tr")
+  .includes(q)
  );
+
  $("serviceList").innerHTML=items.length?
   items.map(x=>recordHTML(x,"service")).join(""):
   '<div class="empty">Servis kaydı bulunamadı.</div>';
+
+ renderStoredPhotos();
 }
 
 function renderOrders(){
- const q=$("orderSearch").value.toLocaleLowerCase("tr");
+ const q=$("orderSearch").value
+  .toLocaleLowerCase("tr");
+
  const items=db.orders.filter(x=>
-  [x.name,x.phone,x.model,x.notes].join(" ").toLocaleLowerCase("tr").includes(q)
+  [x.name,x.phone,x.model,x.notes]
+  .join(" ")
+  .toLocaleLowerCase("tr")
+  .includes(q)
  );
+
  $("orderList").innerHTML=items.length?
   items.map(x=>recordHTML(x,"order")).join(""):
   '<div class="empty">Sipariş bulunamadı.</div>';
+
+ renderStoredPhotos();
 }
 
 function formatPrice(value){
@@ -571,43 +1437,87 @@ function formatPrice(value){
 }
 
 function renderParts(){
- const q=$("partSearch").value.toLocaleLowerCase("tr");
+ const q=$("partSearch").value
+  .toLocaleLowerCase("tr");
+
  const items=db.parts.filter(x=>
-  String(x.name).toLocaleLowerCase("tr").includes(q)
+  String(x.name)
+  .toLocaleLowerCase("tr")
+  .includes(q)
  );
+
  $("partList").innerHTML=items.length?
   items.map(x=>`<div class="record">
-   <div class="part-row">
-    <h3>${safe(x.name)}</h3>
-    <p class="price">${formatPrice(x.price)}</p>
-   </div>
-   <div class="actions">
-    <button class="secondary" data-action="edit" data-type="part" data-id="${safe(x.id)}">Düzenle</button>
-    <button class="danger" data-action="delete" data-type="part" data-id="${safe(x.id)}">Sil</button>
-   </div>
+
+  <div class="part-row">
+  <h3>${safe(x.name)}</h3>
+  <p class="price">${formatPrice(x.price)}</p>
+  </div>
+
+  <div class="actions">
+
+  <button class="secondary"
+  data-action="edit"
+  data-type="part"
+  data-id="${safe(x.id)}">
+  Düzenle
+  </button>
+
+  <button class="danger"
+  data-action="delete"
+  data-type="part"
+  data-id="${safe(x.id)}">
+  Sil
+  </button>
+
+  </div>
   </div>`).join(""):
   '<div class="empty">Motor bakım parçası bulunamadı.</div>';
 }
+
+/* DÜZENLEME */
 
 function editRecord(type,id){
  if(type==="part"){
   const x=db.parts.find(v=>v.id===id);
   if(!x)return;
+
   $("partId").value=x.id;
   $("partName").value=x.name;
   $("partPrice").value=x.price;
   $("partTitle").textContent="Motor Bakım Parçasını Düzenle";
+
   show("parts");
   return;
  }
+
  const list=type==="service"?db.services:db.orders;
  const x=list.find(v=>v.id===id);
+
  if(!x)return;
- ["Id","Date","Name","Phone","Model","Notes","Status","Reminder"].forEach(field=>{
-  $(type+field).value=x[field.toLowerCase()]??"";
+
+ const fields={
+  Id:"id",
+  Date:"date",
+  Name:"name",
+  Phone:"phone",
+  Model:"model",
+  Notes:"notes",
+  Status:"status",
+  Reminder:"reminder"
+ };
+
+ Object.entries(fields).forEach(([field,key])=>{
+  $(type+field).value=x[key]??"";
  });
- photoCache[type]=[...(x.photos||[])];
+
+ photoCache[type]=(x.photos||[]).map(path=>({
+  kind:"stored",
+  path
+ }));
+
  renderPhotoPreview(type);
+
  if(type==="service"){
   $("serviceProblem").value=x.problem||"";
   $("serviceTitle").textContent="Servis Kaydını Düzenle";
@@ -618,50 +1528,76 @@ function editRecord(type,id){
  }
 }
 
+/* SİLME */
+
 async function deleteRecord(type,id){
- if(!confirm("Bu kaydı kalıcı olarak silmek istiyor musun?"))return;
- const key=type==="service"?"services":type==="order"?"orders":"parts";
- const next={
-  services:[...db.services],
-  orders:[...db.orders],
-  parts:[...db.parts]
- };
- next[key]=next[key].filter(x=>x.id!==id);
+ if(!confirm("Bu kaydı kalıcı olarak silmek istiyor musun?")){
+  return;
+ }
+
+ if(busy)return;
+
+ busy=true;
+
  try{
-  await persist(next);
- }catch(e){
-  alert("Kayıt silinemedi: "+e.message);
+  await removeRecord(TABLES[type],id);
+  await refreshData();
+  alert("Kayıt silindi.");
+
+ }catch(error){
+  alert("Kayıt silinemedi: "+errorText(error));
+ }finally{
+  busy=false;
  }
 }
 
 document.addEventListener("click",async e=>{
  const btn=e.target.closest("[data-action]");
  if(!btn)return;
- if(btn.dataset.action==="edit"){
-  editRecord(btn.dataset.type,btn.dataset.id);
+
+ const {action,type,id}=btn.dataset;
+
+ if(action==="edit"){
+  editRecord(type,id);
  }
- if(btn.dataset.action==="delete"){
-  await deleteRecord(btn.dataset.type,btn.dataset.id);
+
+ if(action==="delete"){
+  await deleteRecord(type,id);
  }
 });
 
+/* HATIRLATMALAR */
+
 function getReminders(){
  return [
-  ...db.services.filter(x=>x.reminder&&!["Tamamlandı","Teslim Edildi"].includes(x.status))
-   .map(x=>({...x,type:"Servis"})),
-  ...db.orders.filter(x=>x.reminder&&x.status!=="Teslim Edildi")
-   .map(x=>({...x,type:"Sipariş"}))
+  ...db.services.filter(x=>
+   x.reminder&&
+   !["Tamamlandı","Teslim Edildi"].includes(x.status)
+  ).map(x=>({...x,type:"Servis"})),
+
+  ...db.orders.filter(x=>
+   x.reminder&&x.status!=="Teslim Edildi"
+  ).map(x=>({...x,type:"Sipariş"}))
  ].sort((a,b)=>a.reminder.localeCompare(b.reminder));
 }
 
 function reminderHTML(x){
  const due=x.reminder<=today();
+
  return `<div class="record">
- <span class="badge ${due?"due":"ok"}">${due?"Bugün / Gecikmiş":"Yaklaşan"}</span>
+
+ <span class="badge ${due?"due":"ok"}">
+ ${due?"Bugün / Gecikmiş":"Yaklaşan"}
+ </span>
+
  <h3>${safe(x.name)}</h3>
+
  <p>${safe(x.type)} · ${safe(x.model)}</p>
+
  <p><b>Tarih:</b> ${safe(x.reminder)}</p>
+
  <p><b>Durum:</b> ${safe(x.status)}</p>
+
  </div>`;
 }
 
@@ -669,72 +1605,178 @@ function renderAll(){
  $("serviceCount").textContent=db.services.length;
  $("orderCount").textContent=db.orders.length;
  $("partCount").textContent=db.parts.length;
- $("completedCount").textContent=db.services.filter(x=>
+
+ $("completedCount").textContent=
+ db.services.filter(x=>
   ["Tamamlandı","Teslim Edildi"].includes(x.status)
  ).length;
+
  const reminders=getReminders();
+
  $("reminderCount").textContent=reminders.length;
+
  $("reminderList").innerHTML=reminders.length?
   reminders.map(reminderHTML).join(""):
   '<div class="empty">Bekleyen hatırlatma yok.</div>';
+
  $("homeReminders").innerHTML=reminders.length?
   reminders.slice(0,5).map(reminderHTML).join(""):
   '<div class="empty">Yaklaşan hatırlatma yok.</div>';
+
  renderServices();
  renderOrders();
  renderParts();
 }
 
+/* YEDEKLEME */
+
 function exportBackup(){
- const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+ const blob=new Blob(
+  [JSON.stringify(db,null,2)],
+  {type:"application/json"}
+ );
+
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
+
  a.href=url;
  a.download="yerliyurt-marin-yedek-"+today()+".json";
+
  document.body.appendChild(a);
  a.click();
  a.remove();
+
  setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 
 async function importBackup(){
  const file=$("backupFile").files[0];
+
  if(!file){
-  alert("Önce bir JSON yedek dosyası seç.");
+  alert("Önce JSON yedek dosyasını seç.");
   return;
  }
+
+ if(busy)return;
+
+ if(!confirm(
+  "Yedekteki kayıtlar ortak veritabanına aktarılacak. "+
+  "Aynı kimliğe sahip kayıtlar güncellenecek. Devam edilsin mi?"
+ ))return;
+
+ busy=true;
+
  try{
   const data=JSON.parse(await file.text());
-  if(!Array.isArray(data.services)||!Array.isArray(data.orders)){
-   throw new Error("Geçersiz yedek dosyası");
+
+  if(!Array.isArray(data.services)||
+     !Array.isArray(data.orders)){
+   throw new Error("Geçersiz yedek dosyası.");
   }
-  if(!confirm("Mevcut kayıtlar yedekteki kayıtlarla değiştirilsin mi?"))return;
-  await persist(normalize(data));
-  resetService();
-  resetOrder();
-  resetPart();
-  alert("Yedek geri yüklendi.");
- }catch(e){
-  alert("Yedek yüklenemedi: "+e.message);
+
+  let count=0;
+
+  for(const [type,items] of [
+   ["service",data.services],
+   ["order",data.orders],
+   ["part",data.parts||[]]
+  ]){
+   for(const old of items){
+    const item={...old};
+
+    item.id=String(item.id||uid());
+
+    delete item.created_at;
+
+    if(type!=="part"){
+     const paths=[];
+
+     for(const photo of item.photos||[]){
+      if(typeof photo!=="string")continue;
+
+      if(photo.startsWith("data:image/")){
+       const response=await fetch(photo);
+       const blob=await response.blob();
+
+       const path=type+"/"+item.id+"/"+uid()+".jpg";
+
+       const {error}=await client.storage
+        .from(PHOTO_BUCKET)
+        .upload(path,blob,{
+         contentType:blob.type||"image/jpeg"
+        });
+
+       if(error)throw error;
+
+       paths.push(path);
+      }else{
+       paths.push(photo);
+      }
+     }
+
+     item.photos=paths;
+     item.reminder=item.reminder||null;
+    }
+
+    await saveRecord(TABLES[type],item);
+    count++;
+   }
+  }
+
+  await refreshData();
+
+  alert(count+" kayıt ortak veritabanına aktarıldı.");
+
+ }catch(error){
+  alert(
+   "Aktarma tamamlanamadı. Bazı kayıtlar aktarılmış olabilir: "+
+   errorText(error)
+  );
+ }finally{
+  busy=false;
  }
 }
 
+/* BAŞLAT */
+
 async function start(){
  try{
-  if(!window.indexedDB){
-   throw new Error("Bu tarayıcı IndexedDB desteklemiyor.");
+  const {data,error}=await client.auth.getUser();
+
+  if(error&&!String(error.message).includes("Auth session missing")){
+   console.warn(error);
   }
-  database=await openDatabase();
-  db=normalize(await readDatabase());
-  resetService();
-  resetOrder();
-  resetPart();
-  renderAll();
- }catch(e){
-  alert("Veritabanı açılamadı: "+e.message);
+
+  if(data?.user){
+   await enterApp(data.user);
+  }else{
+   $("loginScreen").style.display="flex";
+   $("app").style.display="none";
+  }
+
+ }catch(error){
+  $("loginMessage").textContent=
+   "Başlatma hatası: "+errorText(error);
  }
 }
+
+document.addEventListener("visibilitychange",()=>{
+ if(!document.hidden&&currentUser){
+  photoUrls.clear();
+  refreshData();
+ }
+});
+
+setInterval(()=>{
+ if(currentUser&&!document.hidden){
+  photoUrls.clear();
+  refreshData();
+ }
+},30000);
+
 start();
+
 </script>
+
 </body>
 </html>
