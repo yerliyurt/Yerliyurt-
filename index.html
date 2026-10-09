@@ -2,697 +2,592 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Yerliyurt Marin</title>
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
-<meta name="theme-color" content="#10243a">
-
-<link rel="apple-touch-icon" href="logo.png.PNG">
-<link rel="icon" type="image/png" href="logo.png.PNG">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17263d">
+<title>Servis ve Sipariş Takip</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 15px;
-  font-family: Arial, sans-serif;
-  background: #eef2f6;
-  color: #172b42;
-}
-
-.container {
-  max-width: 650px;
-  margin: auto;
-}
-
-.logo {
-  display: block;
-  width: 250px;
-  max-width: 90%;
-  margin: 15px auto;
-}
-
-h1, h2 {
-  text-align: center;
-}
-
-h1 {
-  font-size: 24px;
-}
-
-.tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  background: #10243a;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.tabs button.active {
-  background: #1679a5;
-}
-
-.section {
-  display: none;
-}
-
-.section.active {
-  display: block;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 12px #00000012;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 15px;
-  margin-bottom: 6px;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #ccd3da;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-textarea {
-  min-height: 110px;
-}
-
-.full {
-  margin-top: 16px;
-}
-
-.message {
-  margin-top: 15px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  line-height: 1.5;
-}
-
-.record {
-  background: #f7f9fc;
-  padding: 15px;
-  border: 1px solid #dce3eb;
-  border-radius: 12px;
-  margin-top: 12px;
-  line-height: 1.8;
-  overflow-wrap: anywhere;
-}
-
-.record strong {
-  font-size: 18px;
-}
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5f9;color:#17263d;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#17263d;color:white;padding:24px 17px}
+header h1{font-size:23px;margin:0 0 6px}
+header p{margin:0;color:#cbd5e1;font-size:13px}
+nav{display:flex;gap:7px;overflow-x:auto;padding:12px;background:white;position:sticky;top:0;z-index:5;border-bottom:1px solid #ddd}
+button{border:0;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;cursor:pointer}
+nav button{white-space:nowrap;background:#e9eef5;color:#17263d}
+nav button.active,.primary{background:#2563eb;color:white}
+main{max-width:850px;margin:auto;padding:15px}
+section{display:none}
+section.active{display:block}
+.card{background:white;border-radius:15px;padding:17px;margin-bottom:15px;box-shadow:0 2px 12px #17263d0c}
+h2{font-size:20px;margin:0 0 15px}
+h3{font-size:16px;margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:600;margin:13px 0 6px}
+input,textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:12px;font:inherit;font-size:16px;background:white;color:#17263d}
+textarea{min-height:85px;resize:vertical}
+.primary{width:100%;margin-top:16px}
+.secondary{background:#e2e8f0;color:#17263d}
+.danger{background:#fee2e2;color:#b91c1c}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{flex:1}
+.record{border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin:10px 0}
+.record p{margin:6px 0;font-size:14px;overflow-wrap:anywhere}
+.muted{color:#64748b;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#eff6ff;padding:15px;border-radius:12px;font-size:13px}
+.stat strong{font-size:26px;display:block;color:#1d4ed8}
+.empty{text-align:center;color:#64748b;padding:25px}
+.notice{background:#fff7ed;border-radius:10px;padding:12px;font-size:13px;margin-bottom:15px}
+.badge{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:20px;padding:5px 9px;font-size:12px}
+.due{background:#fee2e2;color:#991b1b}
+.ok{background:#dcfce7;color:#166534}
+.photos{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.photo{position:relative;width:100px}
+.photo img{width:100px;height:100px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
+.photo button{position:absolute;right:-5px;top:-5px;border-radius:50%;padding:4px 8px;background:#dc2626;color:white}
+.photo a{display:block}
+.photo-note{font-size:12px;color:#64748b;margin-top:7px}
+.hidden{display:none}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<header>
+<h1>Servis & Sipariş Takip</h1>
+<p>Fotoğraflı müşteri ve iş takip sistemi</p>
+</header>
 
-<img src="logo.png.PNG"
-     alt="Yerliyurt Marin"
-     class="logo">
+<nav>
+<button class="active" data-tab="home">Ana Sayfa</button>
+<button data-tab="service">Yeni Servis</button>
+<button data-tab="history">Geçmiş Servisler</button>
+<button data-tab="order">Sipariş Formları</button>
+<button data-tab="reminders">Hatırlatmalar</button>
+<button data-tab="backup">Yedekleme</button>
+</nav>
 
-<h1>Servis ve Sipariş Takip Sistemi</h1>
+<main>
 
-<div class="tabs">
-
-<button type="button"
-        data-tab="servis"
-        onclick="sekmeAc('servis')">
-🚤 Servis Kaydı
-</button>
-
-<button type="button"
-        data-tab="gecmisServis"
-        onclick="sekmeAc('gecmisServis')">
-🔧 Geçmiş Servis Kayıtları
-</button>
-
-<button type="button"
-        data-tab="siparis"
-        onclick="sekmeAc('siparis')">
-📋 Sipariş Formları
-</button>
-
-<button type="button"
-        data-tab="gecmisSiparis"
-        onclick="sekmeAc('gecmisSiparis')">
-📂 Geçmiş Siparişler
-</button>
-
-</div>
-
-
-<!-- YENİ SERVİS KAYDI -->
-
-<section id="servis" class="section active">
+<section id="home" class="active">
 <div class="card">
-
-<h2>🚤 Yeni Servis Kaydı</h2>
-
-<form id="servisForm">
-
-<label>Müşteri Ad Soyad</label>
-<input id="customer_name" required>
-
-<label>Telefon</label>
-<input id="phone" type="tel">
-
-<label>Tekne</label>
-<input id="boat">
-
-<label>Motor</label>
-<input id="motor">
-
-<label>Yapılan İşlem</label>
-<textarea id="service_details"></textarea>
-
-<label>Ücret (₺)</label>
-<input id="amount" type="number" min="0" step="0.01">
-
-<label>Ödeme Durumu</label>
-<select id="paid">
-<option value="false">Ödenmedi</option>
-<option value="true">Ödendi</option>
-</select>
-
-<label>Servis Tarihi</label>
-<input id="service_date" type="date" required>
-
-<button class="full" type="submit">
-💾 Servis Kaydını Kaydet
-</button>
-
-</form>
-
-<div id="servisMesaj" class="message"></div>
-
+<h2>Genel Durum</h2>
+<div class="stats">
+<div class="stat"><strong id="serviceCount">0</strong>Servis Kaydı</div>
+<div class="stat"><strong id="orderCount">0</strong>Sipariş Formu</div>
+<div class="stat"><strong id="reminderCount">0</strong>Bekleyen Hatırlatma</div>
+<div class="stat"><strong id="completedCount">0</strong>Tamamlanan Servis</div>
+</div>
+</div>
+<div class="card">
+<h3>Yaklaşan Hatırlatmalar</h3>
+<div id="homeReminders"></div>
 </div>
 </section>
 
-
-<!-- GEÇMİŞ SERVİS KAYITLARI -->
-
-<section id="gecmisServis" class="section">
+<section id="service">
 <div class="card">
-
-<h2>🔧 Geçmiş Servis Kayıtları</h2>
-
-<label>Müşteri Ara</label>
-<input id="servisArama"
-       placeholder="Müşteri adı veya soyadı">
-
-<button class="full" type="button"
-        onclick="servisAra()">
-🔎 Servis Kaydı Ara
-</button>
-
-<button class="full" type="button"
-        onclick="tumServisleriGetir()">
-📋 Tüm Servis Kayıtlarını Göster
-</button>
-
-<div id="servisSonuc" class="message"></div>
-
-</div>
-</section>
-
-
-<!-- SİPARİŞ FORMLARI -->
-
-<section id="siparis" class="section">
-<div class="card">
-
-<h2>📋 Yeni Sipariş Formu</h2>
-
-<form id="siparisForm">
-
+<h2 id="serviceTitle">Yeni Servis Kaydı</h2>
+<form id="serviceForm">
+<input type="hidden" id="serviceId">
 <label>Tarih</label>
-<input id="siparisTarih" type="date" required>
-
+<input type="date" id="serviceDate" required>
 <label>Ad Soyad</label>
-<input id="siparisMusteri" required>
-
+<input id="serviceName" required>
 <label>Telefon</label>
-<input id="siparisTelefon" type="tel">
-
+<input type="tel" id="servicePhone">
 <label>Model</label>
-<input id="siparisModel">
-
+<input id="serviceModel" required>
+<label>Arıza / Yapılacak İşlem</label>
+<textarea id="serviceProblem"></textarea>
 <label>Notlar</label>
-<textarea id="siparisNotlar"></textarea>
+<textarea id="serviceNotes"></textarea>
+<label>Durum</label>
+<select id="serviceStatus">
+<option>Bekliyor</option>
+<option>İşlemde</option>
+<option>Tamamlandı</option>
+<option>Teslim Edildi</option>
+</select>
+<label>Hatırlatma Tarihi</label>
+<input type="date" id="serviceReminder">
 
-<button class="full" type="submit">
-💾 Siparişi Kaydet
-</button>
+<label>Servis Fotoğrafları</label>
+<input type="file" id="servicePhotos" accept="image/*" multiple>
+<p class="photo-note">iPhone kamerasından çekebilir veya galeriden birden fazla fotoğraf seçebilirsin.</p>
+<div id="servicePhotoPreview" class="photos"></div>
 
+<button type="submit" class="primary">Servis Kaydını Kaydet</button>
+<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetService()">Formu Temizle</button>
 </form>
-
-<div id="siparisMesaj" class="message"></div>
-
 </div>
 </section>
 
-
-<!-- GEÇMİŞ SİPARİŞLER -->
-
-<section id="gecmisSiparis" class="section">
+<section id="history">
 <div class="card">
-
-<h2>📂 Geçmiş Siparişler</h2>
-
-<label>Müşteri Ara</label>
-<input id="siparisArama"
-       placeholder="Müşteri adı veya soyadı">
-
-<button class="full" type="button"
-        onclick="siparisAra()">
-🔎 Sipariş Ara
-</button>
-
-<button class="full" type="button"
-        onclick="tumSiparisleriGetir()">
-📋 Tüm Siparişleri Göster
-</button>
-
-<div id="siparisSonuc" class="message"></div>
-
+<h2>Geçmiş Servis Kayıtları</h2>
+<input id="serviceSearch" placeholder="Ad, telefon veya model ara..." oninput="renderServices()">
+<div id="serviceList"></div>
 </div>
 </section>
 
-</div>
+<section id="order">
+<div class="card">
+<h2 id="orderTitle">Yeni Sipariş Formu</h2>
+<form id="orderForm">
+<input type="hidden" id="orderId">
+<label>Tarih</label>
+<input type="date" id="orderDate" required>
+<label>Ad Soyad</label>
+<input id="orderName" required>
+<label>Telefon</label>
+<input type="tel" id="orderPhone">
+<label>Model</label>
+<input id="orderModel" required>
+<label>Notlar</label>
+<textarea id="orderNotes"></textarea>
+<label>Durum</label>
+<select id="orderStatus">
+<option>Bekliyor</option>
+<option>Sipariş Verildi</option>
+<option>Geldi</option>
+<option>Teslim Edildi</option>
+</select>
+<label>Hatırlatma Tarihi</label>
+<input type="date" id="orderReminder">
 
+<label>Sipariş Fotoğrafları</label>
+<input type="file" id="orderPhotos" accept="image/*" multiple>
+<div id="orderPhotoPreview" class="photos"></div>
+
+<button type="submit" class="primary">Sipariş Formunu Kaydet</button>
+<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetOrder()">Formu Temizle</button>
+</form>
+</div>
+<div class="card">
+<h2>Kaydedilen Siparişler</h2>
+<input id="orderSearch" placeholder="Ad, telefon veya model ara..." oninput="renderOrders()">
+<div id="orderList"></div>
+</div>
+</section>
+
+<section id="reminders">
+<div class="card">
+<h2>Hatırlatmalar</h2>
+<div class="notice">Hatırlatmalar uygulama açıldığında görüntülenir. Safari kapalıyken otomatik bildirim gönderilmez.</div>
+<div id="reminderList"></div>
+</div>
+</section>
+
+<section id="backup">
+<div class="card">
+<h2>Yedekleme</h2>
+<p class="muted">Fotoğraflar dahil bütün kayıtlarını JSON dosyası olarak yedekleyebilirsin.</p>
+<button class="primary" onclick="exportBackup()">Fotoğraflı Yedek İndir</button>
+<label>Yedekten Geri Yükle</label>
+<input type="file" id="backupFile" accept=".json,application/json">
+<button class="secondary" style="width:100%;margin-top:12px" onclick="importBackup()">Yedeği Geri Yükle</button>
+</div>
+</section>
+
+</main>
 
 <script>
+"use strict";
 
-/* SUPABASE BİLGİLERİ */
+const $ = id => document.getElementById(id);
+const today = () => {
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+};
+const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
+const DB_NAME="servis_siparis_fotograf_v1";
+const STORE="records";
+let database;
+let db={services:[],orders:[]};
+let photoCache={service:[],order:[]};
+let busy=false;
 
-const SUPABASE_URL =
-  "https://grkixellsuhlsryrkaff.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_203KVZ7fXhED0wTpBdqPhw_Y_fsM7kX";
-
-
-/* YARDIMCI FONKSİYONLAR */
-
-function alan(id) {
-  return document.getElementById(id);
+function openDatabase(){
+ return new Promise((resolve,reject)=>{
+  const request=indexedDB.open(DB_NAME,1);
+  request.onupgradeneeded=()=>{
+   const d=request.result;
+   if(!d.objectStoreNames.contains(STORE)){
+    d.createObjectStore(STORE);
+   }
+  };
+  request.onsuccess=()=>resolve(request.result);
+  request.onerror=()=>reject(request.error);
+ });
 }
 
-function deger(id) {
-  return alan(id).value.trim();
+function readDatabase(){
+ return new Promise((resolve,reject)=>{
+  const tx=database.transaction(STORE,"readonly");
+  const request=tx.objectStore(STORE).get("data");
+  request.onsuccess=()=>resolve(request.result||{services:[],orders:[]});
+  request.onerror=()=>reject(request.error);
+ });
 }
 
-function mesajYaz(id, mesaj) {
-  alan(id).textContent = mesaj;
+function writeDatabase(data){
+ return new Promise((resolve,reject)=>{
+  const tx=database.transaction(STORE,"readwrite");
+  tx.objectStore(STORE).put(data,"data");
+  tx.oncomplete=()=>resolve();
+  tx.onerror=()=>reject(tx.error);
+  tx.onabort=()=>reject(tx.error);
+ });
 }
 
-function bugun() {
-  const d = new Date();
-
-  const yil = d.getFullYear();
-  const ay = String(d.getMonth() + 1).padStart(2, "0");
-  const gun = String(d.getDate()).padStart(2, "0");
-
-  return `${yil}-${ay}-${gun}`;
+async function persist(next){
+ await writeDatabase(next);
+ db=next;
+ renderAll();
 }
 
-function metin(value) {
-  return String(value ?? "-");
+function safe(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
 }
 
-function satir(baslik, value) {
-  const div = document.createElement("div");
-  div.textContent = baslik + ": " + metin(value);
-  return div;
+function show(tab){
+ document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll("nav button").forEach(b=>{
+  b.classList.toggle("active",b.dataset.tab===tab);
+ });
+ $(tab).classList.add("active");
+ renderAll();
+ window.scrollTo(0,0);
 }
 
+document.querySelectorAll("nav button").forEach(b=>{
+ b.addEventListener("click",()=>show(b.dataset.tab));
+});
 
-/* SUPABASE BAĞLANTISI */
+function resetService(){
+ $("serviceForm").reset();
+ $("serviceId").value="";
+ $("serviceDate").value=today();
+ $("serviceTitle").textContent="Yeni Servis Kaydı";
+ photoCache.service=[];
+ renderPhotoPreview("service");
+}
 
-async function apiIstek(yol, ayarlar = {}) {
+function resetOrder(){
+ $("orderForm").reset();
+ $("orderId").value="";
+ $("orderDate").value=today();
+ $("orderTitle").textContent="Yeni Sipariş Formu";
+ photoCache.order=[];
+ renderPhotoPreview("order");
+}
 
-  if (!SUPABASE_KEY.startsWith("sb_publishable_")) {
-    throw new Error(
-      "Supabase Publishable Key eksik veya yanlış."
-    );
+function resizePhoto(file){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onerror=()=>reject(new Error("Fotoğraf okunamadı"));
+  reader.onload=()=>{
+   const img=new Image();
+   img.onerror=()=>reject(new Error("Fotoğraf açılamadı"));
+   img.onload=()=>{
+    const max=1200;
+    const scale=Math.min(1,max/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(img.width*scale));
+    canvas.height=Math.max(1,Math.round(img.height*scale));
+    const ctx=canvas.getContext("2d");
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    resolve(canvas.toDataURL("image/jpeg",0.72));
+   };
+   img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
+
+async function addPhotos(type,files){
+ try{
+  for(const file of files){
+   if(!file.type.startsWith("image/")){
+    throw new Error("Yalnızca fotoğraf seçebilirsin.");
+   }
+   if(photoCache[type].length>=10){
+    alert("Bir kayda en fazla 10 fotoğraf eklenebilir.");
+    break;
+   }
+   const data=await resizePhoto(file);
+   photoCache[type].push(data);
   }
+  renderPhotoPreview(type);
+ }catch(e){
+  alert("Fotoğraf eklenemedi: "+e.message);
+ }
+}
 
-  const response = await fetch(
-    SUPABASE_URL + "/rest/v1/" + yol,
-    {
-      ...ayarlar,
-      headers: {
-        apikey: SUPABASE_KEY,
-        ...ayarlar.headers
-      }
-    }
-  );
+["service","order"].forEach(type=>{
+ $(type+"Photos").addEventListener("change",async e=>{
+  await addPhotos(type,Array.from(e.target.files));
+  e.target.value="";
+ });
+});
 
-  if (!response.ok) {
-    throw new Error(await response.text());
+function renderPhotoPreview(type){
+ const container=$(type+"PhotoPreview");
+ container.innerHTML="";
+ photoCache[type].forEach((photo,index)=>{
+  const wrapper=document.createElement("div");
+  wrapper.className="photo";
+  const img=document.createElement("img");
+  img.src=photo;
+  const button=document.createElement("button");
+  button.type="button";
+  button.textContent="×";
+  button.onclick=()=>{
+   photoCache[type].splice(index,1);
+   renderPhotoPreview(type);
+  };
+  wrapper.append(img,button);
+  container.appendChild(wrapper);
+ });
+}
+
+function collect(type){
+ const prefix=type;
+ const item={
+  id:$(prefix+"Id").value||uid(),
+  date:$(prefix+"Date").value,
+  name:$(prefix+"Name").value.trim(),
+  phone:$(prefix+"Phone").value.trim(),
+  model:$(prefix+"Model").value.trim(),
+  notes:$(prefix+"Notes").value.trim(),
+  status:$(prefix+"Status").value,
+  reminder:$(prefix+"Reminder").value,
+  photos:[...photoCache[type]]
+ };
+ if(type==="service"){
+  item.problem=$("serviceProblem").value.trim();
+ }
+ return item;
+}
+
+async function submitRecord(type){
+ if(busy)return;
+ const item=collect(type);
+ if(!item.name||!item.model){
+  alert("Ad soyad ve model zorunludur.");
+  return;
+ }
+ const key=type==="service"?"services":"orders";
+ const next={
+  services:[...db.services],
+  orders:[...db.orders]
+ };
+ next[key]=next[key].filter(x=>x.id!==item.id);
+ next[key].unshift(item);
+ busy=true;
+ try{
+  await persist(next);
+  if(type==="service"){
+   resetService();
+   alert("Servis kaydı fotoğraflarıyla kaydedildi.");
+   show("history");
+  }else{
+   resetOrder();
+   alert("Sipariş formu fotoğraflarıyla kaydedildi.");
   }
+ }catch(e){
+  alert("Kayıt kaydedilemedi: "+e.message);
+ }finally{
+  busy=false;
+ }
+}
 
-  if (response.status === 204) {
-    return null;
+$("serviceForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ await submitRecord("service");
+});
+$("orderForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ await submitRecord("order");
+});
+
+function recordHTML(x,type){
+ const photos=(x.photos||[]).map(p=>
+  `<div class="photo"><a href="${safe(p)}" target="_blank" rel="noopener"><img src="${safe(p)}" alt="Kayıt fotoğrafı"></a></div>`
+ ).join("");
+ return `<div class="record">
+ <h3>${safe(x.name)}</h3>
+ <p><b>Tarih:</b> ${safe(x.date)}</p>
+ <p><b>Telefon:</b> ${safe(x.phone)}</p>
+ <p><b>Model:</b> ${safe(x.model)}</p>
+ ${type==="service"?`<p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
+ <p><b>Not:</b> ${safe(x.notes)}</p>
+ <p><b>Durum:</b> <span class="badge">${safe(x.status)}</span></p>
+ ${x.reminder?`<p><b>Hatırlatma:</b> ${safe(x.reminder)}</p>`:""}
+ <div class="photos">${photos}</div>
+ <div class="actions">
+ <button class="secondary" data-action="edit" data-type="${type}" data-id="${safe(x.id)}">Düzenle</button>
+ <button class="danger" data-action="delete" data-type="${type}" data-id="${safe(x.id)}">Sil</button>
+ </div></div>`;
+}
+
+function renderServices(){
+ const q=$("serviceSearch").value.toLocaleLowerCase("tr");
+ const items=db.services.filter(x=>
+  [x.name,x.phone,x.model,x.problem,x.notes].join(" ").toLocaleLowerCase("tr").includes(q)
+ );
+ $("serviceList").innerHTML=items.length?
+  items.map(x=>recordHTML(x,"service")).join(""):
+  '<div class="empty">Servis kaydı bulunamadı.</div>';
+}
+
+function renderOrders(){
+ const q=$("orderSearch").value.toLocaleLowerCase("tr");
+ const items=db.orders.filter(x=>
+  [x.name,x.phone,x.model,x.notes].join(" ").toLocaleLowerCase("tr").includes(q)
+ );
+ $("orderList").innerHTML=items.length?
+  items.map(x=>recordHTML(x,"order")).join(""):
+  '<div class="empty">Sipariş bulunamadı.</div>';
+}
+
+function editRecord(type,id){
+ const list=type==="service"?db.services:db.orders;
+ const x=list.find(v=>v.id===id);
+ if(!x)return;
+ ["Id","Date","Name","Phone","Model","Notes","Status","Reminder"].forEach(field=>{
+  $(type+field).value=x[field.toLowerCase()]??"";
+ });
+ photoCache[type]=[...(x.photos||[])];
+ renderPhotoPreview(type);
+ if(type==="service"){
+  $("serviceProblem").value=x.problem||"";
+  $("serviceTitle").textContent="Servis Kaydını Düzenle";
+  show("service");
+ }else{
+  $("orderTitle").textContent="Sipariş Formunu Düzenle";
+  show("order");
+ }
+}
+
+async function deleteRecord(type,id){
+ if(!confirm("Bu kaydı ve fotoğraflarını kalıcı olarak silmek istiyor musun?"))return;
+ const key=type==="service"?"services":"orders";
+ const next={
+  services:[...db.services],
+  orders:[...db.orders]
+ };
+ next[key]=next[key].filter(x=>x.id!==id);
+ try{
+  await persist(next);
+ }catch(e){
+  alert("Kayıt silinemedi: "+e.message);
+ }
+}
+
+document.addEventListener("click",async e=>{
+ const btn=e.target.closest("[data-action]");
+ if(!btn)return;
+ if(btn.dataset.action==="edit"){
+  editRecord(btn.dataset.type,btn.dataset.id);
+ }
+ if(btn.dataset.action==="delete"){
+  await deleteRecord(btn.dataset.type,btn.dataset.id);
+ }
+});
+
+function getReminders(){
+ return [
+  ...db.services.filter(x=>x.reminder&&!["Tamamlandı","Teslim Edildi"].includes(x.status))
+   .map(x=>({...x,type:"Servis"})),
+  ...db.orders.filter(x=>x.reminder&&x.status!=="Teslim Edildi")
+   .map(x=>({...x,type:"Sipariş"}))
+ ].sort((a,b)=>a.reminder.localeCompare(b.reminder));
+}
+
+function reminderHTML(x){
+ const due=x.reminder<=today();
+ return `<div class="record">
+ <span class="badge ${due?"due":"ok"}">${due?"Bugün / Gecikmiş":"Yaklaşan"}</span>
+ <h3>${safe(x.name)}</h3>
+ <p>${safe(x.type)} · ${safe(x.model)}</p>
+ <p><b>Tarih:</b> ${safe(x.reminder)}</p>
+ <p><b>Durum:</b> ${safe(x.status)}</p>
+ </div>`;
+}
+
+function renderAll(){
+ $("serviceCount").textContent=db.services.length;
+ $("orderCount").textContent=db.orders.length;
+ $("completedCount").textContent=db.services.filter(x=>
+  ["Tamamlandı","Teslim Edildi"].includes(x.status)
+ ).length;
+ const reminders=getReminders();
+ $("reminderCount").textContent=reminders.length;
+ $("reminderList").innerHTML=reminders.length?
+  reminders.map(reminderHTML).join(""):
+  '<div class="empty">Bekleyen hatırlatma yok.</div>';
+ $("homeReminders").innerHTML=reminders.length?
+  reminders.slice(0,5).map(reminderHTML).join(""):
+  '<div class="empty">Yaklaşan hatırlatma yok.</div>';
+ renderServices();
+ renderOrders();
+}
+
+function exportBackup(){
+ const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="servis-fotografli-yedek-"+today()+".json";
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+
+async function importBackup(){
+ const file=$("backupFile").files[0];
+ if(!file){
+  alert("Önce bir JSON yedek dosyası seç.");
+  return;
+ }
+ try{
+  const data=JSON.parse(await file.text());
+  if(!Array.isArray(data.services)||!Array.isArray(data.orders)){
+   throw new Error("Geçersiz yedek dosyası");
   }
-
-  return response.json();
+  if(!confirm("Mevcut kayıtlar yedekteki kayıtlarla değiştirilsin mi?"))return;
+  await persist(data);
+  resetService();
+  resetOrder();
+  alert("Fotoğraflı yedek geri yüklendi.");
+ }catch(e){
+  alert("Yedek yüklenemedi: "+e.message);
+ }
 }
 
-
-/* SEKME DEĞİŞTİRME */
-
-function sekmeAc(sekme) {
-
-  document.querySelectorAll(".section")
-    .forEach(bolum => {
-      bolum.classList.remove("active");
-    });
-
-  document.querySelectorAll(".tabs button")
-    .forEach(buton => {
-      buton.classList.remove("active");
-    });
-
-  alan(sekme).classList.add("active");
-
-  const buton = document.querySelector(
-    '[data-tab="' + sekme + '"]'
-  );
-
-  if (buton) {
-    buton.classList.add("active");
+async function start(){
+ try{
+  if(!window.indexedDB){
+   throw new Error("Bu tarayıcı IndexedDB desteklemiyor.");
   }
-
-  window.scrollTo(0, 0);
+  database=await openDatabase();
+  const data=await readDatabase();
+  db={
+   services:Array.isArray(data.services)?data.services:[],
+   orders:Array.isArray(data.orders)?data.orders:[]
+  };
+  resetService();
+  resetOrder();
+  renderAll();
+ }catch(e){
+  alert("Veritabanı açılamadı. Safari'de normal sekmede ve HTTPS üzerinden açmayı dene. "+e.message);
+ }
 }
-
-
-/* SERVİS KAYDETME */
-
-alan("servisForm").addEventListener(
-  "submit",
-  async function(e) {
-
-    e.preventDefault();
-
-    const kayit = {
-      customer_name: deger("customer_name"),
-      phone: deger("phone"),
-      boat: deger("boat"),
-      motor: deger("motor"),
-      service_details: deger("service_details"),
-      amount: deger("amount") === ""
-        ? null
-        : Number(deger("amount")),
-      paid: deger("paid") === "true",
-      service_date: deger("service_date")
-    };
-
-    mesajYaz("servisMesaj", "Kaydediliyor...");
-
-    try {
-
-      await apiIstek("service_records", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify(kayit)
-      });
-
-      mesajYaz(
-        "servisMesaj",
-        "✅ Servis kaydı başarıyla kaydedildi."
-      );
-
-      alan("servisForm").reset();
-      alan("service_date").value = bugun();
-
-    } catch (error) {
-
-      mesajYaz(
-        "servisMesaj",
-        "❌ Hata: " + error.message
-      );
-
-    }
-  }
-);
-
-
-/* GEÇMİŞ SERVİS KAYITLARI */
-
-async function servisleriGetir(arama = "") {
-
-  mesajYaz("servisSonuc", "Kayıtlar yükleniyor...");
-
-  try {
-
-    let sorgu =
-      "service_records?select=*" +
-      "&order=service_date.desc";
-
-    if (arama) {
-      sorgu +=
-        "&customer_name=ilike." +
-        encodeURIComponent("*" + arama + "*");
-    }
-
-    const kayitlar = await apiIstek(sorgu);
-
-    kayitlariGoster(
-      "servisSonuc",
-      kayitlar,
-      "servis"
-    );
-
-  } catch (error) {
-
-    mesajYaz(
-      "servisSonuc",
-      "❌ Hata: " + error.message
-    );
-
-  }
-}
-
-function servisAra() {
-  servisleriGetir(deger("servisArama"));
-}
-
-function tumServisleriGetir() {
-  servisleriGetir();
-}
-
-
-/* SİPARİŞ KAYDETME */
-
-alan("siparisForm").addEventListener(
-  "submit",
-  async function(e) {
-
-    e.preventDefault();
-
-    const siparis = {
-      order_date: deger("siparisTarih"),
-      customer_name: deger("siparisMusteri"),
-      phone: deger("siparisTelefon"),
-      model: deger("siparisModel"),
-      notes: deger("siparisNotlar")
-    };
-
-    mesajYaz("siparisMesaj", "Kaydediliyor...");
-
-    try {
-
-      await apiIstek("orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify(siparis)
-      });
-
-      mesajYaz(
-        "siparisMesaj",
-        "✅ Sipariş başarıyla kaydedildi."
-      );
-
-      alan("siparisForm").reset();
-      alan("siparisTarih").value = bugun();
-
-    } catch (error) {
-
-      mesajYaz(
-        "siparisMesaj",
-        "❌ Hata: " + error.message
-      );
-
-    }
-  }
-);
-
-
-/* GEÇMİŞ SİPARİŞLER */
-
-async function siparisleriGetir(arama = "") {
-
-  mesajYaz("siparisSonuc", "Siparişler yükleniyor...");
-
-  try {
-
-    let sorgu =
-      "orders?select=*" +
-      "&order=order_date.desc";
-
-    if (arama) {
-      sorgu +=
-        "&customer_name=ilike." +
-        encodeURIComponent("*" + arama + "*");
-    }
-
-    const kayitlar = await apiIstek(sorgu);
-
-    kayitlariGoster(
-      "siparisSonuc",
-      kayitlar,
-      "siparis"
-    );
-
-  } catch (error) {
-
-    mesajYaz(
-      "siparisSonuc",
-      "❌ Hata: " + error.message
-    );
-
-  }
-}
-
-function siparisAra() {
-  siparisleriGetir(deger("siparisArama"));
-}
-
-function tumSiparisleriGetir() {
-  siparisleriGetir();
-}
-
-
-/* KAYITLARI EKRANDA GÖSTERME */
-
-function kayitlariGoster(hedef, kayitlar, tur) {
-
-  const kutu = alan(hedef);
-  kutu.replaceChildren();
-
-  if (!kayitlar || kayitlar.length === 0) {
-    kutu.textContent = "Kayıt bulunamadı.";
-    return;
-  }
-
-  kayitlar.forEach(k => {
-
-    const kart = document.createElement("div");
-    kart.className = "record";
-
-    const baslik = document.createElement("strong");
-    baslik.textContent =
-      "👤 " + metin(k.customer_name);
-
-    kart.appendChild(baslik);
-
-    if (tur === "servis") {
-
-      kart.appendChild(satir("📞 Telefon", k.phone));
-      kart.appendChild(satir("🚤 Tekne", k.boat));
-      kart.appendChild(satir("⚙️ Motor", k.motor));
-
-      kart.appendChild(
-        satir("🔧 Yapılan İşlem", k.service_details)
-      );
-
-      kart.appendChild(
-        satir("💰 Ücret", (k.amount ?? 0) + " ₺")
-      );
-
-      kart.appendChild(
-        satir(
-          "💳 Ödeme",
-          k.paid ? "Ödendi" : "Ödenmedi"
-        )
-      );
-
-      kart.appendChild(
-        satir("📅 Tarih", k.service_date)
-      );
-
-    } else {
-
-      kart.appendChild(
-        satir("📅 Tarih", k.order_date)
-      );
-
-      kart.appendChild(
-        satir("📞 Telefon", k.phone)
-      );
-
-      kart.appendChild(
-        satir("🚤 Model", k.model)
-      );
-
-      kart.appendChild(
-        satir("📝 Notlar", k.notes)
-      );
-
-    }
-
-    kutu.appendChild(kart);
-
-  });
-}
-
-
-/* BAŞLANGIÇ */
-
-alan("service_date").value = bugun();
-alan("siparisTarih").value = bugun();
-
-sekmeAc("servis");
-
+start();
 </script>
-
 </body>
 </html>
-
         
