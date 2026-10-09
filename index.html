@@ -271,11 +271,10 @@ document.getElementById("servisForm").addEventListener("submit", async function(
 
     document.getElementById("servisForm").reset();
 
-  } catch (error) {
-
-    durum.textContent = "❌ Kayıt yapılamadı.";
-
-    console.error(error);
+  }  catch (error) {
+  durum.textContent = "❌ Hata: " + error.message;
+  console.error(error);
+}
 
   }
 
