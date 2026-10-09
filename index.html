@@ -3,65 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#17263d">
-<title>Servis ve Sipariş Takip</title>
- link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
+<title>Yerliyurt Marin - Servis Takip</title>
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f2f5f9;color:#17263d;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:#17263d;color:white;padding:24px 17px}
-header h1{font-size:23px;margin:0 0 6px}
-header p{margin:0;color:#cbd5e1;font-size:13px}
-nav{display:flex;gap:7px;overflow-x:auto;padding:12px;background:white;position:sticky;top:0;z-index:5;border-bottom:1px solid #ddd}
-button{border:0;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;cursor:pointer}
+body{
+ margin:0;background:#f2f5f9;color:#17263d;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+header{
+ background:white;text-align:center;padding:20px 15px;
+ border-bottom:1px solid #e2e8f0
+}
+header img{display:block;width:100%;max-width:330px;height:auto;margin:0 auto 12px}
+header h1{font-size:20px;color:#09254a;margin:8px 0 5px}
+header p{color:#64748b;font-size:13px;margin:0}
+nav{
+ display:flex;gap:7px;overflow-x:auto;padding:12px;
+ background:white;position:sticky;top:0;z-index:5;
+ border-bottom:1px solid #ddd
+}
+button{
+ border:0;border-radius:10px;padding:12px 14px;
+ font-weight:600;font-size:14px;cursor:pointer
+}
 nav button{white-space:nowrap;background:#e9eef5;color:#17263d}
 nav button.active,.primary{background:#2563eb;color:white}
 main{max-width:850px;margin:auto;padding:15px}
 section{display:none}
 section.active{display:block}
-.card{background:white;border-radius:15px;padding:17px;margin-bottom:15px;box-shadow:0 2px 12px #17263d0c}
+.card{
+ background:white;border-radius:15px;padding:17px;
+ margin-bottom:15px;box-shadow:0 2px 12px #17263d0c
+}
 h2{font-size:20px;margin:0 0 15px}
 h3{font-size:16px;margin:0 0 8px}
 label{display:block;font-size:13px;font-weight:600;margin:13px 0 6px}
-input,textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:12px;font:inherit;font-size:16px;background:white;color:#17263d}
+input,textarea,select{
+ width:100%;border:1px solid #cbd5e1;border-radius:9px;
+ padding:12px;font:inherit;font-size:16px;
+ background:white;color:#17263d
+}
 textarea{min-height:85px;resize:vertical}
 .primary{width:100%;margin-top:16px}
 .secondary{background:#e2e8f0;color:#17263d}
 .danger{background:#fee2e2;color:#b91c1c}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .actions button{flex:1}
-.record{border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin:10px 0}
+.record{
+ border:1px solid #e2e8f0;border-radius:12px;
+ padding:14px;margin:10px 0
+}
 .record p{margin:6px 0;font-size:14px;overflow-wrap:anywhere}
 .muted{color:#64748b;font-size:13px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .stat{background:#eff6ff;padding:15px;border-radius:12px;font-size:13px}
 .stat strong{font-size:26px;display:block;color:#1d4ed8}
 .empty{text-align:center;color:#64748b;padding:25px}
-.notice{background:#fff7ed;border-radius:10px;padding:12px;font-size:13px;margin-bottom:15px}
-.badge{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:20px;padding:5px 9px;font-size:12px}
+.notice{
+ background:#fff7ed;border-radius:10px;
+ padding:12px;font-size:13px;margin-bottom:15px
+}
+.badge{
+ display:inline-block;background:#dbeafe;color:#1d4ed8;
+ border-radius:20px;padding:5px 9px;font-size:12px
+}
 .due{background:#fee2e2;color:#991b1b}
 .ok{background:#dcfce7;color:#166534}
 .photos{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
 .photo{position:relative;width:100px}
-.photo img{width:100px;height:100px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
-.photo button{position:absolute;right:-5px;top:-5px;border-radius:50%;padding:4px 8px;background:#dc2626;color:white}
+.photo img{
+ width:100px;height:100px;object-fit:cover;
+ border-radius:10px;border:1px solid #ddd
+}
+.photo button{
+ position:absolute;right:-5px;top:-5px;
+ border-radius:50%;padding:4px 8px;
+ background:#dc2626;color:white
+}
 .photo a{display:block}
 .photo-note{font-size:12px;color:#64748b;margin-top:7px}
-.hidden{display:none}
+.price{font-size:20px;font-weight:700;color:#1d4ed8}
+.part-row{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:10px;flex-wrap:wrap
+}
+.part-row h3{margin:0}
+.part-row .price{margin:0}
 </style>
 </head>
 <body>
 
-<header style="text-align:center;background:#ffffff;padding:20px;">
-<img
-src="./yerliyurt-logo.png"
-alt="Yerliyurt Marin"
-style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
->
-<h1 style="color:#09254a;">Servis & Sipariş Takip</h1>
-<p style="color:#64748b;">Fotoğraflı müşteri ve iş takip sistemi</p>
+<header>
+<img src="./yerliyurt-logo.png" alt="Yerliyurt Marin Logosu">
+<h1>Servis & Sipariş Takip</h1>
+<p>Yerliyurt Marin Yönetim Sistemi</p>
 </header>
 
 <nav>
@@ -69,6 +110,7 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 <button data-tab="service">Yeni Servis</button>
 <button data-tab="history">Geçmiş Servisler</button>
 <button data-tab="order">Sipariş Formları</button>
+<button data-tab="parts">Motor Bakım Parçaları</button>
 <button data-tab="reminders">Hatırlatmalar</button>
 <button data-tab="backup">Yedekleme</button>
 </nav>
@@ -81,6 +123,7 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 <div class="stats">
 <div class="stat"><strong id="serviceCount">0</strong>Servis Kaydı</div>
 <div class="stat"><strong id="orderCount">0</strong>Sipariş Formu</div>
+<div class="stat"><strong id="partCount">0</strong>Motor Bakım Parçası</div>
 <div class="stat"><strong id="reminderCount">0</strong>Bekleyen Hatırlatma</div>
 <div class="stat"><strong id="completedCount">0</strong>Tamamlanan Servis</div>
 </div>
@@ -117,12 +160,10 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 </select>
 <label>Hatırlatma Tarihi</label>
 <input type="date" id="serviceReminder">
-
 <label>Servis Fotoğrafları</label>
 <input type="file" id="servicePhotos" accept="image/*" multiple>
-<p class="photo-note">iPhone kamerasından çekebilir veya galeriden birden fazla fotoğraf seçebilirsin.</p>
+<p class="photo-note">Kameradan çekebilir veya galeriden fotoğraf seçebilirsin.</p>
 <div id="servicePhotoPreview" class="photos"></div>
-
 <button type="submit" class="primary">Servis Kaydını Kaydet</button>
 <button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetService()">Formu Temizle</button>
 </form>
@@ -161,11 +202,9 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 </select>
 <label>Hatırlatma Tarihi</label>
 <input type="date" id="orderReminder">
-
 <label>Sipariş Fotoğrafları</label>
 <input type="file" id="orderPhotos" accept="image/*" multiple>
 <div id="orderPhotoPreview" class="photos"></div>
-
 <button type="submit" class="primary">Sipariş Formunu Kaydet</button>
 <button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetOrder()">Formu Temizle</button>
 </form>
@@ -174,6 +213,26 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 <h2>Kaydedilen Siparişler</h2>
 <input id="orderSearch" placeholder="Ad, telefon veya model ara..." oninput="renderOrders()">
 <div id="orderList"></div>
+</div>
+</section>
+
+<section id="parts">
+<div class="card">
+<h2 id="partTitle">Motor Bakım Parçaları</h2>
+<form id="partForm">
+<input type="hidden" id="partId">
+<label>Parça Adı</label>
+<input id="partName" required placeholder="Örn. Yağ filtresi">
+<label>Fiyat (₺)</label>
+<input id="partPrice" type="number" min="0" step="0.01" required placeholder="Örn. 850">
+<button type="submit" class="primary">Parçayı Kaydet</button>
+<button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetPart()">Formu Temizle</button>
+</form>
+</div>
+<div class="card">
+<h2>Kayıtlı Motor Bakım Parçaları</h2>
+<input id="partSearch" placeholder="Parça adı ara..." oninput="renderParts()">
+<div id="partList"></div>
 </div>
 </section>
 
@@ -188,8 +247,8 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 <section id="backup">
 <div class="card">
 <h2>Yedekleme</h2>
-<p class="muted">Fotoğraflar dahil bütün kayıtlarını JSON dosyası olarak yedekleyebilirsin.</p>
-<button class="primary" onclick="exportBackup()">Fotoğraflı Yedek İndir</button>
+<p class="muted">Servis, sipariş, fotoğraf ve motor bakım parçası kayıtlarını JSON dosyası olarak yedekleyebilirsin.</p>
+<button class="primary" onclick="exportBackup()">Tüm Verileri Yedekle</button>
 <label>Yedekten Geri Yükle</label>
 <input type="file" id="backupFile" accept=".json,application/json">
 <button class="secondary" style="width:100%;margin-top:12px" onclick="importBackup()">Yedeği Geri Yükle</button>
@@ -201,8 +260,8 @@ style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto 15px;"
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
-const today = () => {
+const $=id=>document.getElementById(id);
+const today=()=>{
  const d=new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 };
@@ -210,9 +269,17 @@ const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
 const DB_NAME="servis_siparis_fotograf_v1";
 const STORE="records";
 let database;
-let db={services:[],orders:[]};
+let db={services:[],orders:[],parts:[]};
 let photoCache={service:[],order:[]};
 let busy=false;
+
+function normalize(data){
+ return {
+  services:Array.isArray(data?.services)?data.services:[],
+  orders:Array.isArray(data?.orders)?data.orders:[],
+  parts:Array.isArray(data?.parts)?data.parts:[]
+ };
+}
 
 function openDatabase(){
  return new Promise((resolve,reject)=>{
@@ -232,7 +299,7 @@ function readDatabase(){
  return new Promise((resolve,reject)=>{
   const tx=database.transaction(STORE,"readonly");
   const request=tx.objectStore(STORE).get("data");
-  request.onsuccess=()=>resolve(request.result||{services:[],orders:[]});
+  request.onsuccess=()=>resolve(request.result||{services:[],orders:[],parts:[]});
   request.onerror=()=>reject(request.error);
  });
 }
@@ -289,6 +356,12 @@ function resetOrder(){
  $("orderTitle").textContent="Yeni Sipariş Formu";
  photoCache.order=[];
  renderPhotoPreview("order");
+}
+
+function resetPart(){
+ $("partForm").reset();
+ $("partId").value="";
+ $("partTitle").textContent="Motor Bakım Parçaları";
 }
 
 function resizePhoto(file){
@@ -361,16 +434,15 @@ function renderPhotoPreview(type){
 }
 
 function collect(type){
- const prefix=type;
  const item={
-  id:$(prefix+"Id").value||uid(),
-  date:$(prefix+"Date").value,
-  name:$(prefix+"Name").value.trim(),
-  phone:$(prefix+"Phone").value.trim(),
-  model:$(prefix+"Model").value.trim(),
-  notes:$(prefix+"Notes").value.trim(),
-  status:$(prefix+"Status").value,
-  reminder:$(prefix+"Reminder").value,
+  id:$(type+"Id").value||uid(),
+  date:$(type+"Date").value,
+  name:$(type+"Name").value.trim(),
+  phone:$(type+"Phone").value.trim(),
+  model:$(type+"Model").value.trim(),
+  notes:$(type+"Notes").value.trim(),
+  status:$(type+"Status").value,
+  reminder:$(type+"Reminder").value,
   photos:[...photoCache[type]]
  };
  if(type==="service"){
@@ -389,7 +461,8 @@ async function submitRecord(type){
  const key=type==="service"?"services":"orders";
  const next={
   services:[...db.services],
-  orders:[...db.orders]
+  orders:[...db.orders],
+  parts:[...db.parts]
  };
  next[key]=next[key].filter(x=>x.id!==item.id);
  next[key].unshift(item);
@@ -398,11 +471,11 @@ async function submitRecord(type){
   await persist(next);
   if(type==="service"){
    resetService();
-   alert("Servis kaydı fotoğraflarıyla kaydedildi.");
+   alert("Servis kaydı kaydedildi.");
    show("history");
   }else{
    resetOrder();
-   alert("Sipariş formu fotoğraflarıyla kaydedildi.");
+   alert("Sipariş formu kaydedildi.");
   }
  }catch(e){
   alert("Kayıt kaydedilemedi: "+e.message);
@@ -415,9 +488,39 @@ $("serviceForm").addEventListener("submit",async e=>{
  e.preventDefault();
  await submitRecord("service");
 });
+
 $("orderForm").addEventListener("submit",async e=>{
  e.preventDefault();
  await submitRecord("order");
+});
+
+$("partForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(busy)return;
+ const name=$("partName").value.trim();
+ const price=Number($("partPrice").value);
+ if(!name||!Number.isFinite(price)||price<0){
+  alert("Geçerli parça adı ve fiyatı gir.");
+  return;
+ }
+ const id=$("partId").value||uid();
+ const item={id,name,price};
+ const next={
+  services:[...db.services],
+  orders:[...db.orders],
+  parts:db.parts.filter(x=>x.id!==id)
+ };
+ next.parts.unshift(item);
+ busy=true;
+ try{
+  await persist(next);
+  resetPart();
+  alert("Motor bakım parçası kaydedildi.");
+ }catch(e){
+  alert("Parça kaydedilemedi: "+e.message);
+ }finally{
+  busy=false;
+ }
 });
 
 function recordHTML(x,type){
@@ -460,7 +563,43 @@ function renderOrders(){
   '<div class="empty">Sipariş bulunamadı.</div>';
 }
 
+function formatPrice(value){
+ return Number(value).toLocaleString("tr-TR",{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ })+" ₺";
+}
+
+function renderParts(){
+ const q=$("partSearch").value.toLocaleLowerCase("tr");
+ const items=db.parts.filter(x=>
+  String(x.name).toLocaleLowerCase("tr").includes(q)
+ );
+ $("partList").innerHTML=items.length?
+  items.map(x=>`<div class="record">
+   <div class="part-row">
+    <h3>${safe(x.name)}</h3>
+    <p class="price">${formatPrice(x.price)}</p>
+   </div>
+   <div class="actions">
+    <button class="secondary" data-action="edit" data-type="part" data-id="${safe(x.id)}">Düzenle</button>
+    <button class="danger" data-action="delete" data-type="part" data-id="${safe(x.id)}">Sil</button>
+   </div>
+  </div>`).join(""):
+  '<div class="empty">Motor bakım parçası bulunamadı.</div>';
+}
+
 function editRecord(type,id){
+ if(type==="part"){
+  const x=db.parts.find(v=>v.id===id);
+  if(!x)return;
+  $("partId").value=x.id;
+  $("partName").value=x.name;
+  $("partPrice").value=x.price;
+  $("partTitle").textContent="Motor Bakım Parçasını Düzenle";
+  show("parts");
+  return;
+ }
  const list=type==="service"?db.services:db.orders;
  const x=list.find(v=>v.id===id);
  if(!x)return;
@@ -480,11 +619,12 @@ function editRecord(type,id){
 }
 
 async function deleteRecord(type,id){
- if(!confirm("Bu kaydı ve fotoğraflarını kalıcı olarak silmek istiyor musun?"))return;
- const key=type==="service"?"services":"orders";
+ if(!confirm("Bu kaydı kalıcı olarak silmek istiyor musun?"))return;
+ const key=type==="service"?"services":type==="order"?"orders":"parts";
  const next={
   services:[...db.services],
-  orders:[...db.orders]
+  orders:[...db.orders],
+  parts:[...db.parts]
  };
  next[key]=next[key].filter(x=>x.id!==id);
  try{
@@ -528,6 +668,7 @@ function reminderHTML(x){
 function renderAll(){
  $("serviceCount").textContent=db.services.length;
  $("orderCount").textContent=db.orders.length;
+ $("partCount").textContent=db.parts.length;
  $("completedCount").textContent=db.services.filter(x=>
   ["Tamamlandı","Teslim Edildi"].includes(x.status)
  ).length;
@@ -541,6 +682,7 @@ function renderAll(){
   '<div class="empty">Yaklaşan hatırlatma yok.</div>';
  renderServices();
  renderOrders();
+ renderParts();
 }
 
 function exportBackup(){
@@ -548,7 +690,7 @@ function exportBackup(){
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
  a.href=url;
- a.download="servis-fotografli-yedek-"+today()+".json";
+ a.download="yerliyurt-marin-yedek-"+today()+".json";
  document.body.appendChild(a);
  a.click();
  a.remove();
@@ -567,10 +709,11 @@ async function importBackup(){
    throw new Error("Geçersiz yedek dosyası");
   }
   if(!confirm("Mevcut kayıtlar yedekteki kayıtlarla değiştirilsin mi?"))return;
-  await persist(data);
+  await persist(normalize(data));
   resetService();
   resetOrder();
-  alert("Fotoğraflı yedek geri yüklendi.");
+  resetPart();
+  alert("Yedek geri yüklendi.");
  }catch(e){
   alert("Yedek yüklenemedi: "+e.message);
  }
@@ -582,16 +725,13 @@ async function start(){
    throw new Error("Bu tarayıcı IndexedDB desteklemiyor.");
   }
   database=await openDatabase();
-  const data=await readDatabase();
-  db={
-   services:Array.isArray(data.services)?data.services:[],
-   orders:Array.isArray(data.orders)?data.orders:[]
-  };
+  db=normalize(await readDatabase());
   resetService();
   resetOrder();
+  resetPart();
   renderAll();
  }catch(e){
-  alert("Veritabanı açılamadı. Safari'de normal sekmede ve HTTPS üzerinden açmayı dene. "+e.message);
+  alert("Veritabanı açılamadı: "+e.message);
  }
 }
 start();
