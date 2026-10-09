@@ -1,149 +1,113 @@
 <!DOCTYPE html>
-
 <html lang="tr">
-
 <head>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Yerliyurt Servis">
-<meta name="theme-color" content="#111111">
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Yerliyurt Servis">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Yerliyurt Servis</title>
 
   <style>
-
-    * { box-sizing: border-box; }
-
-    body {
-
-      margin: 0;
-
-      font-family: Arial, sans-serif;
-
-      background: #f4f4f4;
-
-      color: #222;
-
+    * {
+      box-sizing: border-box;
     }
 
-    header {
-
-      background: #111;
-
-      color: white;
-
-      padding: 25px 20px;
-
-      text-align: center;
-
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
     }
 
     .container {
+      max-width: 600px;
+      margin: auto;
+    }
 
-      max-width: 650px;
-
-      margin: 25px auto;
-
-      padding: 20px;
-
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
     }
 
     .card {
-
       background: white;
-
-      padding: 25px;
-
-      border-radius: 18px;
-
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    h2 { margin-top: 0; }
+    h2 {
+      margin-top: 0;
+    }
 
     label {
-
       display: block;
-
-      margin-top: 15px;
-
-      margin-bottom: 6px;
-
+      margin-top: 12px;
+      margin-bottom: 5px;
       font-weight: bold;
-
     }
 
-    input, textarea, select {
-
+    input,
+    textarea,
+    select {
       width: 100%;
-
-      padding: 14px;
-
+      padding: 12px;
       border: 1px solid #ccc;
-
       border-radius: 10px;
-
       font-size: 16px;
-
     }
 
     textarea {
-
-      min-height: 110px;
-
+      min-height: 80px;
     }
 
     button {
-
       width: 100%;
-
-      margin-top: 22px;
-
-      padding: 16px;
-
-      border: 0;
-
-      border-radius: 10px;
-
-      background: #111;
-
-      color: white;
-
-      font-size: 18px;
-
-      cursor: pointer;
-
-    }
-
-    #durum {
-
-      text-align: center;
-
+      padding: 14px;
       margin-top: 15px;
-
+      border: none;
+      border-radius: 10px;
+      background: #0f172a;
+      color: white;
+      font-size: 16px;
       font-weight: bold;
-
+      cursor: pointer;
     }
 
-  </style>
+    .mesaj {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
 
+    .kayit {
+      padding: 15px;
+      margin-top: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fafafa;
+      line-height: 1.7;
+    }
+
+    .musteri {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-
-  <h1>Yerliyurt</h1>
-
-  <p>Servis Müşteri Kayıt Sistemi</p>
-
-</header>
-
 <div class="container">
+
+  <h1>🚤 Yerliyurt Servis</h1>
 
   <div class="card">
 
@@ -152,585 +116,371 @@
     <form id="servisForm">
 
       <label>Müşteri Adı</label>
-
-      <input id="customer_name" required>
+      <input id="customer_name" type="text" required>
 
       <label>Telefon</label>
-
       <input id="phone" type="tel">
 
       <label>Tekne</label>
-
-      <input id="boat">
+      <input id="boat" type="text">
 
       <label>Motor</label>
-
-      <input id="motor">
+      <input id="motor" type="text">
 
       <label>Yapılan İşlem</label>
-
       <textarea id="service_details"></textarea>
 
       <label>Ücret (₺)</label>
-
       <input id="amount" type="number" step="0.01">
 
       <label>Ödeme Durumu</label>
-
       <select id="paid">
-
         <option value="false">Ödenmedi</option>
-
         <option value="true">Ödendi</option>
-
       </select>
 
       <label>Servis Tarihi</label>
-
       <input id="service_date" type="date">
 
-      <button type="submit">Servis Kaydını Kaydet</button>
+      <button type="submit">
+        Servis Kaydını Kaydet
+      </button>
 
     </form>
-<hr style="margin:30px 0;">
-<hr style="margin:30px 0;">
 
-<h2>👥 Müşteriler</h2>
+    <div id="durum" class="mesaj"></div>
 
-<button type="button" onclick="musterileriGetir()"
-style="width:100%; padding:14px;">
-  Müşterileri Göster
-</button>
+  </div>
 
-<div id="musteriListesi" style="margin-top:20px;"></div>
-<h2>Müşteri Ara</h2>
 
-<input
-  type="text"
-  id="musteriAra"
-  placeholder="Müşteri adını yazın"
-  style="width:100%; padding:12px; margin-bottom:10px;"
->
+  <div class="card">
 
-<button type="button" onclick="musteriAra()">
-  Müşteri Ara
-</button>
+    <h2>🔎 Müşteri Ara</h2>
 
-<div id="aramaSonuclari" style="margin-top:20px;"></div>
-    <div id="durum"></div>
+    <input
+      id="arama"
+      type="text"
+      placeholder="Müşteri adını yazın"
+    >
+
+    <button type="button" onclick="musteriAra()">
+      Ara
+    </button>
+
+    <div id="aramaSonuclari"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>👥 Müşteri Kayıtları</h2>
+
+    <button type="button" onclick="tumKayitlariGetir()">
+      Tüm Kayıtları Göster
+    </button>
+
+    <div id="tumKayitlar"></div>
 
   </div>
 
 </div>
 
+
 <script>
 
-const SUPABASE_URL = "https://grkixellsuhlsryrkaff.supabase.co/rest/v1/";
+  /* BURAYA KENDİ SUPABASE BİLGİLERİNİ YAZ */
 
-const SUPABASE_KEY = "sb_publishable_203KVZ7fXhED0wTpBdqPhw_Y_fsM7kX";
+  const SUPABASE_URL = "BURAYA_SUPABASE_URL";
 
-document.getElementById("servisForm").addEventListener("submit", async function(e) {
+  const SUPABASE_KEY = "BURAYA_SB_PUBLISHABLE_KEY";
 
-  e.preventDefault();
 
-  const durum = document.getElementById("durum");
+  /* BUGÜNÜ TARİH ALANINA YAZ */
 
-  durum.textContent = "Kaydediliyor...";
+  document.getElementById("service_date").value =
+    new Date().toISOString().split("T")[0];
 
-  const kayit = {
 
-    customer_name: document.getElementById("customer_name").value,
+  /* YENİ KAYIT */
 
-    phone: document.getElementById("phone").value,
+  document
+    .getElementById("servisForm")
+    .addEventListener("submit", async function(e) {
 
-    boat: document.getElementById("boat").value,
+      e.preventDefault();
 
-    motor: document.getElementById("motor").value,
+      const durum = document.getElementById("durum");
 
-    service_details: document.getElementById("service_details").value,
+      durum.textContent = "Kaydediliyor...";
 
-    amount: document.getElementById("amount").value || null,
+      const amountValue =
+        document.getElementById("amount").value;
 
-    paid: document.getElementById("paid").value === "true",
+      const kayit = {
 
-    service_date: document.getElementById("service_date").value || null
+        customer_name:
+          document.getElementById("customer_name").value.trim(),
 
-  };
+        phone:
+          document.getElementById("phone").value.trim(),
 
-  try {
+        boat:
+          document.getElementById("boat").value.trim(),
 
-    const response = await fetch(
+        motor:
+          document.getElementById("motor").value.trim(),
 
-      SUPABASE_URL + "/rest/v1/service_records",
+        service_details:
+          document.getElementById("service_details").value.trim(),
 
-      {
+        amount:
+          amountValue === "" ? null : Number(amountValue),
 
-        method: "POST",
+        paid:
+          document.getElementById("paid").value === "true",
 
-        headers: {
+        service_date:
+          document.getElementById("service_date").value || null
+      };
 
-          "apikey": SUPABASE_KEY,
 
-          "Authorization": "Bearer " + SUPABASE_KEY,
+      try {
 
-          "Content-Type": "application/json",
+        const response = await fetch(
+          SUPABASE_URL + "/rest/v1/service_records",
+          {
+            method: "POST",
 
-          "Prefer": "return=minimal"
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Content-Type": "application/json",
+              "Prefer": "return=minimal"
+            },
 
-        },
+            body: JSON.stringify(kayit)
+          }
+        );
 
-        body: JSON.stringify(kayit)
 
-      }
+        if (!response.ok) {
 
-    );
+          const hata = await response.text();
 
-    if (!response.ok) {
-
-      throw new Error(await response.text());
-
-    }
-
-    durum.textContent = "✅ Servis kaydı başarıyla kaydedildi.";
-
-    document.getElementById("servisForm").reset();
-
-  }  catch (error) {
-  durum.textContent = "❌ Hata: " + error.message;
-  console.error(error);
-}
-
-  }
-
-});
-async function musteriAra() {
-  const arama = document.getElementById("musteriAra").value.trim();
-  const sonuc = document.getElementById("aramaSonuclari");
-
-  if (!arama) {
-    sonuc.innerHTML = "Müşteri adı yazın.";
-    return;
-  }
-
-  sonuc.innerHTML = "Aranıyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/service_records?customer_name=ilike.*" +
-      encodeURIComponent(arama) +
-      "*&order=service_date.desc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
+          throw new Error(hata);
         }
+
+
+        durum.textContent =
+          "✅ Kayıt başarıyla kaydedildi.";
+
+        document
+          .getElementById("servisForm")
+          .reset();
+
+        document.getElementById("service_date").value =
+          new Date().toISOString().split("T")[0];
+
+
+      } catch (error) {
+
+        durum.textContent =
+          "❌ Hata: " + error.message;
+
+        console.error(error);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
+    });
 
-    const kayitlar = await response.json();
 
-    if (kayitlar.length === 0) {
-      sonuc.innerHTML = "Kayıt bulunamadı.";
+
+  /* MÜŞTERİ ARA */
+
+  async function musteriAra() {
+
+    const arama =
+      document.getElementById("arama").value.trim();
+
+    const alan =
+      document.getElementById("aramaSonuclari");
+
+
+    if (!arama) {
+
+      alan.innerHTML =
+        "<p>Müşteri adı yazın.</p>";
+
       return;
     }
 
-    sonuc.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>${k.customer_name}</strong><br><br>
 
-        📞 ${k.phone || "-"}<br>
-        🚤 Tekne: ${k.boat || "-"}<br>
-        ⚙️ Motor: ${k.motor || "-"}<br>
-        🔧 İşlem: ${k.service_details || "-"}<br>
-        💰 Ücret: ${k.amount || 0} ₺<br>
-        💳 Ödeme: ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 Servis Tarihi: ${k.service_date || "-"}
-      </div>
-    `).join("");
+    alan.innerHTML =
+      "<p>Aranıyor...</p>";
 
-  } catch (error) {
-    sonuc.innerHTML = "❌ Kayıtlar getirilemedi.";
-    console.error(error);
-  }
-}async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
 
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
+    try {
+
+      const response = await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/service_records" +
+        "?select=*" +
+        "&customer_name=ilike.*" +
+        encodeURIComponent(arama) +
+        "*" +
+        "&order=service_date.desc",
+
+        {
+          headers: {
+            "apikey": SUPABASE_KEY
+          }
         }
+
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          await response.text()
+        );
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(await response.text());
+
+      const kayitlar =
+        await response.json();
+
+
+      kayitlariGoster(
+        kayitlar,
+        alan
+      );
+
+
+    } catch (error) {
+
+      alan.innerHTML =
+        "<p>❌ Hata: " +
+        error.message +
+        "</p>";
     }
+  }
 
-    const kayitlar = await response.json();
+
+
+  /* TÜM KAYITLARI GETİR */
+
+  async function tumKayitlariGetir() {
+
+    const alan =
+      document.getElementById("tumKayitlar");
+
+    alan.innerHTML =
+      "<p>Yükleniyor...</p>";
+
+
+    try {
+
+      const response = await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/service_records" +
+        "?select=*" +
+        "&order=service_date.desc",
+
+        {
+          headers: {
+            "apikey": SUPABASE_KEY
+          }
+        }
+
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          await response.text()
+        );
+      }
+
+
+      const kayitlar =
+        await response.json();
+
+
+      kayitlariGoster(
+        kayitlar,
+        alan
+      );
+
+
+    } catch (error) {
+
+      alan.innerHTML =
+        "<p>❌ Hata: " +
+        error.message +
+        "</p>";
+    }
+  }
+
+
+
+  /* KAYITLARI EKRANA YAZ */
+
+  function kayitlariGoster(kayitlar, alan) {
 
     if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
+
+      alan.innerHTML =
+        "<p>Kayıt bulunamadı.</p>";
+
       return;
     }
 
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
 
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
+    alan.innerHTML =
+      kayitlar.map(k => `
 
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
+        <div class="kayit">
 
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
+          <div class="musteri">
+            👤 ${k.customer_name || "-"}
+          </div>
 
-    const kayitlar = await response.json();
+          📞 Telefon:
+          ${k.phone || "-"}
+          <br>
 
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
+          🚤 Tekne:
+          ${k.boat || "-"}
+          <br>
 
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
+          ⚙️ Motor:
+          ${k.motor || "-"}
+          <br>
 
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
+          🔧 Yapılan İşlem:
+          ${k.service_details || "-"}
+          <br>
 
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
+          💰 Ücret:
+          ${k.amount ?? 0} ₺
+          <br>
 
-    const kayitlar = await response.json();
+          💳 Ödeme:
+          ${k.paid ? "Ödendi" : "Ödenmedi"}
+          <br>
 
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
+          📅 Servis Tarihi:
+          ${k.service_date || "-"}
 
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
+        </div>
 
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-}
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const kayitlar = await response.json();
-
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
-
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-}async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const kayitlar = await response.json();
-
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
-
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const kayitlar = await response.json();
-
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
-
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
+      `).join("");
   }
 
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const kayitlar = await response.json();
-
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
-
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-async function musterileriGetir() {
-  const alan = document.getElementById("musteriListesi");
-  alan.innerHTML = "Müşteriler yükleniyor...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/service_records?select=*&order=customer_name.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const kayitlar = await response.json();
-
-    if (kayitlar.length === 0) {
-      alan.innerHTML = "Henüz müşteri kaydı yok.";
-      return;
-    }
-
-    alan.innerHTML = kayitlar.map(k => `
-      <div style="
-        padding:15px;
-        margin:10px 0;
-        border:1px solid #ddd;
-        border-radius:12px;
-      ">
-        <strong>👤 ${k.customer_name}</strong><br>
-        📞 ${k.phone || "-"}<br>
-        🚤 ${k.boat || "-"}<br>
-        ⚙️ ${k.motor || "-"}<br>
-        🔧 ${k.service_details || "-"}<br>
-        💰 ${k.amount || 0} ₺<br>
-        💳 ${k.paid ? "Ödendi" : "Ödenmedi"}<br>
-        📅 ${k.service_date || "-"}
-      </div>
-    `).join("");
-
-  } catch (error) {
-    alan.innerHTML = "❌ Müşteriler getirilemedi.";
-  }
-}
 </script>
 
 </body>
-
 </html>
