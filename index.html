@@ -74,6 +74,8 @@
 
 <div id="siparisMesaj" class="mesaj"></div>
 
+<div id="siparisMesaj" class="mesaj"></div>
+
     .mesaj {
       margin-top: 15px;
       font-weight: bold;
@@ -579,6 +581,47 @@ async function siparisKaydet() {
   } else {
     siparis.style.display = "none";
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+async function siparisKaydet() {
+  const mesaj = document.getElementById("siparisMesaj");
+
+  const siparis = {
+    order_date: document.getElementById("siparisTarih").value,
+    customer_name: document.getElementById("siparisMusteri").value.trim(),
+    phone: document.getElementById("siparisTelefon").value.trim(),
+    model: document.getElementById("siparisModel").value.trim(),
+    notes: document.getElementById("siparisNotlar").value.trim()
+  };
+
+  if (!siparis.order_date || !siparis.customer_name) {
+    mesaj.textContent = "❌ Tarih ve ad soyad zorunlu.";
+    return;
+  }
+
+  mesaj.textContent = "Kaydediliyor...";
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/orders",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(siparis)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    mesaj.textContent = "✅ Sipariş kaydedildi!";
+
+  } catch (error) {
+    mesaj.textContent = "❌ Hata: " + error.message;
   }
 }
 </script>
