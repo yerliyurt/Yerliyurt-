@@ -1,630 +1,698 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
-  <meta name="theme-color" content="#0f172a">
+<title>Yerliyurt Marin</title>
 
-  <title>Yerliyurt Marin</title>
-<link rel="apple-touch-icon" href="./logo.png.PNG">
-<link rel="icon" type="image/png" href="./logo.png.PNG">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
+<meta name="theme-color" content="#10243a">
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      color: #1f2937;
-    }
+<link rel="apple-touch-icon" href="logo.png.PNG">
+<link rel="icon" type="image/png" href="logo.png.PNG">
 
-    .container {
-      max-width: 600px;
-      margin: auto;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+body {
+  margin: 0;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  background: #eef2f6;
+  color: #172b42;
+}
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
+.container {
+  max-width: 650px;
+  margin: auto;
+}
 
-    h2 {
-      margin-top: 0;
-    }
+.logo {
+  display: block;
+  width: 250px;
+  max-width: 90%;
+  margin: 15px auto;
+}
 
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
+h1, h2 {
+  text-align: center;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
-    }
+h1 {
+  font-size: 24px;
+}
 
-    textarea {
-      min-height: 80px;
-    }
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
 
-    <button type="button" onclick="siparisKaydet()">
-  💾 Siparişi Kaydet
-</button>
+button {
+  width: 100%;
+  padding: 14px;
+  background: #10243a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
 
-<div id="siparisMesaj" class="mesaj"></div>
+.tabs button.active {
+  background: #1679a5;
+}
 
-<div id="siparisMesaj" class="mesaj"></div>
+.section {
+  display: none;
+}
 
-    .mesaj {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
-    }
+.section.active {
+  display: block;
+}
 
-    .kayit {
-      padding: 15px;
-      margin-top: 12px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      background: #fafafa;
-      line-height: 1.7;
-    }
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px #00000012;
+}
 
-    .musteri {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-  </style>
-  <link rel="apple-touch-icon" href="logo.png.Png">
-<link rel="icon" type="image/png" href="logo.png.Png">
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 6px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccd3da;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+textarea {
+  min-height: 110px;
+}
+
+.full {
+  margin-top: 16px;
+}
+
+.message {
+  margin-top: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.record {
+  background: #f7f9fc;
+  padding: 15px;
+  border: 1px solid #dce3eb;
+  border-radius: 12px;
+  margin-top: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.record strong {
+  font-size: 18px;
+}
+</style>
 </head>
 
 <body>
-<div id="siparisSekmesi" style="display:none; padding:20px;">
 
-  <h2>📋 Yerliyurt Marin Sipariş Formu</h2>
-
-  <label>Tarih</label>
-  <input type="date" id="siparisTarih">
-
-  <label>Ad Soyad</label>
-  <input type="text" id="siparisMusteri">
-
-  <label>Telefon</label>
-  <input type="tel" id="siparisTelefon">
-
-  <label>Model</label>
-  <input type="text" id="siparisModel">
-
-  <label>Notlar</label>
-  <textarea id="siparisNotlar"
-    placeholder="Siparişle ilgili notlarınızı yazın..."
-    style="min-height:120px;"></textarea>
-
-  <button type="button"
-    onclick="alert('Kaydetme özelliği henüz eklenmedi.')">
-    💾 Siparişi Kaydet
-  </button>
-
-</div>
 <div class="container">
-<div style="display:flex; gap:10px; margin-bottom:20px;">
 
-  <button type="button" onclick="sekmeAc('servis')">
-    🚤 Servis
-  </button>
+<img src="logo.png.PNG"
+     alt="Yerliyurt Marin"
+     class="logo">
 
-  <button type="button" onclick="sekmeAc('siparis')">
-    📋 Sipariş Formları
-  </button>
+<h1>Servis ve Sipariş Takip Sistemi</h1>
+
+<div class="tabs">
+
+<button type="button"
+        data-tab="servis"
+        onclick="sekmeAc('servis')">
+🚤 Servis Kaydı
+</button>
+
+<button type="button"
+        data-tab="gecmisServis"
+        onclick="sekmeAc('gecmisServis')">
+🔧 Geçmiş Servis Kayıtları
+</button>
+
+<button type="button"
+        data-tab="siparis"
+        onclick="sekmeAc('siparis')">
+📋 Sipariş Formları
+</button>
+
+<button type="button"
+        data-tab="gecmisSiparis"
+        onclick="sekmeAc('gecmisSiparis')">
+📂 Geçmiş Siparişler
+</button>
 
 </div>
-<div style="text-align:center; margin-bottom:25px;">
-  <img src="./logo.png.PNG"
-       alt="Yerliyurt Marin"
-       style="width:280px; max-width:100%; height:auto;">
-  <h2>Servis Takip Sistemi</h2>
+
+
+<!-- YENİ SERVİS KAYDI -->
+
+<section id="servis" class="section active">
+<div class="card">
+
+<h2>🚤 Yeni Servis Kaydı</h2>
+
+<form id="servisForm">
+
+<label>Müşteri Ad Soyad</label>
+<input id="customer_name" required>
+
+<label>Telefon</label>
+<input id="phone" type="tel">
+
+<label>Tekne</label>
+<input id="boat">
+
+<label>Motor</label>
+<input id="motor">
+
+<label>Yapılan İşlem</label>
+<textarea id="service_details"></textarea>
+
+<label>Ücret (₺)</label>
+<input id="amount" type="number" min="0" step="0.01">
+
+<label>Ödeme Durumu</label>
+<select id="paid">
+<option value="false">Ödenmedi</option>
+<option value="true">Ödendi</option>
+</select>
+
+<label>Servis Tarihi</label>
+<input id="service_date" type="date" required>
+
+<button class="full" type="submit">
+💾 Servis Kaydını Kaydet
+</button>
+
+</form>
+
+<div id="servisMesaj" class="message"></div>
+
 </div>
-
-  <div class="card">
-
-    <h2>Yeni Servis Kaydı</h2>
-
-    <form id="servisForm">
-
-      <label>Müşteri Adı</label>
-      <input id="customer_name" type="text" required>
-
-      <label>Telefon</label>
-      <input id="phone" type="tel">
-
-      <label>Tekne</label>
-      <input id="boat" type="text">
-
-      <label>Motor</label>
-      <input id="motor" type="text">
-
-      <label>Yapılan İşlem</label>
-      <textarea id="service_details"></textarea>
-
-      <label>Ücret (₺)</label>
-      <input id="amount" type="number" step="0.01">
-
-      <label>Ödeme Durumu</label>
-      <select id="paid">
-        <option value="false">Ödenmedi</option>
-        <option value="true">Ödendi</option>
-      </select>
-
-      <label>Servis Tarihi</label>
-      <input id="service_date" type="date">
-
-      <button type="submit">
-        Servis Kaydını Kaydet
-      </button>
-
-    </form>
-
-    <div id="durum" class="mesaj"></div>
-
-  </div>
+</section>
 
 
-  <div class="card">
+<!-- GEÇMİŞ SERVİS KAYITLARI -->
 
-    <h2>🔎 Müşteri Ara</h2>
+<section id="gecmisServis" class="section">
+<div class="card">
 
-    <input
-      id="arama"
-      type="text"
-      placeholder="Müşteri adını yazın"
-    >
+<h2>🔧 Geçmiş Servis Kayıtları</h2>
 
-    <button type="button" onclick="musteriAra()">
-      Ara
-    </button>
+<label>Müşteri Ara</label>
+<input id="servisArama"
+       placeholder="Müşteri adı veya soyadı">
 
-    <div id="aramaSonuclari"></div>
+<button class="full" type="button"
+        onclick="servisAra()">
+🔎 Servis Kaydı Ara
+</button>
 
-  </div>
+<button class="full" type="button"
+        onclick="tumServisleriGetir()">
+📋 Tüm Servis Kayıtlarını Göster
+</button>
+
+<div id="servisSonuc" class="message"></div>
+
+</div>
+</section>
 
 
-  <div class="card">
+<!-- SİPARİŞ FORMLARI -->
 
-    <h2>👥 Müşteri Kayıtları</h2>
+<section id="siparis" class="section">
+<div class="card">
 
-    <button type="button" onclick="tumKayitlariGetir()">
-      Tüm Kayıtları Göster
-    </button>
+<h2>📋 Yeni Sipariş Formu</h2>
 
-    <div id="tumKayitlar"></div>
+<form id="siparisForm">
 
-  </div>
+<label>Tarih</label>
+<input id="siparisTarih" type="date" required>
+
+<label>Ad Soyad</label>
+<input id="siparisMusteri" required>
+
+<label>Telefon</label>
+<input id="siparisTelefon" type="tel">
+
+<label>Model</label>
+<input id="siparisModel">
+
+<label>Notlar</label>
+<textarea id="siparisNotlar"></textarea>
+
+<button class="full" type="submit">
+💾 Siparişi Kaydet
+</button>
+
+</form>
+
+<div id="siparisMesaj" class="message"></div>
+
+</div>
+</section>
+
+
+<!-- GEÇMİŞ SİPARİŞLER -->
+
+<section id="gecmisSiparis" class="section">
+<div class="card">
+
+<h2>📂 Geçmiş Siparişler</h2>
+
+<label>Müşteri Ara</label>
+<input id="siparisArama"
+       placeholder="Müşteri adı veya soyadı">
+
+<button class="full" type="button"
+        onclick="siparisAra()">
+🔎 Sipariş Ara
+</button>
+
+<button class="full" type="button"
+        onclick="tumSiparisleriGetir()">
+📋 Tüm Siparişleri Göster
+</button>
+
+<div id="siparisSonuc" class="message"></div>
+
+</div>
+</section>
 
 </div>
 
 
 <script>
 
-  /* BURAYA KENDİ SUPABASE BİLGİLERİNİ YAZ */
+/* SUPABASE BİLGİLERİ */
 
-  const SUPABASE_URL = "https://grkixellsuhlsryrkaff.supabase.co";
+const SUPABASE_URL =
+  "https://grkixellsuhlsryrkaff.supabase.co";
 
-  const SUPABASE_KEY = "sb_publishable_203KVZ7fXhED0wTpBdqPhw_Y_fsM7kX";
-
-
-  /* BUGÜNÜ TARİH ALANINA YAZ */
-
-  document.getElementById("service_date").value =
-    new Date().toISOString().split("T")[0];
+const SUPABASE_KEY =
+  "sb_publishable_203KVZ7fXhED0wTpBdqPhw_Y_fsM7kX";
 
 
-  /* YENİ KAYIT */
+/* YARDIMCI FONKSİYONLAR */
 
-  document
-    .getElementById("servisForm")
-    .addEventListener("submit", async function(e) {
+function alan(id) {
+  return document.getElementById(id);
+}
 
-      e.preventDefault();
+function deger(id) {
+  return alan(id).value.trim();
+}
 
-      const durum = document.getElementById("durum");
+function mesajYaz(id, mesaj) {
+  alan(id).textContent = mesaj;
+}
 
-      durum.textContent = "Kaydediliyor...";
+function bugun() {
+  const d = new Date();
 
-      const amountValue =
-        document.getElementById("amount").value;
+  const yil = d.getFullYear();
+  const ay = String(d.getMonth() + 1).padStart(2, "0");
+  const gun = String(d.getDate()).padStart(2, "0");
 
-      const kayit = {
+  return `${yil}-${ay}-${gun}`;
+}
 
-        customer_name:
-          document.getElementById("customer_name").value.trim(),
+function metin(value) {
+  return String(value ?? "-");
+}
 
-        phone:
-          document.getElementById("phone").value.trim(),
-
-        boat:
-          document.getElementById("boat").value.trim(),
-
-        motor:
-          document.getElementById("motor").value.trim(),
-
-        service_details:
-          document.getElementById("service_details").value.trim(),
-
-        amount:
-          amountValue === "" ? null : Number(amountValue),
-
-        paid:
-          document.getElementById("paid").value === "true",
-
-        service_date:
-          document.getElementById("service_date").value || null
-      };
+function satir(baslik, value) {
+  const div = document.createElement("div");
+  div.textContent = baslik + ": " + metin(value);
+  return div;
+}
 
 
-      try {
+/* SUPABASE BAĞLANTISI */
 
-        const response = await fetch(
-          SUPABASE_URL + "/rest/v1/service_records",
-          {
-            method: "POST",
+async function apiIstek(yol, ayarlar = {}) {
 
-            headers: {
-              "apikey": SUPABASE_KEY,
-              "Content-Type": "application/json",
-              "Prefer": "return=minimal"
-            },
+  if (!SUPABASE_KEY.startsWith("sb_publishable_")) {
+    throw new Error(
+      "Supabase Publishable Key eksik veya yanlış."
+    );
+  }
 
-            body: JSON.stringify(kayit)
-          }
-        );
-
-
-        if (!response.ok) {
-
-          const hata = await response.text();
-
-          throw new Error(hata);
-        }
-
-
-        durum.textContent =
-          "✅ Kayıt başarıyla kaydedildi.";
-
-        document
-          .getElementById("servisForm")
-          .reset();
-
-        document.getElementById("service_date").value =
-          new Date().toISOString().split("T")[0];
-
-
-      } catch (error) {
-
-        durum.textContent =
-          "❌ Hata: " + error.message;
-
-        console.error(error);
+  const response = await fetch(
+    SUPABASE_URL + "/rest/v1/" + yol,
+    {
+      ...ayarlar,
+      headers: {
+        apikey: SUPABASE_KEY,
+        ...ayarlar.headers
       }
+    }
+  );
 
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  return response.json();
+}
+
+
+/* SEKME DEĞİŞTİRME */
+
+function sekmeAc(sekme) {
+
+  document.querySelectorAll(".section")
+    .forEach(bolum => {
+      bolum.classList.remove("active");
     });
 
+  document.querySelectorAll(".tabs button")
+    .forEach(buton => {
+      buton.classList.remove("active");
+    });
+
+  alan(sekme).classList.add("active");
+
+  const buton = document.querySelector(
+    '[data-tab="' + sekme + '"]'
+  );
+
+  if (buton) {
+    buton.classList.add("active");
+  }
+
+  window.scrollTo(0, 0);
+}
 
 
-  /* MÜŞTERİ ARA */
+/* SERVİS KAYDETME */
 
-  async function musteriAra() {
+alan("servisForm").addEventListener(
+  "submit",
+  async function(e) {
 
-    const arama =
-      document.getElementById("arama").value.trim();
+    e.preventDefault();
 
-    const alan =
-      document.getElementById("aramaSonuclari");
+    const kayit = {
+      customer_name: deger("customer_name"),
+      phone: deger("phone"),
+      boat: deger("boat"),
+      motor: deger("motor"),
+      service_details: deger("service_details"),
+      amount: deger("amount") === ""
+        ? null
+        : Number(deger("amount")),
+      paid: deger("paid") === "true",
+      service_date: deger("service_date")
+    };
 
-
-    if (!arama) {
-
-      alan.innerHTML =
-        "<p>Müşteri adı yazın.</p>";
-
-      return;
-    }
-
-
-    alan.innerHTML =
-      "<p>Aranıyor...</p>";
-
+    mesajYaz("servisMesaj", "Kaydediliyor...");
 
     try {
 
-      const response = await fetch(
+      await apiIstek("service_records", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Prefer: "return=minimal"
+        },
+        body: JSON.stringify(kayit)
+      });
 
-        SUPABASE_URL +
-        "/rest/v1/service_records" +
-        "?select=*" +
-        "&customer_name=ilike.*" +
-        encodeURIComponent(arama) +
-        "*" +
-        "&order=service_date.desc",
-
-        {
-          headers: {
-            "apikey": SUPABASE_KEY
-          }
-        }
-
+      mesajYaz(
+        "servisMesaj",
+        "✅ Servis kaydı başarıyla kaydedildi."
       );
 
-
-      if (!response.ok) {
-
-        throw new Error(
-          await response.text()
-        );
-      }
-
-
-      const kayitlar =
-        await response.json();
-
-
-      kayitlariGoster(
-        kayitlar,
-        alan
-      );
-
+      alan("servisForm").reset();
+      alan("service_date").value = bugun();
 
     } catch (error) {
 
-      alan.innerHTML =
-        "<p>❌ Hata: " +
-        error.message +
-        "</p>";
+      mesajYaz(
+        "servisMesaj",
+        "❌ Hata: " + error.message
+      );
+
     }
   }
+);
 
 
+/* GEÇMİŞ SERVİS KAYITLARI */
 
-  /* TÜM KAYITLARI GETİR */
+async function servisleriGetir(arama = "") {
 
-  async function tumKayitlariGetir() {
+  mesajYaz("servisSonuc", "Kayıtlar yükleniyor...");
 
-    const alan =
-      document.getElementById("tumKayitlar");
+  try {
 
-    alan.innerHTML =
-      "<p>Yükleniyor...</p>";
+    let sorgu =
+      "service_records?select=*" +
+      "&order=service_date.desc";
 
+    if (arama) {
+      sorgu +=
+        "&customer_name=ilike." +
+        encodeURIComponent("*" + arama + "*");
+    }
+
+    const kayitlar = await apiIstek(sorgu);
+
+    kayitlariGoster(
+      "servisSonuc",
+      kayitlar,
+      "servis"
+    );
+
+  } catch (error) {
+
+    mesajYaz(
+      "servisSonuc",
+      "❌ Hata: " + error.message
+    );
+
+  }
+}
+
+function servisAra() {
+  servisleriGetir(deger("servisArama"));
+}
+
+function tumServisleriGetir() {
+  servisleriGetir();
+}
+
+
+/* SİPARİŞ KAYDETME */
+
+alan("siparisForm").addEventListener(
+  "submit",
+  async function(e) {
+
+    e.preventDefault();
+
+    const siparis = {
+      order_date: deger("siparisTarih"),
+      customer_name: deger("siparisMusteri"),
+      phone: deger("siparisTelefon"),
+      model: deger("siparisModel"),
+      notes: deger("siparisNotlar")
+    };
+
+    mesajYaz("siparisMesaj", "Kaydediliyor...");
 
     try {
 
-      const response = await fetch(
+      await apiIstek("orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Prefer: "return=minimal"
+        },
+        body: JSON.stringify(siparis)
+      });
 
-        SUPABASE_URL +
-        "/rest/v1/service_records" +
-        "?select=*" +
-        "&order=service_date.desc",
-
-        {
-          headers: {
-            "apikey": SUPABASE_KEY
-          }
-        }
-
+      mesajYaz(
+        "siparisMesaj",
+        "✅ Sipariş başarıyla kaydedildi."
       );
 
-
-      if (!response.ok) {
-
-        throw new Error(
-          await response.text()
-        );
-      }
-
-
-      const kayitlar =
-        await response.json();
-
-
-      kayitlariGoster(
-        kayitlar,
-        alan
-      );
-
+      alan("siparisForm").reset();
+      alan("siparisTarih").value = bugun();
 
     } catch (error) {
 
-      alan.innerHTML =
-        "<p>❌ Hata: " +
-        error.message +
-        "</p>";
+      mesajYaz(
+        "siparisMesaj",
+        "❌ Hata: " + error.message
+      );
+
     }
   }
+);
 
 
+/* GEÇMİŞ SİPARİŞLER */
 
-  /* KAYITLARI EKRANA YAZ */
+async function siparisleriGetir(arama = "") {
 
-  function kayitlariGoster(kayitlar, alan) {
-
-    if (kayitlar.length === 0) {
-
-      alan.innerHTML =
-        "<p>Kayıt bulunamadı.</p>";
-
-      return;
-    }
-
-
-    alan.innerHTML =
-      kayitlar.map(k => `
-
-        <div class="kayit">
-
-          <div class="musteri">
-            👤 ${k.customer_name || "-"}
-          </div>
-
-          📞 Telefon:
-          ${k.phone || "-"}
-          <br>
-
-          🚤 Tekne:
-          ${k.boat || "-"}
-          <br>
-
-          ⚙️ Motor:
-          ${k.motor || "-"}
-          <br>
-
-          🔧 Yapılan İşlem:
-          ${k.service_details || "-"}
-          <br>
-
-          💰 Ücret:
-          ${k.amount ?? 0} ₺
-          <br>
-
-          💳 Ödeme:
-          ${k.paid ? "Ödendi" : "Ödenmedi"}
-          <br>
-
-          📅 Servis Tarihi:
-          ${k.service_date || "-"}
-
-        </div>
-
-      `).join("");
-  }
-async function siparisKaydet() {
-
-  const mesaj = document.getElementById("siparisMesaj");
-
-  const siparis = {
-    order_date: document.getElementById("siparisTarih").value,
-    customer_name: document.getElementById("siparisMusteri").value.trim(),
-    phone: document.getElementById("siparisTelefon").value.trim(),
-    model: document.getElementById("siparisModel").value.trim(),
-    notes: document.getElementById("siparisNotlar").value.trim()
-  };
-
-  if (!siparis.order_date || !siparis.customer_name) {
-    mesaj.textContent = "❌ Tarih ve ad soyad zorunludur.";
-    return;
-  }
-
-  mesaj.textContent = "Kaydediliyor...";
+  mesajYaz("siparisSonuc", "Siparişler yükleniyor...");
 
   try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/orders",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify(siparis)
-      }
-    );
 
-    if (!response.ok) {
-      throw new Error(await response.text());
+    let sorgu =
+      "orders?select=*" +
+      "&order=order_date.desc";
+
+    if (arama) {
+      sorgu +=
+        "&customer_name=ilike." +
+        encodeURIComponent("*" + arama + "*");
     }
 
-    mesaj.textContent = "✅ Sipariş başarıyla kaydedildi.";
+    const kayitlar = await apiIstek(sorgu);
 
-    document.getElementById("siparisTarih").value = "";
-    document.getElementById("siparisMusteri").value = "";
-    document.getElementById("siparisTelefon").value = "";
-    document.getElementById("siparisModel").value = "";
-    document.getElementById("siparisNotlar").value = "";
+    kayitlariGoster(
+      "siparisSonuc",
+      kayitlar,
+      "siparis"
+    );
 
   } catch (error) {
-    mesaj.textContent = "❌ Hata: " + error.message;
+
+    mesajYaz(
+      "siparisSonuc",
+      "❌ Hata: " + error.message
+    );
+
   }
 }
-  function sekmeAc(sekme) {
-  const siparis = document.getElementById("siparisSekmesi");
 
-  if (!siparis) {
-    alert("Sipariş formu henüz eklenmemiş.");
+function siparisAra() {
+  siparisleriGetir(deger("siparisArama"));
+}
+
+function tumSiparisleriGetir() {
+  siparisleriGetir();
+}
+
+
+/* KAYITLARI EKRANDA GÖSTERME */
+
+function kayitlariGoster(hedef, kayitlar, tur) {
+
+  const kutu = alan(hedef);
+  kutu.replaceChildren();
+
+  if (!kayitlar || kayitlar.length === 0) {
+    kutu.textContent = "Kayıt bulunamadı.";
     return;
   }
 
-  if (sekme === "siparis") {
-    siparis.style.display = "block";
-    siparis.scrollIntoView({ behavior: "smooth" });
-  } else {
-    siparis.style.display = "none";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-async function siparisKaydet() {
-  const mesaj = document.getElementById("siparisMesaj");
+  kayitlar.forEach(k => {
 
-  const siparis = {
-    order_date: document.getElementById("siparisTarih").value,
-    customer_name: document.getElementById("siparisMusteri").value.trim(),
-    phone: document.getElementById("siparisTelefon").value.trim(),
-    model: document.getElementById("siparisModel").value.trim(),
-    notes: document.getElementById("siparisNotlar").value.trim()
-  };
+    const kart = document.createElement("div");
+    kart.className = "record";
 
-  if (!siparis.order_date || !siparis.customer_name) {
-    mesaj.textContent = "❌ Tarih ve ad soyad zorunlu.";
-    return;
-  }
+    const baslik = document.createElement("strong");
+    baslik.textContent =
+      "👤 " + metin(k.customer_name);
 
-  mesaj.textContent = "Kaydediliyor...";
+    kart.appendChild(baslik);
 
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/orders",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify(siparis)
-      }
-    );
+    if (tur === "servis") {
 
-    if (!response.ok) {
-      throw new Error(await response.text());
+      kart.appendChild(satir("📞 Telefon", k.phone));
+      kart.appendChild(satir("🚤 Tekne", k.boat));
+      kart.appendChild(satir("⚙️ Motor", k.motor));
+
+      kart.appendChild(
+        satir("🔧 Yapılan İşlem", k.service_details)
+      );
+
+      kart.appendChild(
+        satir("💰 Ücret", (k.amount ?? 0) + " ₺")
+      );
+
+      kart.appendChild(
+        satir(
+          "💳 Ödeme",
+          k.paid ? "Ödendi" : "Ödenmedi"
+        )
+      );
+
+      kart.appendChild(
+        satir("📅 Tarih", k.service_date)
+      );
+
+    } else {
+
+      kart.appendChild(
+        satir("📅 Tarih", k.order_date)
+      );
+
+      kart.appendChild(
+        satir("📞 Telefon", k.phone)
+      );
+
+      kart.appendChild(
+        satir("🚤 Model", k.model)
+      );
+
+      kart.appendChild(
+        satir("📝 Notlar", k.notes)
+      );
+
     }
 
-    mesaj.textContent = "✅ Sipariş kaydedildi!";
+    kutu.appendChild(kart);
 
-  } catch (error) {
-    mesaj.textContent = "❌ Hata: " + error.message;
-  }
+  });
 }
+
+
+/* BAŞLANGIÇ */
+
+alan("service_date").value = bugun();
+alan("siparisTarih").value = bugun();
+
+sekmeAc("servis");
+
 </script>
 
 </body>
 </html>
+
+        
