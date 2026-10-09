@@ -565,6 +565,22 @@ async function siparisKaydet() {
     mesaj.textContent = "❌ Hata: " + error.message;
   }
 }
+  function sekmeAc(sekme) {
+  const siparis = document.getElementById("siparisSekmesi");
+
+  if (!siparis) {
+    alert("Sipariş formu henüz eklenmemiş.");
+    return;
+  }
+
+  if (sekme === "siparis") {
+    siparis.style.display = "block";
+    siparis.scrollIntoView({ behavior: "smooth" });
+  } else {
+    siparis.style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 </script>
 
 </body>
