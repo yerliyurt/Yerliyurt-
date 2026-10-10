@@ -336,10 +336,62 @@ textarea{
  padding:8px;
 }
 
-.loading{
- text-align:center;
- padding:20px;
- color:#64748b;
+.stock-ok{
+ color:#166534;
+ font-weight:700;
+}
+
+.stock-low{
+ color:#b91c1c;
+ font-weight:700;
+}
+
+.stock-zero{
+ color:#991b1b;
+ font-weight:700;
+}
+
+.stock-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:12px;
+}
+
+.stock-in{
+ background:#16a34a;
+ color:white;
+}
+
+.stock-out{
+ background:#dc2626;
+ color:white;
+}
+
+.stock-summary{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
+}
+
+.stock-summary .stat{
+ background:#f0fdf4;
+}
+
+.stock-summary .stat strong{
+ color:#15803d;
+}
+
+.stock-history{
+ border-left:4px solid #2563eb;
+}
+
+.stock-history.out{
+ border-left-color:#dc2626;
+}
+
+.stock-history.in{
+ border-left-color:#16a34a;
 }
 
 </style>
@@ -348,36 +400,27 @@ textarea{
 <body>
 
 <div id="loginScreen">
-
 <div class="login-card">
 
-<img src="./logo.png.PNG"
+<img src="./yerliyurt-logo.png"
  alt="Yerliyurt Marin"
  onerror="this.style.display='none'">
 
 <h2>YERLİYURT MARİN</h2>
 
 <p class="muted">
-Servis ve Sipariş Yönetim Sistemi
+Servis, Sipariş ve Stok Yönetim Sistemi
 </p>
 
 <form id="loginForm">
 
 <label>E-posta Adresi</label>
-<input
- type="email"
- id="loginEmail"
- autocomplete="username"
- required
->
+<input type="email" id="loginEmail"
+ autocomplete="username" required>
 
 <label>Şifre</label>
-<input
- type="password"
- id="loginPassword"
- autocomplete="current-password"
- required
->
+<input type="password" id="loginPassword"
+ autocomplete="current-password" required>
 
 <button class="primary" type="submit" id="loginButton">
 Giriş Yap
@@ -394,11 +437,11 @@ Giriş Yap
 
 <header>
 
-<img src="./logo.png.PNG"
+<img src="./yerliyurt-logo.png"
  alt="Yerliyurt Marin Logosu"
  onerror="this.style.display='none'">
 
-<h1>Servis & Sipariş Takip</h1>
+<h1>Servis, Sipariş & Stok Takip</h1>
 
 <p>Yerliyurt Marin Yönetim Sistemi</p>
 
@@ -490,6 +533,11 @@ Bekleyen Hatırlatma
 Tamamlanan Servis
 </div>
 
+<div class="stat">
+<strong id="homeCriticalStock">0</strong>
+Kritik Stok
+</div>
+
 </div>
 
 </div>
@@ -546,12 +594,10 @@ Tamamlanan Servis
 
 <label>Servis Fotoğrafları</label>
 
-<input
- type="file"
+<input type="file"
  id="servicePhotos"
  accept="image/*"
- multiple
->
+ multiple>
 
 <p class="photo-note">
 Kameradan veya galeriden fotoğraf ekleyebilirsin.
@@ -583,11 +629,9 @@ Formu Temizle
 
 <h2>Geçmiş Servis Kayıtları</h2>
 
-<input
- id="serviceSearch"
+<input id="serviceSearch"
  placeholder="Ad, telefon veya model ara..."
- oninput="renderServices()"
->
+ oninput="renderServices()">
 
 <div id="serviceList"></div>
 
@@ -634,12 +678,10 @@ Formu Temizle
 
 <label>Sipariş Fotoğrafları</label>
 
-<input
- type="file"
+<input type="file"
  id="orderPhotos"
  accept="image/*"
- multiple
->
+ multiple>
 
 <div id="orderPhotoPreview" class="photos"></div>
 
@@ -662,17 +704,17 @@ Formu Temizle
 
 <h2>Kaydedilen Siparişler</h2>
 
-<input
- id="orderSearch"
+<input id="orderSearch"
  placeholder="Ad, telefon veya model ara..."
- oninput="renderOrders()"
->
+ oninput="renderOrders()">
 
 <div id="orderList"></div>
 
 </div>
 
 </section>
+
+<!-- MOTOR BAKIM PARÇALARI -->
 
 <section id="parts">
 
@@ -684,18 +726,42 @@ Formu Temizle
 
 <input type="hidden" id="partId">
 
+<label>Parça Kodu</label>
+<input id="partCode"
+ placeholder="Örneğin: YM-1001"
+ required>
+
 <label>Parça Adı</label>
-<input id="partName" required>
+<input id="partName"
+ placeholder="Örneğin: Yağ Filtresi"
+ required>
 
-<label>Fiyat (₺)</label>
-
-<input
- id="partPrice"
+<label>Alış Fiyatı (₺)</label>
+<input id="partPurchasePrice"
  type="number"
  min="0"
  step="0.01"
- required
->
+ required>
+
+<label>Satış Fiyatı (₺)</label>
+<input id="partPrice"
+ type="number"
+ min="0"
+ step="0.01"
+ required>
+
+<label>Minimum Stok Adedi</label>
+<input id="partMinStock"
+ type="number"
+ min="0"
+ step="1"
+ value="3"
+ required>
+
+<p class="muted">
+Yeni parçanın stok miktarı başlangıçta 0 olur.
+Stok Girişi düğmesiyle adet ekleyebilirsin.
+</p>
 
 <button type="submit" class="primary">
 Parçayı Kaydet
@@ -714,15 +780,50 @@ Formu Temizle
 
 <div class="card">
 
+<h2>Stok Özeti</h2>
+
+<div class="stock-summary">
+
+<div class="stat">
+<strong id="totalStock">0</strong>
+Toplam Stok Adedi
+</div>
+
+<div class="stat">
+<strong id="criticalStock">0</strong>
+Kritik Stok
+</div>
+
+</div>
+
+<p style="margin-top:15px">
+<b>Toplam Stok Maliyeti:</b>
+<span id="totalStockValue">0 ₺</span>
+</p>
+
+</div>
+
+<div class="card">
+
 <h2>Kayıtlı Motor Bakım Parçaları</h2>
 
-<input
- id="partSearch"
- placeholder="Parça adı ara..."
- oninput="renderParts()"
->
+<input id="partSearch"
+ placeholder="Parça kodu veya adı ara..."
+ oninput="renderParts()">
 
 <div id="partList"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Stok Hareketleri</h2>
+
+<p class="muted">
+Yapılan tüm stok giriş ve çıkışları burada görünür.
+</p>
+
+<div id="stockHistory"></div>
 
 </div>
 
@@ -754,7 +855,7 @@ Safari kapalıyken otomatik bildirim gönderilmez.
 <p class="muted">
 Ortak veritabanındaki kayıtları JSON dosyası olarak
 yedekleyebilirsin. Fotoğraflar bağlantı yollarıyla
-yedeklenir; ayrı fotoğraf dosyaları bu yedeğe dahil değildir.
+yedeklenir; ayrı fotoğraf dosyaları yedeğe dahil değildir.
 </p>
 
 <button class="primary" onclick="exportBackup()">
@@ -763,11 +864,9 @@ Tüm Verileri Yedekle
 
 <label>Eski Yedeği İçeri Aktar</label>
 
-<input
- type="file"
+<input type="file"
  id="backupFile"
- accept=".json,application/json"
->
+ accept=".json,application/json">
 
 <button class="secondary"
  style="width:100%;margin-top:12px"
@@ -778,6 +877,8 @@ Yedekten Kayıtları Aktar
 <p class="muted">
 İçe aktarma mevcut kayıtları topluca silmez.
 Aynı kimliğe sahip kayıtları günceller.
+Stok hareketleri yalnızca dışa aktarılır;
+eski hareketler bu ekrandan geri yüklenmez.
 </p>
 
 </div>
@@ -818,6 +919,8 @@ let db = {
  orders:[],
  parts:[]
 };
+
+let stockMovements = [];
 
 let photoCache = {
  service:[],
@@ -860,6 +963,13 @@ function setConnection(message,error=false){
 
 function errorText(error){
  return error?.message||String(error);
+}
+
+function formatPrice(value){
+ return Number(value||0).toLocaleString("tr-TR",{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ })+" ₺";
 }
 
 /* GİRİŞ */
@@ -911,6 +1021,7 @@ async function logout(){
  await client.auth.signOut();
  currentUser=null;
  db={services:[],orders:[],parts:[]};
+ stockMovements=[];
  photoCache={service:[],order:[]};
  photoUrls.clear();
 
@@ -949,13 +1060,15 @@ async function refreshData(){
  setConnection("Veriler yenileniyor...");
 
  try{
-  const [services,orders,parts]=await Promise.all([
+  const [services,orders,parts,movements]=await Promise.all([
    readTable(TABLES.service),
    readTable(TABLES.order),
-   readTable(TABLES.part)
+   readTable(TABLES.part),
+   readTable("marin_stock_movements")
   ]);
 
   db={services,orders,parts};
+  stockMovements=movements;
 
   renderAll();
   setConnection("☁️ Ortak veritabanı bağlı");
@@ -1028,6 +1141,7 @@ function resetOrder(){
 function resetPart(){
  $("partForm").reset();
  $("partId").value="";
+ $("partMinStock").value=3;
  $("partTitle").textContent="Motor Bakım Parçaları";
 }
 
@@ -1273,22 +1387,38 @@ $("partForm").addEventListener("submit",async e=>{
 
  if(busy)return;
 
+ const id=$("partId").value||uid();
+ const code=$("partCode").value.trim();
  const name=$("partName").value.trim();
+ const purchasePrice=Number($("partPurchasePrice").value);
  const price=Number($("partPrice").value);
+ const minStock=Number($("partMinStock").value);
 
- if(!name||!Number.isFinite(price)||price<0){
-  alert("Geçerli parça adı ve fiyatı gir.");
+ if(!code||!name){
+  alert("Parça kodu ve parça adı zorunludur.");
+  return;
+ }
+
+ if(!Number.isFinite(purchasePrice)||purchasePrice<0||
+    !Number.isFinite(price)||price<0||
+    !Number.isInteger(minStock)||minStock<0){
+  alert("Fiyatları ve minimum stok miktarını kontrol et.");
   return;
  }
 
  busy=true;
 
  try{
-  await saveRecord(TABLES.part,{
-   id:$("partId").value||uid(),
+  const item={
+   id,
+   part_code:code,
    name,
-   price
-  });
+   purchase_price:purchasePrice,
+   price,
+   min_stock:minStock
+  };
+
+  await saveRecord(TABLES.part,item);
 
   resetPart();
   await refreshData();
@@ -1301,6 +1431,69 @@ $("partForm").addEventListener("submit",async e=>{
   busy=false;
  }
 });
+
+/* STOK GİRİŞ VE ÇIKIŞ */
+
+async function stockAction(id,kind){
+ if(busy)return;
+
+ const part=db.parts.find(x=>x.id===id);
+ if(!part)return;
+
+ const input=prompt(
+  part.name+" için "+kind+" adedini gir:"
+ );
+
+ if(input===null)return;
+
+ const quantity=Number(input);
+
+ if(!Number.isInteger(quantity)||quantity<=0){
+  alert("Geçerli bir adet gir.");
+  return;
+ }
+
+ let customer=null;
+
+ if(kind==="Çıkış"){
+  customer=prompt("Müşteri adı soyadı:");
+
+  if(customer===null)return;
+
+  customer=customer.trim();
+
+  if(!customer){
+   alert("Stok çıkışı için müşteri adı zorunludur.");
+   return;
+  }
+ }
+
+ busy=true;
+
+ try{
+  const {error}=await client.rpc(
+   "marin_apply_stock",
+   {
+    p_part_id:id,
+    p_kind:kind,
+    p_quantity:quantity,
+    p_customer:customer,
+    p_notes:null
+   }
+  );
+
+  if(error)throw error;
+
+  await refreshData();
+
+  alert("Stok "+kind+" işlemi kaydedildi.");
+
+ }catch(error){
+  alert("Stok işlemi başarısız: "+errorText(error));
+ }finally{
+  busy=false;
+ }
+}
 
 /* KAYIT GÖRÜNTÜLEME */
 
@@ -1429,50 +1622,139 @@ function renderOrders(){
  renderStoredPhotos();
 }
 
-function formatPrice(value){
- return Number(value).toLocaleString("tr-TR",{
-  minimumFractionDigits:2,
-  maximumFractionDigits:2
- })+" ₺";
-}
+/* PARÇA LİSTESİ */
 
 function renderParts(){
  const q=$("partSearch").value
   .toLocaleLowerCase("tr");
 
  const items=db.parts.filter(x=>
-  String(x.name)
+  [x.name,x.part_code]
+  .join(" ")
   .toLocaleLowerCase("tr")
   .includes(q)
  );
 
  $("partList").innerHTML=items.length?
-  items.map(x=>`<div class="record">
+  items.map(x=>{
+   const stock=Number(x.stock_quantity||0);
+   const min=Number(x.min_stock??3);
+   const critical=stock<=min;
 
-  <div class="part-row">
-  <h3>${safe(x.name)}</h3>
-  <p class="price">${formatPrice(x.price)}</p>
-  </div>
+   return `<div class="record">
 
-  <div class="actions">
+   <div class="part-row">
+   <h3>${safe(x.name)}</h3>
+   <p class="price">${formatPrice(x.price)}</p>
+   </div>
 
-  <button class="secondary"
-  data-action="edit"
-  data-type="part"
-  data-id="${safe(x.id)}">
-  Düzenle
-  </button>
+   <p><b>Parça Kodu:</b> ${safe(x.part_code||"-")}</p>
+   <p><b>Alış Fiyatı:</b> ${formatPrice(x.purchase_price)}</p>
+   <p><b>Satış Fiyatı:</b> ${formatPrice(x.price)}</p>
+   <p><b>Mevcut Stok:</b> ${stock} adet</p>
+   <p><b>Minimum Stok:</b> ${min} adet</p>
 
-  <button class="danger"
-  data-action="delete"
-  data-type="part"
-  data-id="${safe(x.id)}">
-  Sil
-  </button>
+   <span class="badge ${critical?"due":"ok"}">
+   ${stock===0?"Stok Tükendi":
+     critical?"Kritik Stok":"Stok Yeterli"}
+   </span>
 
-  </div>
-  </div>`).join(""):
+   <div class="stock-actions">
+
+   <button class="stock-in"
+    data-action="stock-in"
+    data-id="${safe(x.id)}">
+   + Stok Girişi
+   </button>
+
+   <button class="stock-out"
+    data-action="stock-out"
+    data-id="${safe(x.id)}">
+   − Stok Çıkışı
+   </button>
+
+   </div>
+
+   <div class="actions">
+
+   <button class="secondary"
+    data-action="edit"
+    data-type="part"
+    data-id="${safe(x.id)}">
+   Düzenle
+   </button>
+
+   <button class="danger"
+    data-action="delete"
+    data-type="part"
+    data-id="${safe(x.id)}">
+   Sil
+   </button>
+
+   </div>
+   </div>`;
+  }).join(""):
   '<div class="empty">Motor bakım parçası bulunamadı.</div>';
+
+ const totalStock=db.parts.reduce(
+  (sum,x)=>sum+Number(x.stock_quantity||0),0
+ );
+
+ const criticalStock=db.parts.filter(x=>
+  Number(x.stock_quantity||0)<=Number(x.min_stock??3)
+ ).length;
+
+ const totalValue=db.parts.reduce(
+  (sum,x)=>
+   sum+
+   Number(x.stock_quantity||0)*
+   Number(x.purchase_price||0),
+  0
+ );
+
+ $("totalStock").textContent=totalStock;
+ $("criticalStock").textContent=criticalStock;
+ $("totalStockValue").textContent=formatPrice(totalValue);
+ $("homeCriticalStock").textContent=criticalStock;
+}
+
+/* STOK HAREKETLERİ */
+
+function renderStockHistory(){
+ const container=$("stockHistory");
+
+ container.innerHTML=stockMovements.length?
+  stockMovements.map(x=>{
+   const part=db.parts.find(p=>p.id===x.part_id);
+   const isOut=x.movement_type==="Çıkış";
+
+   return `<div class="record stock-history ${isOut?"out":"in"}">
+
+   <h3>${safe(part?.name||"Bilinmeyen Parça")}</h3>
+
+   <p><b>Parça Kodu:</b>
+   ${safe(part?.part_code||"-")}</p>
+
+   <p><b>İşlem:</b>
+   <span class="badge ${isOut?"due":"ok"}">
+   ${safe(x.movement_type)}
+   </span></p>
+
+   <p><b>Adet:</b>
+   ${isOut?"−":"+"}${safe(x.quantity)}</p>
+
+   <p><b>Müşteri:</b>
+   ${safe(x.customer_name||"-")}</p>
+
+   <p><b>Tarih:</b>
+   ${safe(new Date(x.created_at).toLocaleString("tr-TR"))}</p>
+
+   ${x.notes?
+   `<p><b>Not:</b> ${safe(x.notes)}</p>`:""}
+
+   </div>`;
+  }).join(""):
+  '<div class="empty">Henüz stok hareketi yok.</div>';
 }
 
 /* DÜZENLEME */
@@ -1483,8 +1765,11 @@ function editRecord(type,id){
   if(!x)return;
 
   $("partId").value=x.id;
+  $("partCode").value=x.part_code||"";
   $("partName").value=x.name;
+  $("partPurchasePrice").value=x.purchase_price??0;
   $("partPrice").value=x.price;
+  $("partMinStock").value=x.min_stock??3;
   $("partTitle").textContent="Motor Bakım Parçasını Düzenle";
 
   show("parts");
@@ -1564,6 +1849,14 @@ document.addEventListener("click",async e=>{
  if(action==="delete"){
   await deleteRecord(type,id);
  }
+
+ if(action==="stock-in"){
+  await stockAction(id,"Giriş");
+ }
+
+ if(action==="stock-out"){
+  await stockAction(id,"Çıkış");
+ }
 });
 
 /* HATIRLATMALAR */
@@ -1626,13 +1919,19 @@ function renderAll(){
  renderServices();
  renderOrders();
  renderParts();
+ renderStockHistory();
 }
 
 /* YEDEKLEME */
 
 function exportBackup(){
+ const backup={
+  ...db,
+  stock_movements:stockMovements
+ };
+
  const blob=new Blob(
-  [JSON.stringify(db,null,2)],
+  [JSON.stringify(backup,null,2)],
   {type:"application/json"}
  );
 
@@ -1716,6 +2015,8 @@ async function importBackup(){
 
      item.photos=paths;
      item.reminder=item.reminder||null;
+    }else{
+     delete item.stock_movements;
     }
 
     await saveRecord(TABLES[type],item);
