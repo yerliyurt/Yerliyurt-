@@ -574,6 +574,13 @@ Kritik Stok
 <label>Model</label>
 <input id="serviceModel" required>
 
+<label>Seri No</label>
+<input
+ id="serviceSerialNumber"
+ type="text"
+ placeholder="Motor seri numarasını gir"
+ autocomplete="off">
+
 <label>Arıza / Yapılacak İşlem</label>
 <textarea id="serviceProblem"></textarea>
 
@@ -630,7 +637,7 @@ Formu Temizle
 <h2>Geçmiş Servis Kayıtları</h2>
 
 <input id="serviceSearch"
- placeholder="Ad, telefon veya model ara..."
+ placeholder="Ad, telefon, model veya seri no ara..."
  oninput="renderServices()">
 
 <div id="serviceList"></div>
@@ -1124,7 +1131,15 @@ function resetService(){
  $("serviceForm").reset();
  $("serviceId").value="";
  $("serviceDate").value=today();
+ $("serviceSerialNumber").value="";
  $("serviceTitle").textContent="Yeni Servis Kaydı";
+
+ for(const item of photoCache.service){
+  if(item.kind==="new"){
+   URL.revokeObjectURL(item.preview);
+  }
+ }
+
  photoCache.service=[];
  renderPhotoPreview("service");
 }
@@ -1134,6 +1149,13 @@ function resetOrder(){
  $("orderId").value="";
  $("orderDate").value=today();
  $("orderTitle").textContent="Yeni Sipariş Formu";
+
+ for(const item of photoCache.order){
+  if(item.kind==="new"){
+   URL.revokeObjectURL(item.preview);
+  }
+ }
+
  photoCache.order=[];
  renderPhotoPreview("order");
 }
@@ -1325,6 +1347,7 @@ function collect(type){
 
  if(type==="service"){
   item.problem=$("serviceProblem").value.trim();
+  item.serial_number=$("serviceSerialNumber").value.trim();
  }
 
  return item;
@@ -1507,7 +1530,8 @@ function recordHTML(x,type){
  <p><b>Model:</b> ${safe(x.model)}</p>
 
  ${type==="service"?
- `<p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
+ `<p><b>Seri No:</b> ${safe(x.serial_number||"-")}</p>
+  <p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
 
  <p><b>Not:</b> ${safe(x.notes)}</p>
 
@@ -1591,7 +1615,14 @@ function renderServices(){
   .toLocaleLowerCase("tr");
 
  const items=db.services.filter(x=>
-  [x.name,x.phone,x.model,x.problem,x.notes]
+  [
+   x.name,
+   x.phone,
+   x.model,
+   x.serial_number,
+   x.problem,
+   x.notes
+  ]
   .join(" ")
   .toLocaleLowerCase("tr")
   .includes(q)
@@ -1805,6 +1836,7 @@ function editRecord(type,id){
 
  if(type==="service"){
   $("serviceProblem").value=x.problem||"";
+  $("serviceSerialNumber").value=x.serial_number||"";
   $("serviceTitle").textContent="Servis Kaydını Düzenle";
   show("service");
  }else{
@@ -2015,6 +2047,10 @@ async function importBackup(){
 
      item.photos=paths;
      item.reminder=item.reminder||null;
+
+     if(type==="service"){
+      item.serial_number=item.serial_number||"";
+     }
     }else{
      delete item.stock_movements;
     }
