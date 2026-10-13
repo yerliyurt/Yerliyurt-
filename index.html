@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -6,938 +7,300 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Yerliyurt Marin">
-
 <title>Yerliyurt Marin - Servis Takip</title>
-
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- background:#f2f5f9;
- color:#17263d;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-header{
- background:white;
- text-align:center;
- padding:20px 15px;
- border-bottom:1px solid #e2e8f0;
-}
-
-header img{
- display:block;
- width:100%;
- max-width:330px;
- height:auto;
- margin:0 auto 12px;
-}
-
-header h1{
- font-size:20px;
- color:#09254a;
- margin:8px 0 5px;
-}
-
-header p{
- color:#64748b;
- font-size:13px;
- margin:0;
-}
-
-nav{
- display:flex;
- gap:7px;
- overflow-x:auto;
- padding:12px;
- background:white;
- position:sticky;
- top:0;
- z-index:5;
- border-bottom:1px solid #ddd;
-}
-
-button{
- border:0;
- border-radius:10px;
- padding:12px 14px;
- font-weight:600;
- font-size:14px;
- cursor:pointer;
-}
-
-button:disabled{
- opacity:.55;
- cursor:wait;
-}
-
-nav button{
- white-space:nowrap;
- background:#e9eef5;
- color:#17263d;
-}
-
-nav button.active,.primary{
- background:#2563eb;
- color:white;
-}
-
-main{
- max-width:850px;
- margin:auto;
- padding:15px;
-}
-
+body{margin:0;background:#f2f5f9;color:#17263d;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#fff;text-align:center;padding:20px 15px;border-bottom:1px solid #e2e8f0}
+header img{display:block;width:100%;max-width:330px;height:auto;margin:0 auto 12px}
+header h1{font-size:20px;color:#09254a;margin:8px 0 5px}
+header p,.muted{color:#64748b;font-size:13px}
+nav{display:flex;gap:7px;overflow-x:auto;padding:12px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid #ddd}
+button{border:0;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px;cursor:pointer}
+button:disabled{opacity:.55}
+nav button{white-space:nowrap;background:#e9eef5;color:#17263d}
+nav button.active,.primary{background:#2563eb;color:#fff}
+main{max-width:900px;margin:auto;padding:15px}
 section{display:none}
 section.active{display:block}
-
-.card{
- background:white;
- border-radius:15px;
- padding:17px;
- margin-bottom:15px;
- box-shadow:0 2px 12px #17263d0c;
-}
-
+.card{background:#fff;border-radius:15px;padding:17px;margin-bottom:15px;box-shadow:0 2px 12px #17263d0c}
 h2{font-size:20px;margin:0 0 15px}
 h3{font-size:16px;margin:0 0 8px}
-
-label{
- display:block;
- font-size:13px;
- font-weight:600;
- margin:13px 0 6px;
-}
-
-input,textarea,select{
- width:100%;
- border:1px solid #cbd5e1;
- border-radius:9px;
- padding:12px;
- font:inherit;
- font-size:16px;
- background:white;
- color:#17263d;
-}
-
-textarea{
- min-height:85px;
- resize:vertical;
-}
-
-.primary{
- width:100%;
- margin-top:16px;
-}
-
-.secondary{
- background:#e2e8f0;
- color:#17263d;
-}
-
-.danger{
- background:#fee2e2;
- color:#b91c1c;
-}
-
-.actions{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin-top:12px;
-}
-
+label{display:block;font-size:13px;font-weight:600;margin:13px 0 6px}
+input,textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:12px;font:inherit;font-size:16px;background:white;color:#17263d}
+textarea{min-height:85px;resize:vertical}
+.primary{width:100%;margin-top:16px}
+.secondary{background:#e2e8f0;color:#17263d}
+.danger{background:#fee2e2;color:#b91c1c}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .actions button{flex:1}
-
-.record{
- border:1px solid #e2e8f0;
- border-radius:12px;
- padding:14px;
- margin:10px 0;
-}
-
-.record p{
- margin:6px 0;
- font-size:14px;
- overflow-wrap:anywhere;
-}
-
-.muted{
- color:#64748b;
- font-size:13px;
-}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
-}
-
-.stat{
- background:#eff6ff;
- padding:15px;
- border-radius:12px;
- font-size:13px;
-}
-
-.stat strong{
- font-size:26px;
- display:block;
- color:#1d4ed8;
-}
-
-.empty{
- text-align:center;
- color:#64748b;
- padding:25px;
-}
-
-.notice{
- background:#fff7ed;
- border-radius:10px;
- padding:12px;
- font-size:13px;
- margin-bottom:15px;
-}
-
-.badge{
- display:inline-block;
- background:#dbeafe;
- color:#1d4ed8;
- border-radius:20px;
- padding:5px 9px;
- font-size:12px;
-}
-
-.due{
- background:#fee2e2;
- color:#991b1b;
-}
-
-.ok{
- background:#dcfce7;
- color:#166534;
-}
-
-.photos{
- display:flex;
- flex-wrap:wrap;
- gap:9px;
- margin-top:12px;
-}
-
-.photo{
- position:relative;
- width:100px;
-}
-
-.photo img{
- width:100px;
- height:100px;
- object-fit:cover;
- border-radius:10px;
- border:1px solid #ddd;
-}
-
-.photo button{
- position:absolute;
- right:-5px;
- top:-5px;
- border-radius:50%;
- padding:4px 8px;
- background:#dc2626;
- color:white;
-}
-
-.photo-note{
- font-size:12px;
- color:#64748b;
- margin-top:7px;
-}
-
-.price{
- font-size:20px;
- font-weight:700;
- color:#1d4ed8;
-}
-
-.part-row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- flex-wrap:wrap;
-}
-
+.record{border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin:10px 0;overflow-wrap:anywhere}
+.record p{margin:6px 0;font-size:14px}
+.stats,.stock-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#eff6ff;padding:15px;border-radius:12px;font-size:13px}
+.stat strong{font-size:26px;display:block;color:#1d4ed8}
+.empty{text-align:center;color:#64748b;padding:25px}
+.notice{background:#fff7ed;border-radius:10px;padding:12px;font-size:13px;margin-bottom:15px}
+.badge{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:20px;padding:5px 9px;font-size:12px}
+.due{background:#fee2e2;color:#991b1b}
+.ok{background:#dcfce7;color:#166534}
+.photos{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.photo{position:relative;width:100px}
+.photo img{width:100px;height:100px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
+.photo button{position:absolute;right:-5px;top:-5px;border-radius:50%;padding:4px 8px;background:#dc2626;color:white}
+.photo-note{font-size:12px;color:#64748b;margin-top:7px}
+.price{font-size:20px;font-weight:700;color:#1d4ed8}
+.part-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .part-row h3,.part-row .price{margin:0}
-
-#loginScreen{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:20px;
-}
-
-.login-card{
- background:white;
- width:100%;
- max-width:400px;
- border-radius:18px;
- padding:25px;
- box-shadow:0 4px 25px #17263d15;
- text-align:center;
-}
-
-.login-card img{
- max-width:260px;
- width:100%;
- margin-bottom:15px;
-}
-
-.login-card h2{
- color:#09254a;
-}
-
-.login-card label{
- text-align:left;
-}
-
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:white;width:100%;max-width:400px;border-radius:18px;padding:25px;box-shadow:0 4px 25px #17263d15;text-align:center}
+.login-card img{max-width:260px;width:100%;margin-bottom:15px}
+.login-card label{text-align:left}
 #app{display:none}
-
-.topbar{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- padding:10px 15px;
- background:#eff6ff;
- font-size:12px;
-}
-
-#connectionStatus{
- font-weight:600;
- color:#166534;
-}
-
-#userEmail{
- overflow-wrap:anywhere;
-}
-
-.smallbtn{
- font-size:12px;
- padding:8px;
-}
-
-.stock-ok{
- color:#166534;
- font-weight:700;
-}
-
-.stock-low{
- color:#b91c1c;
- font-weight:700;
-}
-
-.stock-zero{
- color:#991b1b;
- font-weight:700;
-}
-
-.stock-actions{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- margin-top:12px;
-}
-
-.stock-in{
- background:#16a34a;
- color:white;
-}
-
-.stock-out{
- background:#dc2626;
- color:white;
-}
-
-.stock-summary{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
-}
-
-.stock-summary .stat{
- background:#f0fdf4;
-}
-
-.stock-summary .stat strong{
- color:#15803d;
-}
-
-.stock-history{
- border-left:4px solid #2563eb;
-}
-
-.stock-history.out{
- border-left-color:#dc2626;
-}
-
-.stock-history.in{
- border-left-color:#16a34a;
-}
-
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 15px;background:#eff6ff;font-size:12px}
+#connectionStatus{font-weight:600;color:#166534}
+#userEmail{overflow-wrap:anywhere}
+.smallbtn{font-size:12px;padding:8px}
+.stock-low,.stock-zero{color:#b91c1c;font-weight:700}
+.stock-ok{color:#166534;font-weight:700}
+.stock-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stock-in{background:#16a34a;color:white}
+.stock-out{background:#dc2626;color:white}
+.stock-history{border-left:4px solid #2563eb}
+.stock-history.out{border-left-color:#dc2626}
+.stock-history.in{border-left-color:#16a34a}
+.critical-card{border-left:5px solid #ef4444;background:#fffafa}
+.critical-card.zero{border-left-color:#991b1b}
+.critical-title{color:#b91c1c}
+.critical-count{color:#b91c1c!important}
+@media(max-width:450px){.card{padding:13px}.stat{padding:12px}.stat strong{font-size:23px}}
 </style>
 </head>
-
 <body>
 
 <div id="loginScreen">
-<div class="login-card">
-
-<img src="./yerliyurt-logo.png"
- alt="Yerliyurt Marin"
- onerror="this.style.display='none'">
-
-<h2>YERLİYURT MARİN</h2>
-
-<p class="muted">
-Servis, Sipariş ve Stok Yönetim Sistemi
-</p>
-
-<form id="loginForm">
-
-<label>E-posta Adresi</label>
-<input type="email" id="loginEmail"
- autocomplete="username" required>
-
-<label>Şifre</label>
-<input type="password" id="loginPassword"
- autocomplete="current-password" required>
-
-<button class="primary" type="submit" id="loginButton">
-Giriş Yap
-</button>
-
-</form>
-
-<p id="loginMessage" class="muted"></p>
-
-</div>
+ <div class="login-card">
+  <img src="./yerliyurt-logo.png" alt="Yerliyurt Marin" onerror="this.style.display='none'">
+  <h2>YERLİYURT MARİN</h2>
+  <p class="muted">Servis, Sipariş ve Stok Yönetim Sistemi</p>
+  <form id="loginForm">
+   <label>E-posta Adresi</label>
+   <input type="email" id="loginEmail" autocomplete="username" required>
+   <label>Şifre</label>
+   <input type="password" id="loginPassword" autocomplete="current-password" required>
+   <button class="primary" type="submit" id="loginButton">Giriş Yap</button>
+  </form>
+  <p id="loginMessage" class="muted"></p>
+ </div>
 </div>
 
 <div id="app">
-
 <header>
-
-<img src="./yerliyurt-logo.png"
- alt="Yerliyurt Marin Logosu"
- onerror="this.style.display='none'">
-
-<h1>Servis, Sipariş & Stok Takip</h1>
-
-<p>Yerliyurt Marin Yönetim Sistemi</p>
-
+ <img src="./yerliyurt-logo.png" alt="Yerliyurt Marin Logosu" onerror="this.style.display='none'">
+ <h1>Servis, Sipariş & Stok Takip</h1>
+ <p>Yerliyurt Marin Yönetim Sistemi</p>
 </header>
 
 <div class="topbar">
-
-<div>
-<div id="userEmail"></div>
-<div id="connectionStatus">Bağlanıyor...</div>
-</div>
-
-<div>
-<button class="secondary smallbtn" onclick="refreshData()">
-Yenile
-</button>
-
-<button class="danger smallbtn" onclick="logout()">
-Çıkış
-</button>
-</div>
-
+ <div>
+  <div id="userEmail"></div>
+  <div id="connectionStatus">Bağlanıyor...</div>
+ </div>
+ <div>
+  <button class="secondary smallbtn" onclick="refreshData()">Yenile</button>
+  <button class="danger smallbtn" onclick="logout()">Çıkış</button>
+ </div>
 </div>
 
 <nav>
-
-<button class="active" data-tab="home">
-Ana Sayfa
-</button>
-
-<button data-tab="service">
-Yeni Servis
-</button>
-
-<button data-tab="history">
-Geçmiş Servisler
-</button>
-
-<button data-tab="order">
-Sipariş Formları
-</button>
-
-<button data-tab="parts">
-Motor Bakım Parçaları
-</button>
-
-<button data-tab="reminders">
-Hatırlatmalar
-</button>
-
-<button data-tab="backup">
-Yedekleme
-</button>
-
+ <button class="active" data-tab="home">Ana Sayfa</button>
+ <button data-tab="service">Yeni Servis</button>
+ <button data-tab="history">Geçmiş Servisler</button>
+ <button data-tab="order">Sipariş Formları</button>
+ <button data-tab="parts">Motor Bakım Parçaları</button>
+ <button data-tab="reminders">Hatırlatmalar</button>
+ <button data-tab="backup">Yedekleme</button>
 </nav>
 
 <main>
-
 <section id="home" class="active">
-
-<div class="card">
-
-<h2>Genel Durum</h2>
-
-<div class="stats">
-
-<div class="stat">
-<strong id="serviceCount">0</strong>
-Servis Kaydı
-</div>
-
-<div class="stat">
-<strong id="orderCount">0</strong>
-Sipariş Formu
-</div>
-
-<div class="stat">
-<strong id="partCount">0</strong>
-Motor Bakım Parçası
-</div>
-
-<div class="stat">
-<strong id="reminderCount">0</strong>
-Bekleyen Hatırlatma
-</div>
-
-<div class="stat">
-<strong id="completedCount">0</strong>
-Tamamlanan Servis
-</div>
-
-<div class="stat">
-<strong id="homeCriticalStock">0</strong>
-Kritik Stok
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>Yaklaşan Hatırlatmalar</h3>
-
-<div id="homeReminders"></div>
-
-</div>
-
+ <div class="card">
+  <h2>Genel Durum</h2>
+  <div class="stats">
+   <div class="stat"><strong id="serviceCount">0</strong>Servis Kaydı</div>
+   <div class="stat"><strong id="orderCount">0</strong>Sipariş Formu</div>
+   <div class="stat"><strong id="partCount">0</strong>Motor Bakım Parçası</div>
+   <div class="stat"><strong id="reminderCount">0</strong>Bekleyen Hatırlatma</div>
+   <div class="stat"><strong id="completedCount">0</strong>Tamamlanan Servis</div>
+   <div class="stat"><strong id="homeCriticalStock" class="critical-count">0</strong>Kritik Stok</div>
+  </div>
+ </div>
+ <div class="card">
+  <h2 class="critical-title">⚠️ Kritik Stokta Kalan Parçalar</h2>
+  <div id="homeCriticalList"></div>
+ </div>
+ <div class="card">
+  <h3>Yaklaşan Hatırlatmalar</h3>
+  <div id="homeReminders"></div>
+ </div>
 </section>
 
 <section id="service">
-
-<div class="card">
-
-<h2 id="serviceTitle">Yeni Servis Kaydı</h2>
-
-<form id="serviceForm">
-
-<input type="hidden" id="serviceId">
-
-<label>Tarih</label>
-<input type="date" id="serviceDate" required>
-
-<label>Ad Soyad</label>
-<input id="serviceName" required>
-
-<label>Telefon</label>
-<input type="tel" id="servicePhone">
-
-<label>Model</label>
-<input id="serviceModel" required>
-
-<label>Seri No</label>
-<input
- id="serviceSerialNumber"
- type="text"
- placeholder="Motor seri numarasını gir"
- autocomplete="off">
-
-<label>Arıza / Yapılacak İşlem</label>
-<textarea id="serviceProblem"></textarea>
-
-<label>Notlar</label>
-<textarea id="serviceNotes"></textarea>
-
-<label>Durum</label>
-
-<select id="serviceStatus">
-<option>Bekliyor</option>
-<option>İşlemde</option>
-<option>Tamamlandı</option>
-<option>Teslim Edildi</option>
-</select>
-
-<label>Hatırlatma Tarihi</label>
-<input type="date" id="serviceReminder">
-
-<label>Servis Fotoğrafları</label>
-
-<input type="file"
- id="servicePhotos"
- accept="image/*"
- multiple>
-
-<p class="photo-note">
-Kameradan veya galeriden fotoğraf ekleyebilirsin.
-Bir kayda en fazla 10 fotoğraf eklenebilir.
-</p>
-
-<div id="servicePhotoPreview" class="photos"></div>
-
-<button type="submit" class="primary">
-Servis Kaydını Kaydet
-</button>
-
-<button type="button"
- class="secondary"
- style="width:100%;margin-top:8px"
- onclick="resetService()">
-Formu Temizle
-</button>
-
-</form>
-
-</div>
-
+ <div class="card">
+  <h2 id="serviceTitle">Yeni Servis Kaydı</h2>
+  <form id="serviceForm">
+   <input type="hidden" id="serviceId">
+   <label>Tarih</label><input type="date" id="serviceDate" required>
+   <label>Ad Soyad</label><input id="serviceName" required>
+   <label>Telefon</label><input type="tel" id="servicePhone">
+   <label>Model</label><input id="serviceModel" required>
+   <label>Seri No</label><input id="serviceSerialNumber" placeholder="Motor seri numarasını gir">
+   <label>Arıza / Yapılacak İşlem</label><textarea id="serviceProblem"></textarea>
+   <label>Notlar</label><textarea id="serviceNotes"></textarea>
+   <label>Durum</label>
+   <select id="serviceStatus">
+    <option>Bekliyor</option><option>İşlemde</option>
+    <option>Tamamlandı</option><option>Teslim Edildi</option>
+   </select>
+   <label>Hatırlatma Tarihi</label><input type="date" id="serviceReminder">
+   <label>Servis Fotoğrafları</label>
+   <input type="file" id="servicePhotos" accept="image/*" multiple>
+   <p class="photo-note">En fazla 10 fotoğraf eklenebilir.</p>
+   <div id="servicePhotoPreview" class="photos"></div>
+   <button type="submit" class="primary">Servis Kaydını Kaydet</button>
+   <button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetService()">Formu Temizle</button>
+  </form>
+ </div>
 </section>
 
 <section id="history">
-
-<div class="card">
-
-<h2>Geçmiş Servis Kayıtları</h2>
-
-<input id="serviceSearch"
- placeholder="Ad, telefon, model veya seri no ara..."
- oninput="renderServices()">
-
-<div id="serviceList"></div>
-
-</div>
-
+ <div class="card">
+  <h2>Geçmiş Servis Kayıtları</h2>
+  <input id="serviceSearch" placeholder="Ad, telefon, model veya seri no ara..." oninput="renderServices()">
+  <div id="serviceList"></div>
+ </div>
 </section>
 
 <section id="order">
-
-<div class="card">
-
-<h2 id="orderTitle">Yeni Sipariş Formu</h2>
-
-<form id="orderForm">
-
-<input type="hidden" id="orderId">
-
-<label>Tarih</label>
-<input type="date" id="orderDate" required>
-
-<label>Ad Soyad</label>
-<input id="orderName" required>
-
-<label>Telefon</label>
-<input type="tel" id="orderPhone">
-
-<label>Model</label>
-<input id="orderModel" required>
-
-<label>Notlar</label>
-<textarea id="orderNotes"></textarea>
-
-<label>Durum</label>
-
-<select id="orderStatus">
-<option>Bekliyor</option>
-<option>Sipariş Verildi</option>
-<option>Geldi</option>
-<option>Teslim Edildi</option>
-</select>
-
-<label>Hatırlatma Tarihi</label>
-<input type="date" id="orderReminder">
-
-<label>Sipariş Fotoğrafları</label>
-
-<input type="file"
- id="orderPhotos"
- accept="image/*"
- multiple>
-
-<div id="orderPhotoPreview" class="photos"></div>
-
-<button type="submit" class="primary">
-Sipariş Formunu Kaydet
-</button>
-
-<button type="button"
- class="secondary"
- style="width:100%;margin-top:8px"
- onclick="resetOrder()">
-Formu Temizle
-</button>
-
-</form>
-
-</div>
-
-<div class="card">
-
-<h2>Kaydedilen Siparişler</h2>
-
-<input id="orderSearch"
- placeholder="Ad, telefon veya model ara..."
- oninput="renderOrders()">
-
-<div id="orderList"></div>
-
-</div>
-
+ <div class="card">
+  <h2 id="orderTitle">Yeni Sipariş Formu</h2>
+  <form id="orderForm">
+   <input type="hidden" id="orderId">
+   <label>Tarih</label><input type="date" id="orderDate" required>
+   <label>Ad Soyad</label><input id="orderName" required>
+   <label>Telefon</label><input type="tel" id="orderPhone">
+   <label>Model</label><input id="orderModel" required>
+   <label>Notlar</label><textarea id="orderNotes"></textarea>
+   <label>Durum</label>
+   <select id="orderStatus">
+    <option>Bekliyor</option><option>Sipariş Verildi</option>
+    <option>Geldi</option><option>Teslim Edildi</option>
+   </select>
+   <label>Hatırlatma Tarihi</label><input type="date" id="orderReminder">
+   <label>Sipariş Fotoğrafları</label>
+   <input type="file" id="orderPhotos" accept="image/*" multiple>
+   <div id="orderPhotoPreview" class="photos"></div>
+   <button type="submit" class="primary">Sipariş Formunu Kaydet</button>
+   <button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetOrder()">Formu Temizle</button>
+  </form>
+ </div>
+ <div class="card">
+  <h2>Kaydedilen Siparişler</h2>
+  <input id="orderSearch" placeholder="Ad, telefon veya model ara..." oninput="renderOrders()">
+  <div id="orderList"></div>
+ </div>
 </section>
 
-<!-- MOTOR BAKIM PARÇALARI -->
-
 <section id="parts">
+ <div class="card">
+  <h2 id="partTitle">Motor Bakım Parçaları</h2>
+  <form id="partForm">
+   <input type="hidden" id="partId">
+   <label>Parça Kodu</label><input id="partCode" placeholder="Örneğin: YM-1001" required>
+   <label>Parça Adı</label><input id="partName" placeholder="Örneğin: Yağ Filtresi" required>
+   <label>Alış Fiyatı (₺)</label><input id="partPurchasePrice" type="number" min="0" step="0.01" required>
+   <label>Satış Fiyatı (₺)</label><input id="partPrice" type="number" min="0" step="0.01" required>
+   <label>Minimum Stok Adedi</label><input id="partMinStock" type="number" min="0" step="1" value="3" required>
+   <p class="muted">Yeni parçanın stok miktarı başlangıçta 0 olur. Stok Girişi düğmesiyle adet ekleyebilirsin.</p>
+   <button type="submit" class="primary">Parçayı Kaydet</button>
+   <button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="resetPart()">Formu Temizle</button>
+  </form>
+ </div>
 
-<div class="card">
+ <div class="card">
+  <h2>Stok Özeti</h2>
+  <div class="stock-summary">
+   <div class="stat"><strong id="totalStock">0</strong>Toplam Stok Adedi</div>
+   <div class="stat"><strong id="criticalStock" class="critical-count">0</strong>Kritik Stok</div>
+  </div>
+  <p style="margin-top:15px"><b>Toplam Stok Maliyeti:</b> <span id="totalStockValue">0 ₺</span></p>
+ </div>
 
-<h2 id="partTitle">Motor Bakım Parçaları</h2>
+ <div class="card">
+  <h2 class="critical-title">⚠️ Kritik Stok Listesi</h2>
+  <p class="muted">Minimum stok seviyesine ulaşan veya bu seviyenin altına düşen parçalar.</p>
+  <div id="criticalPartsList"></div>
+ </div>
 
-<form id="partForm">
+ <div class="card">
+  <h2>Kayıtlı Motor Bakım Parçaları</h2>
+  <input id="partSearch" placeholder="Parça kodu veya adı ara..." oninput="renderParts()">
+  <div id="partList"></div>
+ </div>
 
-<input type="hidden" id="partId">
-
-<label>Parça Kodu</label>
-<input id="partCode"
- placeholder="Örneğin: YM-1001"
- required>
-
-<label>Parça Adı</label>
-<input id="partName"
- placeholder="Örneğin: Yağ Filtresi"
- required>
-
-<label>Alış Fiyatı (₺)</label>
-<input id="partPurchasePrice"
- type="number"
- min="0"
- step="0.01"
- required>
-
-<label>Satış Fiyatı (₺)</label>
-<input id="partPrice"
- type="number"
- min="0"
- step="0.01"
- required>
-
-<label>Minimum Stok Adedi</label>
-<input id="partMinStock"
- type="number"
- min="0"
- step="1"
- value="3"
- required>
-
-<p class="muted">
-Yeni parçanın stok miktarı başlangıçta 0 olur.
-Stok Girişi düğmesiyle adet ekleyebilirsin.
-</p>
-
-<button type="submit" class="primary">
-Parçayı Kaydet
-</button>
-
-<button type="button"
- class="secondary"
- style="width:100%;margin-top:8px"
- onclick="resetPart()">
-Formu Temizle
-</button>
-
-</form>
-
-</div>
-
-<div class="card">
-
-<h2>Stok Özeti</h2>
-
-<div class="stock-summary">
-
-<div class="stat">
-<strong id="totalStock">0</strong>
-Toplam Stok Adedi
-</div>
-
-<div class="stat">
-<strong id="criticalStock">0</strong>
-Kritik Stok
-</div>
-
-</div>
-
-<p style="margin-top:15px">
-<b>Toplam Stok Maliyeti:</b>
-<span id="totalStockValue">0 ₺</span>
-</p>
-
-</div>
-
-<div class="card">
-
-<h2>Kayıtlı Motor Bakım Parçaları</h2>
-
-<input id="partSearch"
- placeholder="Parça kodu veya adı ara..."
- oninput="renderParts()">
-
-<div id="partList"></div>
-
-</div>
-
-<div class="card">
-
-<h2>Stok Hareketleri</h2>
-
-<p class="muted">
-Yapılan tüm stok giriş ve çıkışları burada görünür.
-</p>
-
-<div id="stockHistory"></div>
-
-</div>
-
+ <div class="card">
+  <h2>Stok Hareketleri</h2>
+  <p class="muted">Yapılan tüm stok giriş ve çıkışları burada görünür.</p>
+  <div id="stockHistory"></div>
+ </div>
 </section>
 
 <section id="reminders">
-
-<div class="card">
-
-<h2>Hatırlatmalar</h2>
-
-<div class="notice">
-Hatırlatmalar program açıldığında görüntülenir.
-Safari kapalıyken otomatik bildirim gönderilmez.
-</div>
-
-<div id="reminderList"></div>
-
-</div>
-
+ <div class="card">
+  <h2>Hatırlatmalar</h2>
+  <div class="notice">Hatırlatmalar program açıldığında görüntülenir. Safari kapalıyken otomatik bildirim gönderilmez.</div>
+  <div id="reminderList"></div>
+ </div>
 </section>
 
 <section id="backup">
-
-<div class="card">
-
-<h2>Yedekleme</h2>
-
-<p class="muted">
-Ortak veritabanındaki kayıtları JSON dosyası olarak
-yedekleyebilirsin. Fotoğraflar bağlantı yollarıyla
-yedeklenir; ayrı fotoğraf dosyaları yedeğe dahil değildir.
-</p>
-
-<button class="primary" onclick="exportBackup()">
-Tüm Verileri Yedekle
-</button>
-
-<label>Eski Yedeği İçeri Aktar</label>
-
-<input type="file"
- id="backupFile"
- accept=".json,application/json">
-
-<button class="secondary"
- style="width:100%;margin-top:12px"
- onclick="importBackup()">
-Yedekten Kayıtları Aktar
-</button>
-
-<p class="muted">
-İçe aktarma mevcut kayıtları topluca silmez.
-Aynı kimliğe sahip kayıtları günceller.
-Stok hareketleri yalnızca dışa aktarılır;
-eski hareketler bu ekrandan geri yüklenmez.
-</p>
-
-</div>
-
+ <div class="card">
+  <h2>Yedekleme</h2>
+  <p class="muted">Ortak veritabanındaki kayıtları JSON dosyası olarak yedekleyebilirsin. Fotoğraflar bağlantı yollarıyla yedeklenir.</p>
+  <button class="primary" onclick="exportBackup()">Tüm Verileri Yedekle</button>
+  <label>Eski Yedeği İçeri Aktar</label>
+  <input type="file" id="backupFile" accept=".json,application/json">
+  <button class="secondary" style="width:100%;margin-top:12px" onclick="importBackup()">Yedekten Kayıtları Aktar</button>
+  <p class="muted">İçe aktarma mevcut kayıtları topluca silmez. Aynı kimliğe sahip kayıtları günceller. Stok hareketleri bu ekrandan geri yüklenmez.</p>
+ </div>
 </section>
-
 </main>
 </div>
 
 <script>
 "use strict";
 
-/* SUPABASE BAĞLANTISI */
+const SUPABASE_URL="https://dgmsqqcnqiazbpnpflna.supabase.co";
+const SUPABASE_KEY="sb_publishable_rAem6UGu8RnZHgj1uZ683Q_AOaK7eRQ";
+const PHOTO_BUCKET="Marin-photos";
 
-const SUPABASE_URL =
-"https://dgmsqqcnqiazbpnpflna.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_rAem6UGu8RnZHgj1uZ683Q_AOaK7eRQ";
-
-const PHOTO_BUCKET = "Marin-photos";
-
-const client = window.supabase.createClient(
- SUPABASE_URL,
- SUPABASE_KEY
-);
-
-const $ = id => document.getElementById(id);
-
-const TABLES = {
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+const TABLES={
  service:"marin_services",
  order:"marin_orders",
  part:"marin_parts"
 };
 
-let db = {
- services:[],
- orders:[],
- parts:[]
-};
-
-let stockMovements = [];
-
-let photoCache = {
- service:[],
- order:[]
-};
-
-let busy = false;
-let refreshBusy = false;
-let currentUser = null;
-let photoUrls = new Map();
+let db={services:[],orders:[],parts:[]};
+let stockMovements=[];
+let photoCache={service:[],order:[]};
+let busy=false,refreshBusy=false,currentUser=null;
+let photoUrls=new Map();
 
 function today(){
  const d=new Date();
@@ -945,70 +308,44 @@ function today(){
  String(d.getMonth()+1).padStart(2,"0")+"-"+
  String(d.getDate()).padStart(2,"0");
 }
-
 function uid(){
- if(crypto.randomUUID)return crypto.randomUUID();
- return Date.now().toString(36)+"-"+
- Math.random().toString(36).slice(2);
+ return crypto.randomUUID?crypto.randomUUID():
+ Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
 }
-
 function safe(value){
  return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
  })[c]);
 }
-
-function setConnection(message,error=false){
- $("connectionStatus").textContent=message;
- $("connectionStatus").style.color=
- error?"#b91c1c":"#166534";
-}
-
-function errorText(error){
- return error?.message||String(error);
-}
-
+function errorText(error){return error?.message||String(error)}
 function formatPrice(value){
  return Number(value||0).toLocaleString("tr-TR",{
-  minimumFractionDigits:2,
-  maximumFractionDigits:2
+  minimumFractionDigits:2,maximumFractionDigits:2
  })+" ₺";
 }
-
-/* GİRİŞ */
+function setConnection(message,error=false){
+ $("connectionStatus").textContent=message;
+ $("connectionStatus").style.color=error?"#b91c1c":"#166534";
+}
 
 $("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
-
  const button=$("loginButton");
  button.disabled=true;
  $("loginMessage").textContent="Giriş yapılıyor...";
-
  try{
-  const email=$("loginEmail").value.trim();
-  const password=$("loginPassword").value;
-
   const {data,error}=await client.auth.signInWithPassword({
-   email,password
+   email:$("loginEmail").value.trim(),
+   password:$("loginPassword").value
   });
-
   if(error)throw error;
-
   if(!data.user)throw new Error("Giriş yapılamadı.");
-
   $("loginPassword").value="";
   await enterApp(data.user);
-
  }catch(error){
-  $("loginMessage").textContent=
-  "Giriş başarısız: "+errorText(error);
- }finally{
-  button.disabled=false;
- }
+  $("loginMessage").textContent="Giriş başarısız: "+errorText(error);
+ }finally{button.disabled=false}
 });
 
 async function enterApp(user){
@@ -1016,14 +353,9 @@ async function enterApp(user){
  $("loginScreen").style.display="none";
  $("app").style.display="block";
  $("userEmail").textContent=user.email||"Çalışan";
-
- resetService();
- resetOrder();
- resetPart();
-
+ resetService();resetOrder();resetPart();
  await refreshData();
 }
-
 async function logout(){
  await client.auth.signOut();
  currentUser=null;
@@ -1031,41 +363,29 @@ async function logout(){
  stockMovements=[];
  photoCache={service:[],order:[]};
  photoUrls.clear();
-
  $("app").style.display="none";
  $("loginScreen").style.display="flex";
  $("loginMessage").textContent="";
 }
 
-/* ORTAK VERİTABANI */
-
 async function readTable(table){
- const all=[];
- const pageSize=500;
-
+ const all=[],pageSize=500;
  for(let start=0;;start+=pageSize){
-  const {data,error}=await client
-   .from(table)
+  const {data,error}=await client.from(table)
    .select("*")
    .order("created_at",{ascending:false})
    .range(start,start+pageSize-1);
-
   if(error)throw error;
-
   all.push(...(data||[]));
-
   if(!data||data.length<pageSize)break;
  }
-
  return all;
 }
 
 async function refreshData(){
  if(!currentUser||refreshBusy)return;
-
  refreshBusy=true;
  setConnection("Veriler yenileniyor...");
-
  try{
   const [services,orders,parts,movements]=await Promise.all([
    readTable(TABLES.service),
@@ -1073,59 +393,37 @@ async function refreshData(){
    readTable(TABLES.part),
    readTable("marin_stock_movements")
   ]);
-
   db={services,orders,parts};
   stockMovements=movements;
-
   renderAll();
   setConnection("☁️ Ortak veritabanı bağlı");
-
  }catch(error){
   setConnection("Bağlantı hatası",true);
   alert("Veriler alınamadı: "+errorText(error));
- }finally{
-  refreshBusy=false;
- }
+ }finally{refreshBusy=false}
 }
 
 async function saveRecord(table,item){
- const {error}=await client
-  .from(table)
-  .upsert(item,{onConflict:"id"});
-
+ const {error}=await client.from(table).upsert(item,{onConflict:"id"});
  if(error)throw error;
 }
-
 async function removeRecord(table,id){
- const {error}=await client
-  .from(table)
-  .delete()
-  .eq("id",id);
-
+ const {error}=await client.from(table).delete().eq("id",id);
  if(error)throw error;
 }
-
-/* SEKMELER */
 
 function show(tab){
- document.querySelectorAll("section").forEach(s=>{
-  s.classList.remove("active");
- });
-
- document.querySelectorAll("nav button").forEach(b=>{
-  b.classList.toggle("active",b.dataset.tab===tab);
- });
-
+ document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll("nav button").forEach(b=>
+  b.classList.toggle("active",b.dataset.tab===tab)
+ );
  $(tab).classList.add("active");
  renderAll();
  window.scrollTo(0,0);
 }
-
-document.querySelectorAll("nav button").forEach(b=>{
- b.addEventListener("click",()=>show(b.dataset.tab));
-});
-
-/* FORMLAR */
+document.querySelectorAll("nav button").forEach(b=>
+ b.addEventListener("click",()=>show(b.dataset.tab))
+);
 
 function resetService(){
  $("serviceForm").reset();
@@ -1133,118 +431,68 @@ function resetService(){
  $("serviceDate").value=today();
  $("serviceSerialNumber").value="";
  $("serviceTitle").textContent="Yeni Servis Kaydı";
-
- for(const item of photoCache.service){
-  if(item.kind==="new"){
-   URL.revokeObjectURL(item.preview);
-  }
- }
-
- photoCache.service=[];
- renderPhotoPreview("service");
+ clearPhotoCache("service");
 }
-
 function resetOrder(){
  $("orderForm").reset();
  $("orderId").value="";
  $("orderDate").value=today();
  $("orderTitle").textContent="Yeni Sipariş Formu";
-
- for(const item of photoCache.order){
-  if(item.kind==="new"){
-   URL.revokeObjectURL(item.preview);
-  }
- }
-
- photoCache.order=[];
- renderPhotoPreview("order");
+ clearPhotoCache("order");
 }
-
 function resetPart(){
  $("partForm").reset();
  $("partId").value="";
  $("partMinStock").value=3;
  $("partTitle").textContent="Motor Bakım Parçaları";
 }
-
-/* FOTOĞRAFLAR */
+function clearPhotoCache(type){
+ for(const item of photoCache[type]){
+  if(item.kind==="new")URL.revokeObjectURL(item.preview);
+ }
+ photoCache[type]=[];
+ renderPhotoPreview(type);
+}
 
 function resizePhoto(file){
  return new Promise((resolve,reject)=>{
   const reader=new FileReader();
-
-  reader.onerror=()=>reject(
-   new Error("Fotoğraf okunamadı.")
-  );
-
+  reader.onerror=()=>reject(new Error("Fotoğraf okunamadı."));
   reader.onload=()=>{
    const img=new Image();
-
-   img.onerror=()=>reject(
-    new Error("Fotoğraf açılamadı.")
-   );
-
+   img.onerror=()=>reject(new Error("Fotoğraf açılamadı."));
    img.onload=()=>{
-    const max=1200;
-    const scale=Math.min(
-     1,max/Math.max(img.width,img.height)
-    );
-
+    const scale=Math.min(1,1200/Math.max(img.width,img.height));
     const canvas=document.createElement("canvas");
-
-    canvas.width=Math.max(
-     1,Math.round(img.width*scale)
-    );
-
-    canvas.height=Math.max(
-     1,Math.round(img.height*scale)
-    );
-
-    canvas.getContext("2d").drawImage(
-     img,0,0,canvas.width,canvas.height
-    );
-
+    canvas.width=Math.max(1,Math.round(img.width*scale));
+    canvas.height=Math.max(1,Math.round(img.height*scale));
+    canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
     canvas.toBlob(blob=>{
      if(blob)resolve(blob);
      else reject(new Error("Fotoğraf işlenemedi."));
     },"image/jpeg",0.72);
    };
-
    img.src=reader.result;
   };
-
   reader.readAsDataURL(file);
  });
 }
-
 async function addPhotos(type,files){
  try{
   for(const file of files){
-   if(!file.type.startsWith("image/")){
-    throw new Error("Yalnızca fotoğraf seçebilirsin.");
-   }
-
+   if(!file.type.startsWith("image/"))throw new Error("Yalnızca fotoğraf seçebilirsin.");
    if(photoCache[type].length>=10){
     alert("En fazla 10 fotoğraf eklenebilir.");
     break;
    }
-
    const blob=await resizePhoto(file);
-
    photoCache[type].push({
-    kind:"new",
-    blob,
-    preview:URL.createObjectURL(blob)
+    kind:"new",blob,preview:URL.createObjectURL(blob)
    });
   }
-
   renderPhotoPreview(type);
-
- }catch(error){
-  alert("Fotoğraf eklenemedi: "+errorText(error));
- }
+ }catch(error){alert("Fotoğraf eklenemedi: "+errorText(error))}
 }
-
 ["service","order"].forEach(type=>{
  $(type+"Photos").addEventListener("change",async e=>{
   await addPhotos(type,Array.from(e.target.files));
@@ -1254,84 +502,52 @@ async function addPhotos(type,files){
 
 async function getPhotoUrl(path){
  if(!path)return "";
-
  if(path.startsWith("data:"))return path;
-
  if(photoUrls.has(path))return photoUrls.get(path);
-
- const {data,error}=await client.storage
-  .from(PHOTO_BUCKET)
+ const {data,error}=await client.storage.from(PHOTO_BUCKET)
   .createSignedUrl(path,3600);
-
  if(error)throw error;
-
  photoUrls.set(path,data.signedUrl);
  return data.signedUrl;
 }
-
 async function renderPhotoPreview(type){
  const container=$(type+"PhotoPreview");
  container.innerHTML="";
-
  for(const [index,item] of photoCache[type].entries()){
   const wrapper=document.createElement("div");
   wrapper.className="photo";
-
   const img=document.createElement("img");
   img.alt="Fotoğraf";
-
-  if(item.kind==="new"){
-   img.src=item.preview;
-  }else{
-   getPhotoUrl(item.path)
-    .then(url=>img.src=url)
-    .catch(()=>img.alt="Fotoğraf açılamadı");
-  }
-
+  if(item.kind==="new")img.src=item.preview;
+  else getPhotoUrl(item.path).then(url=>img.src=url)
+   .catch(()=>img.alt="Fotoğraf açılamadı");
   const button=document.createElement("button");
   button.type="button";
   button.textContent="×";
-
   button.onclick=()=>{
-   if(item.kind==="new"){
-    URL.revokeObjectURL(item.preview);
-   }
+   if(item.kind==="new")URL.revokeObjectURL(item.preview);
    photoCache[type].splice(index,1);
    renderPhotoPreview(type);
   };
-
   wrapper.append(img,button);
   container.appendChild(wrapper);
  }
 }
-
 async function uploadPhotos(type,id){
  const paths=[];
-
  for(const item of photoCache[type]){
   if(item.kind==="stored"){
    paths.push(item.path);
    continue;
   }
-
   const path=type+"/"+id+"/"+uid()+".jpg";
-
-  const {error}=await client.storage
-   .from(PHOTO_BUCKET)
-   .upload(path,item.blob,{
-    contentType:"image/jpeg",
-    upsert:false
-   });
-
+  const {error}=await client.storage.from(PHOTO_BUCKET)
+   .upload(path,item.blob,{contentType:"image/jpeg",upsert:false});
   if(error)throw error;
-
   paths.push(path);
  }
-
  return paths;
 }
-
-/* SERVİS VE SİPARİŞ KAYITLARI */
 
 function collect(type){
  const item={
@@ -1344,457 +560,275 @@ function collect(type){
   status:$(type+"Status").value,
   reminder:$(type+"Reminder").value||null
  };
-
  if(type==="service"){
   item.problem=$("serviceProblem").value.trim();
   item.serial_number=$("serviceSerialNumber").value.trim();
  }
-
  return item;
 }
-
 async function submitRecord(type){
  if(busy)return;
-
  const item=collect(type);
-
  if(!item.name||!item.model){
-  alert("Ad soyad ve model zorunludur.");
-  return;
+  alert("Ad soyad ve model zorunludur.");return;
  }
-
  busy=true;
-
  try{
   item.photos=await uploadPhotos(type,item.id);
-
   await saveRecord(TABLES[type],item);
-
-  if(type==="service"){
-   resetService();
-  }else{
-   resetOrder();
-  }
-
+  if(type==="service")resetService();else resetOrder();
   await refreshData();
-
-  alert(
-   type==="service"?
+  alert(type==="service"?
    "Servis kaydı ortak veritabanına kaydedildi.":
-   "Sipariş formu ortak veritabanına kaydedildi."
-  );
-
+   "Sipariş formu ortak veritabanına kaydedildi.");
   if(type==="service")show("history");
-
  }catch(error){
   alert("Kayıt kaydedilemedi: "+errorText(error));
- }finally{
-  busy=false;
- }
+ }finally{busy=false}
 }
-
 $("serviceForm").addEventListener("submit",async e=>{
- e.preventDefault();
- await submitRecord("service");
+ e.preventDefault();await submitRecord("service");
 });
-
 $("orderForm").addEventListener("submit",async e=>{
- e.preventDefault();
- await submitRecord("order");
+ e.preventDefault();await submitRecord("order");
 });
-
-/* MOTOR BAKIM PARÇALARI */
 
 $("partForm").addEventListener("submit",async e=>{
  e.preventDefault();
-
  if(busy)return;
-
  const id=$("partId").value||uid();
  const code=$("partCode").value.trim();
  const name=$("partName").value.trim();
  const purchasePrice=Number($("partPurchasePrice").value);
  const price=Number($("partPrice").value);
  const minStock=Number($("partMinStock").value);
-
- if(!code||!name){
-  alert("Parça kodu ve parça adı zorunludur.");
-  return;
- }
-
+ if(!code||!name){alert("Parça kodu ve parça adı zorunludur.");return}
  if(!Number.isFinite(purchasePrice)||purchasePrice<0||
-    !Number.isFinite(price)||price<0||
-    !Number.isInteger(minStock)||minStock<0){
-  alert("Fiyatları ve minimum stok miktarını kontrol et.");
-  return;
+ !Number.isFinite(price)||price<0||
+ !Number.isInteger(minStock)||minStock<0){
+  alert("Fiyatları ve minimum stok miktarını kontrol et.");return;
  }
-
  busy=true;
-
  try{
-  const item={
-   id,
-   part_code:code,
-   name,
-   purchase_price:purchasePrice,
-   price,
-   min_stock:minStock
-  };
-
-  await saveRecord(TABLES.part,item);
-
+  await saveRecord(TABLES.part,{
+   id,part_code:code,name,
+   purchase_price:purchasePrice,price,min_stock:minStock
+  });
   resetPart();
   await refreshData();
-
   alert("Motor bakım parçası kaydedildi.");
-
  }catch(error){
   alert("Parça kaydedilemedi: "+errorText(error));
- }finally{
-  busy=false;
- }
+ }finally{busy=false}
 });
-
-/* STOK GİRİŞ VE ÇIKIŞ */
 
 async function stockAction(id,kind){
  if(busy)return;
-
  const part=db.parts.find(x=>x.id===id);
  if(!part)return;
-
- const input=prompt(
-  part.name+" için "+kind+" adedini gir:"
- );
-
+ const input=prompt(part.name+" için "+kind+" adedini gir:");
  if(input===null)return;
-
  const quantity=Number(input);
-
  if(!Number.isInteger(quantity)||quantity<=0){
-  alert("Geçerli bir adet gir.");
-  return;
+  alert("Geçerli bir adet gir.");return;
  }
-
  let customer=null;
-
  if(kind==="Çıkış"){
   customer=prompt("Müşteri adı soyadı:");
-
   if(customer===null)return;
-
   customer=customer.trim();
-
   if(!customer){
-   alert("Stok çıkışı için müşteri adı zorunludur.");
-   return;
+   alert("Stok çıkışı için müşteri adı zorunludur.");return;
   }
  }
-
  busy=true;
-
  try{
-  const {error}=await client.rpc(
-   "marin_apply_stock",
-   {
-    p_part_id:id,
-    p_kind:kind,
-    p_quantity:quantity,
-    p_customer:customer,
-    p_notes:null
-   }
-  );
-
+  const {error}=await client.rpc("marin_apply_stock",{
+   p_part_id:id,p_kind:kind,p_quantity:quantity,
+   p_customer:customer,p_notes:null
+  });
   if(error)throw error;
-
   await refreshData();
-
   alert("Stok "+kind+" işlemi kaydedildi.");
-
  }catch(error){
   alert("Stok işlemi başarısız: "+errorText(error));
- }finally{
-  busy=false;
- }
+ }finally{busy=false}
 }
-
-/* KAYIT GÖRÜNTÜLEME */
 
 function recordHTML(x,type){
  return `<div class="record">
-
- <h3>${safe(x.name)}</h3>
-
- <p><b>Tarih:</b> ${safe(x.date)}</p>
- <p><b>Telefon:</b> ${safe(x.phone)}</p>
- <p><b>Model:</b> ${safe(x.model)}</p>
-
- ${type==="service"?
- `<p><b>Seri No:</b> ${safe(x.serial_number||"-")}</p>
-  <p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
-
- <p><b>Not:</b> ${safe(x.notes)}</p>
-
- <p><b>Durum:</b>
- <span class="badge">${safe(x.status)}</span>
- </p>
-
- ${x.reminder?
- `<p><b>Hatırlatma:</b> ${safe(x.reminder)}</p>`:""}
-
- <div class="photos" data-photo-record="${safe(type)}"
- data-record-id="${safe(x.id)}"></div>
-
- <div class="actions">
-
- <button class="secondary"
- data-action="edit"
- data-type="${type}"
- data-id="${safe(x.id)}">
- Düzenle
- </button>
-
- <button class="danger"
- data-action="delete"
- data-type="${type}"
- data-id="${safe(x.id)}">
- Sil
- </button>
-
- </div>
+  <h3>${safe(x.name)}</h3>
+  <p><b>Tarih:</b> ${safe(x.date)}</p>
+  <p><b>Telefon:</b> ${safe(x.phone)}</p>
+  <p><b>Model:</b> ${safe(x.model)}</p>
+  ${type==="service"?`
+   <p><b>Seri No:</b> ${safe(x.serial_number||"-")}</p>
+   <p><b>Arıza:</b> ${safe(x.problem)}</p>`:""}
+  <p><b>Not:</b> ${safe(x.notes)}</p>
+  <p><b>Durum:</b> <span class="badge">${safe(x.status)}</span></p>
+  ${x.reminder?`<p><b>Hatırlatma:</b> ${safe(x.reminder)}</p>`:""}
+  <div class="photos" data-photo-record="${type}" data-record-id="${safe(x.id)}"></div>
+  <div class="actions">
+   <button class="secondary" data-action="edit" data-type="${type}" data-id="${safe(x.id)}">Düzenle</button>
+   <button class="danger" data-action="delete" data-type="${type}" data-id="${safe(x.id)}">Sil</button>
+  </div>
  </div>`;
 }
 
 async function renderStoredPhotos(){
- const containers=document.querySelectorAll(
-  "[data-photo-record]"
- );
-
+ const containers=document.querySelectorAll("[data-photo-record]");
  for(const container of containers){
   const type=container.dataset.photoRecord;
   const id=container.dataset.recordId;
-
   const list=type==="service"?db.services:db.orders;
   const item=list.find(x=>x.id===id);
-
   if(!item)continue;
-
   container.innerHTML="";
-
   for(const path of item.photos||[]){
    const wrapper=document.createElement("div");
    wrapper.className="photo";
-
    const link=document.createElement("a");
    link.target="_blank";
    link.rel="noopener noreferrer";
-
    const img=document.createElement("img");
    img.alt="Kayıt fotoğrafı";
-
    wrapper.appendChild(link);
    link.appendChild(img);
    container.appendChild(wrapper);
-
    try{
     const url=await getPhotoUrl(path);
-
     if(!container.isConnected)break;
-
-    img.src=url;
-    link.href=url;
-   }catch(error){
-    img.alt="Fotoğraf yüklenemedi";
-   }
+    img.src=url;link.href=url;
+   }catch(error){img.alt="Fotoğraf yüklenemedi"}
   }
  }
 }
-
 function renderServices(){
- const q=$("serviceSearch").value
-  .toLocaleLowerCase("tr");
-
+ const q=$("serviceSearch").value.toLocaleLowerCase("tr");
  const items=db.services.filter(x=>
-  [
-   x.name,
-   x.phone,
-   x.model,
-   x.serial_number,
-   x.problem,
-   x.notes
-  ]
-  .join(" ")
-  .toLocaleLowerCase("tr")
-  .includes(q)
+  [x.name,x.phone,x.model,x.serial_number,x.problem,x.notes]
+  .join(" ").toLocaleLowerCase("tr").includes(q)
  );
-
  $("serviceList").innerHTML=items.length?
   items.map(x=>recordHTML(x,"service")).join(""):
   '<div class="empty">Servis kaydı bulunamadı.</div>';
-
  renderStoredPhotos();
 }
-
 function renderOrders(){
- const q=$("orderSearch").value
-  .toLocaleLowerCase("tr");
-
+ const q=$("orderSearch").value.toLocaleLowerCase("tr");
  const items=db.orders.filter(x=>
   [x.name,x.phone,x.model,x.notes]
-  .join(" ")
-  .toLocaleLowerCase("tr")
-  .includes(q)
+  .join(" ").toLocaleLowerCase("tr").includes(q)
  );
-
  $("orderList").innerHTML=items.length?
   items.map(x=>recordHTML(x,"order")).join(""):
   '<div class="empty">Sipariş bulunamadı.</div>';
-
  renderStoredPhotos();
 }
 
-/* PARÇA LİSTESİ */
+/* KRİTİK STOK HESAPLAMA */
+
+function getStock(part){
+ const n=Number(part.stock_quantity??0);
+ return Number.isFinite(n)?n:0;
+}
+function getMinimum(part){
+ const n=Number(part.min_stock??3);
+ return Number.isFinite(n)?n:3;
+}
+function getCriticalParts(){
+ return db.parts.filter(part=>
+  getStock(part)<=getMinimum(part)
+ ).sort((a,b)=>getStock(a)-getStock(b));
+}
+function criticalHTML(part){
+ const stock=getStock(part);
+ const minimum=getMinimum(part);
+ return `<div class="record critical-card ${stock===0?"zero":""}">
+  <h3>${safe(part.name)}</h3>
+  <p><b>Parça Kodu:</b> ${safe(part.part_code||"-")}</p>
+  <p><b>Kalan Stok:</b>
+   <span class="stock-low">${safe(stock)} adet</span></p>
+  <p><b>Minimum Stok:</b> ${safe(minimum)} adet</p>
+  <span class="badge due">${stock===0?"⛔ Stok Tükendi":"⚠️ Kritik Stok"}</span>
+ </div>`;
+}
+function renderCriticalStock(){
+ const criticalParts=getCriticalParts();
+ const html=criticalParts.length?
+  criticalParts.map(criticalHTML).join(""):
+  '<div class="empty">✅ Kritik stokta parça yok.</div>';
+ $("homeCriticalList").innerHTML=html;
+ $("criticalPartsList").innerHTML=html;
+ $("homeCriticalStock").textContent=criticalParts.length;
+ $("criticalStock").textContent=criticalParts.length;
+}
 
 function renderParts(){
- const q=$("partSearch").value
-  .toLocaleLowerCase("tr");
-
+ const q=$("partSearch").value.toLocaleLowerCase("tr");
  const items=db.parts.filter(x=>
-  [x.name,x.part_code]
-  .join(" ")
-  .toLocaleLowerCase("tr")
-  .includes(q)
+  [x.name,x.part_code].join(" ").toLocaleLowerCase("tr").includes(q)
  );
-
  $("partList").innerHTML=items.length?
   items.map(x=>{
-   const stock=Number(x.stock_quantity||0);
-   const min=Number(x.min_stock??3);
+   const stock=getStock(x),min=getMinimum(x);
    const critical=stock<=min;
-
    return `<div class="record">
-
-   <div class="part-row">
-   <h3>${safe(x.name)}</h3>
-   <p class="price">${formatPrice(x.price)}</p>
-   </div>
-
-   <p><b>Parça Kodu:</b> ${safe(x.part_code||"-")}</p>
-   <p><b>Alış Fiyatı:</b> ${formatPrice(x.purchase_price)}</p>
-   <p><b>Satış Fiyatı:</b> ${formatPrice(x.price)}</p>
-   <p><b>Mevcut Stok:</b> ${stock} adet</p>
-   <p><b>Minimum Stok:</b> ${min} adet</p>
-
-   <span class="badge ${critical?"due":"ok"}">
-   ${stock===0?"Stok Tükendi":
-     critical?"Kritik Stok":"Stok Yeterli"}
-   </span>
-
-   <div class="stock-actions">
-
-   <button class="stock-in"
-    data-action="stock-in"
-    data-id="${safe(x.id)}">
-   + Stok Girişi
-   </button>
-
-   <button class="stock-out"
-    data-action="stock-out"
-    data-id="${safe(x.id)}">
-   − Stok Çıkışı
-   </button>
-
-   </div>
-
-   <div class="actions">
-
-   <button class="secondary"
-    data-action="edit"
-    data-type="part"
-    data-id="${safe(x.id)}">
-   Düzenle
-   </button>
-
-   <button class="danger"
-    data-action="delete"
-    data-type="part"
-    data-id="${safe(x.id)}">
-   Sil
-   </button>
-
-   </div>
+    <div class="part-row">
+     <h3>${safe(x.name)}</h3>
+     <p class="price">${formatPrice(x.price)}</p>
+    </div>
+    <p><b>Parça Kodu:</b> ${safe(x.part_code||"-")}</p>
+    <p><b>Alış Fiyatı:</b> ${formatPrice(x.purchase_price)}</p>
+    <p><b>Satış Fiyatı:</b> ${formatPrice(x.price)}</p>
+    <p><b>Mevcut Stok:</b> ${safe(stock)} adet</p>
+    <p><b>Minimum Stok:</b> ${safe(min)} adet</p>
+    <span class="badge ${critical?"due":"ok"}">
+     ${stock===0?"Stok Tükendi":critical?"Kritik Stok":"Stok Yeterli"}
+    </span>
+    <div class="stock-actions">
+     <button class="stock-in" data-action="stock-in" data-id="${safe(x.id)}">+ Stok Girişi</button>
+     <button class="stock-out" data-action="stock-out" data-id="${safe(x.id)}">− Stok Çıkışı</button>
+    </div>
+    <div class="actions">
+     <button class="secondary" data-action="edit" data-type="part" data-id="${safe(x.id)}">Düzenle</button>
+     <button class="danger" data-action="delete" data-type="part" data-id="${safe(x.id)}">Sil</button>
+    </div>
    </div>`;
   }).join(""):
   '<div class="empty">Motor bakım parçası bulunamadı.</div>';
 
- const totalStock=db.parts.reduce(
-  (sum,x)=>sum+Number(x.stock_quantity||0),0
+ const totalStock=db.parts.reduce((sum,x)=>sum+getStock(x),0);
+ const totalValue=db.parts.reduce((sum,x)=>
+  sum+getStock(x)*Number(x.purchase_price||0),0
  );
-
- const criticalStock=db.parts.filter(x=>
-  Number(x.stock_quantity||0)<=Number(x.min_stock??3)
- ).length;
-
- const totalValue=db.parts.reduce(
-  (sum,x)=>
-   sum+
-   Number(x.stock_quantity||0)*
-   Number(x.purchase_price||0),
-  0
- );
-
  $("totalStock").textContent=totalStock;
- $("criticalStock").textContent=criticalStock;
  $("totalStockValue").textContent=formatPrice(totalValue);
- $("homeCriticalStock").textContent=criticalStock;
+ renderCriticalStock();
 }
 
-/* STOK HAREKETLERİ */
-
 function renderStockHistory(){
- const container=$("stockHistory");
-
- container.innerHTML=stockMovements.length?
+ $("stockHistory").innerHTML=stockMovements.length?
   stockMovements.map(x=>{
    const part=db.parts.find(p=>p.id===x.part_id);
    const isOut=x.movement_type==="Çıkış";
-
    return `<div class="record stock-history ${isOut?"out":"in"}">
-
-   <h3>${safe(part?.name||"Bilinmeyen Parça")}</h3>
-
-   <p><b>Parça Kodu:</b>
-   ${safe(part?.part_code||"-")}</p>
-
-   <p><b>İşlem:</b>
-   <span class="badge ${isOut?"due":"ok"}">
-   ${safe(x.movement_type)}
-   </span></p>
-
-   <p><b>Adet:</b>
-   ${isOut?"−":"+"}${safe(x.quantity)}</p>
-
-   <p><b>Müşteri:</b>
-   ${safe(x.customer_name||"-")}</p>
-
-   <p><b>Tarih:</b>
-   ${safe(new Date(x.created_at).toLocaleString("tr-TR"))}</p>
-
-   ${x.notes?
-   `<p><b>Not:</b> ${safe(x.notes)}</p>`:""}
-
+    <h3>${safe(part?.name||"Bilinmeyen Parça")}</h3>
+    <p><b>Parça Kodu:</b> ${safe(part?.part_code||"-")}</p>
+    <p><b>İşlem:</b> <span class="badge ${isOut?"due":"ok"}">${safe(x.movement_type)}</span></p>
+    <p><b>Adet:</b> ${isOut?"−":"+"}${safe(x.quantity)}</p>
+    <p><b>Müşteri:</b> ${safe(x.customer_name||"-")}</p>
+    <p><b>Tarih:</b> ${safe(new Date(x.created_at).toLocaleString("tr-TR"))}</p>
+    ${x.notes?`<p><b>Not:</b> ${safe(x.notes)}</p>`:""}
    </div>`;
   }).join(""):
   '<div class="empty">Henüz stok hareketi yok.</div>';
 }
 
-/* DÜZENLEME */
-
 function editRecord(type,id){
  if(type==="part"){
   const x=db.parts.find(v=>v.id===id);
   if(!x)return;
-
   $("partId").value=x.id;
   $("partCode").value=x.part_code||"";
   $("partName").value=x.name;
@@ -1802,38 +836,23 @@ function editRecord(type,id){
   $("partPrice").value=x.price;
   $("partMinStock").value=x.min_stock??3;
   $("partTitle").textContent="Motor Bakım Parçasını Düzenle";
-
   show("parts");
+  $("partForm").scrollIntoView({behavior:"smooth"});
   return;
  }
-
  const list=type==="service"?db.services:db.orders;
  const x=list.find(v=>v.id===id);
-
  if(!x)return;
-
  const fields={
-  Id:"id",
-  Date:"date",
-  Name:"name",
-  Phone:"phone",
-  Model:"model",
-  Notes:"notes",
-  Status:"status",
-  Reminder:"reminder"
+  Id:"id",Date:"date",Name:"name",Phone:"phone",
+  Model:"model",Notes:"notes",Status:"status",Reminder:"reminder"
  };
-
  Object.entries(fields).forEach(([field,key])=>{
   $(type+field).value=x[key]??"";
  });
-
- photoCache[type]=(x.photos||[]).map(path=>({
-  kind:"stored",
-  path
- }));
-
+ clearPhotoCache(type);
+ photoCache[type]=(x.photos||[]).map(path=>({kind:"stored",path}));
  renderPhotoPreview(type);
-
  if(type==="service"){
   $("serviceProblem").value=x.problem||"";
   $("serviceSerialNumber").value=x.serial_number||"";
@@ -1845,168 +864,92 @@ function editRecord(type,id){
  }
 }
 
-/* SİLME */
-
 async function deleteRecord(type,id){
- if(!confirm("Bu kaydı kalıcı olarak silmek istiyor musun?")){
-  return;
- }
-
+ if(!confirm("Bu kaydı kalıcı olarak silmek istiyor musun?"))return;
  if(busy)return;
-
  busy=true;
-
  try{
   await removeRecord(TABLES[type],id);
   await refreshData();
   alert("Kayıt silindi.");
-
  }catch(error){
   alert("Kayıt silinemedi: "+errorText(error));
- }finally{
-  busy=false;
- }
+ }finally{busy=false}
 }
-
 document.addEventListener("click",async e=>{
  const btn=e.target.closest("[data-action]");
  if(!btn)return;
-
  const {action,type,id}=btn.dataset;
-
- if(action==="edit"){
-  editRecord(type,id);
- }
-
- if(action==="delete"){
-  await deleteRecord(type,id);
- }
-
- if(action==="stock-in"){
-  await stockAction(id,"Giriş");
- }
-
- if(action==="stock-out"){
-  await stockAction(id,"Çıkış");
- }
+ if(action==="edit")editRecord(type,id);
+ if(action==="delete")await deleteRecord(type,id);
+ if(action==="stock-in")await stockAction(id,"Giriş");
+ if(action==="stock-out")await stockAction(id,"Çıkış");
 });
-
-/* HATIRLATMALAR */
 
 function getReminders(){
  return [
-  ...db.services.filter(x=>
-   x.reminder&&
-   !["Tamamlandı","Teslim Edildi"].includes(x.status)
-  ).map(x=>({...x,type:"Servis"})),
-
-  ...db.orders.filter(x=>
-   x.reminder&&x.status!=="Teslim Edildi"
-  ).map(x=>({...x,type:"Sipariş"}))
+  ...db.services.filter(x=>x.reminder&&
+   !["Tamamlandı","Teslim Edildi"].includes(x.status))
+   .map(x=>({...x,type:"Servis"})),
+  ...db.orders.filter(x=>x.reminder&&x.status!=="Teslim Edildi")
+   .map(x=>({...x,type:"Sipariş"}))
  ].sort((a,b)=>a.reminder.localeCompare(b.reminder));
 }
-
 function reminderHTML(x){
  const due=x.reminder<=today();
-
  return `<div class="record">
-
- <span class="badge ${due?"due":"ok"}">
- ${due?"Bugün / Gecikmiş":"Yaklaşan"}
- </span>
-
- <h3>${safe(x.name)}</h3>
-
- <p>${safe(x.type)} · ${safe(x.model)}</p>
-
- <p><b>Tarih:</b> ${safe(x.reminder)}</p>
-
- <p><b>Durum:</b> ${safe(x.status)}</p>
-
+  <span class="badge ${due?"due":"ok"}">${due?"Bugün / Gecikmiş":"Yaklaşan"}</span>
+  <h3>${safe(x.name)}</h3>
+  <p>${safe(x.type)} · ${safe(x.model)}</p>
+  <p><b>Tarih:</b> ${safe(x.reminder)}</p>
+  <p><b>Durum:</b> ${safe(x.status)}</p>
  </div>`;
 }
-
 function renderAll(){
  $("serviceCount").textContent=db.services.length;
  $("orderCount").textContent=db.orders.length;
  $("partCount").textContent=db.parts.length;
-
- $("completedCount").textContent=
- db.services.filter(x=>
+ $("completedCount").textContent=db.services.filter(x=>
   ["Tamamlandı","Teslim Edildi"].includes(x.status)
  ).length;
-
  const reminders=getReminders();
-
  $("reminderCount").textContent=reminders.length;
-
  $("reminderList").innerHTML=reminders.length?
   reminders.map(reminderHTML).join(""):
   '<div class="empty">Bekleyen hatırlatma yok.</div>';
-
  $("homeReminders").innerHTML=reminders.length?
   reminders.slice(0,5).map(reminderHTML).join(""):
   '<div class="empty">Yaklaşan hatırlatma yok.</div>';
-
  renderServices();
  renderOrders();
  renderParts();
  renderStockHistory();
 }
 
-/* YEDEKLEME */
-
 function exportBackup(){
- const backup={
-  ...db,
-  stock_movements:stockMovements
- };
-
- const blob=new Blob(
-  [JSON.stringify(backup,null,2)],
-  {type:"application/json"}
- );
-
+ const backup={...db,stock_movements:stockMovements};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{
+  type:"application/json"
+ });
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
-
  a.href=url;
  a.download="yerliyurt-marin-yedek-"+today()+".json";
-
  document.body.appendChild(a);
- a.click();
- a.remove();
-
+ a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
-
 async function importBackup(){
  const file=$("backupFile").files[0];
-
- if(!file){
-  alert("Önce JSON yedek dosyasını seç.");
-  return;
- }
-
+ if(!file){alert("Önce JSON yedek dosyasını seç.");return}
  if(busy)return;
-
- if(!confirm(
-  "Yedekteki kayıtlar ortak veritabanına aktarılacak. "+
-  "Aynı kimliğe sahip kayıtlar güncellenecek. Devam edilsin mi?"
- ))return;
-
+ if(!confirm("Yedekteki kayıtlar ortak veritabanına aktarılacak. Devam edilsin mi?"))return;
  busy=true;
-
  try{
   const data=JSON.parse(await file.text());
-
-  if(!Array.isArray(data.services)||
-     !Array.isArray(data.orders)){
+  if(!Array.isArray(data.services)||!Array.isArray(data.orders))
    throw new Error("Geçersiz yedek dosyası.");
-  }
-
   let count=0;
-
   for(const [type,items] of [
    ["service",data.services],
    ["order",data.orders],
@@ -2014,106 +957,64 @@ async function importBackup(){
   ]){
    for(const old of items){
     const item={...old};
-
     item.id=String(item.id||uid());
-
     delete item.created_at;
-
     if(type!=="part"){
      const paths=[];
-
      for(const photo of item.photos||[]){
       if(typeof photo!=="string")continue;
-
       if(photo.startsWith("data:image/")){
        const response=await fetch(photo);
        const blob=await response.blob();
-
        const path=type+"/"+item.id+"/"+uid()+".jpg";
-
-       const {error}=await client.storage
-        .from(PHOTO_BUCKET)
-        .upload(path,blob,{
-         contentType:blob.type||"image/jpeg"
-        });
-
+       const {error}=await client.storage.from(PHOTO_BUCKET)
+        .upload(path,blob,{contentType:blob.type||"image/jpeg"});
        if(error)throw error;
-
        paths.push(path);
-      }else{
-       paths.push(photo);
-      }
+      }else paths.push(photo);
      }
-
      item.photos=paths;
      item.reminder=item.reminder||null;
-
-     if(type==="service"){
-      item.serial_number=item.serial_number||"";
-     }
-    }else{
-     delete item.stock_movements;
-    }
-
+     if(type==="service")item.serial_number=item.serial_number||"";
+    }else delete item.stock_movements;
     await saveRecord(TABLES[type],item);
     count++;
    }
   }
-
   await refreshData();
-
   alert(count+" kayıt ortak veritabanına aktarıldı.");
-
  }catch(error){
-  alert(
-   "Aktarma tamamlanamadı. Bazı kayıtlar aktarılmış olabilir: "+
-   errorText(error)
-  );
- }finally{
-  busy=false;
- }
+  alert("Aktarma tamamlanamadı. Bazı kayıtlar aktarılmış olabilir: "+errorText(error));
+ }finally{busy=false}
 }
-
-/* BAŞLAT */
 
 async function start(){
  try{
   const {data,error}=await client.auth.getUser();
-
-  if(error&&!String(error.message).includes("Auth session missing")){
+  if(error&&!String(error.message).includes("Auth session missing"))
    console.warn(error);
-  }
-
-  if(data?.user){
-   await enterApp(data.user);
-  }else{
+  if(data?.user)await enterApp(data.user);
+  else{
    $("loginScreen").style.display="flex";
    $("app").style.display="none";
   }
-
  }catch(error){
-  $("loginMessage").textContent=
-   "Başlatma hatası: "+errorText(error);
+  $("loginMessage").textContent="Başlatma hatası: "+errorText(error);
  }
 }
-
 document.addEventListener("visibilitychange",()=>{
  if(!document.hidden&&currentUser){
   photoUrls.clear();
   refreshData();
  }
 });
-
 setInterval(()=>{
  if(currentUser&&!document.hidden){
   photoUrls.clear();
   refreshData();
  }
 },30000);
-
 start();
-
 </script>
-
 </body>
 </html>
